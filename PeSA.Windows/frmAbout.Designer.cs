@@ -107,6 +107,7 @@
             this.linkGitHub.TabIndex = 6;
             this.linkGitHub.TabStop = true;
             this.linkGitHub.Text = "https://github.com/EmineTopcu/PeSA";
+            this.linkGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGitHub_LinkClicked);
             // 
             // frmAbout
             // 

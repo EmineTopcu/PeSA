@@ -31,5 +31,10 @@ namespace PeSA.Windows
             lVersionEngine.Text = string.Format("Engine version: {0}.{1}, built on {2}", versionEngine.Major, versionEngine.Minor, dateEngine.ToString("d"));
 
         }
+
+        private void linkGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/EmineTopcu/PeSA");
+        }
     }
 }
