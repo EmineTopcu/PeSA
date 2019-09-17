@@ -83,7 +83,10 @@ namespace PeSA.Engine
                 {'V', new AminoAcid {Name="Valine", Polarity="nonpolar", Charge="neutral", Abbrev1='V', Abbrev3 = "Val", MolecularWeight=117.15, ResidueWeight = 99.13, pKa1 = 2.32, pKa2=9.62, pKa3=null, pI =5.96} }//C5H11NO2 	C5H9NO
             };
         public static bool IsStandardAminoAcid(char c) { return AminoAcidList.ContainsKey(c); }
-        public static AminoAcid GetAminoAcid(char c) { return AminoAcidList[c]; }
+        public static AminoAcid GetAminoAcid(char c) {
+            if (!AminoAcids.IsStandardAminoAcid(c))
+                return null;
+            return AminoAcidList[c]; }
         public static List<AminoAcid> GetAminoAcidList() { return AminoAcidList.Values.ToList(); }
    
         public static List<AminoAcid> GetSortedAminoAcidList()

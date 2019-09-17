@@ -108,7 +108,8 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenQuantification.ShowDialog();
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename) &&
                     FileUtil.ReadQuantificationData(filename, PA, headersExist: true))
@@ -229,7 +230,8 @@ namespace PeSA.Windows
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (PA == null) return;
-            dlgSaveProject.ShowDialog();
+            DialogResult dlg = dlgSaveProject.ShowDialog();
+            if (dlg != DialogResult.OK) return;
             string filename = dlgSaveProject.FileName;
             if (PeptideArray.SaveToFile(filename, PA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -239,7 +241,8 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenProject.ShowDialog();
+                DialogResult dlg = dlgOpenProject.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgOpenProject.FileName;
                 PA = PeptideArray.ReadFromFile(filename);
                 peptidelength = PA.PeptideLength;
@@ -418,7 +421,9 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenPeptideList.ShowDialog();
+                DialogResult dlg = dlgOpenPeptideList.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+                
                 string filename = dlgOpenPeptideList.FileName;
                 List<string> peptides = FileUtil.ReadPeptideList(filename);
                 if (peptides != null)
@@ -458,7 +463,7 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenPeptideMatrix.ShowDialog();
+                DialogResult dlg = dlgOpenPeptideMatrix.ShowDialog();
                 string filename = dlgOpenPeptideMatrix.FileName;
                 string[,] peptides = FileUtil.ReadPeptideMatrix(filename);
                 rowCount = peptides.GetLength(0);

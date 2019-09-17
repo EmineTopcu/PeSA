@@ -96,7 +96,7 @@ namespace PeSA.Engine
         }
 
         static public Bitmap CreateMotif(Dictionary<int, Dictionary<char, double>> Weights, 
-            double threshold = 0.1, int widthImage = 800, int heightImage = 200, int maxAAperCol = 20)
+            double threshold = 0, int widthImage = 800, int heightImage = 200, int maxAAperCol = 20)
         {
             Motif mf = new Motif(Weights);
             if (threshold < 0)
@@ -185,5 +185,8 @@ namespace PeSA.Engine
                 return false;
             }
         }
+
+
+
     }
 }

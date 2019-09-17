@@ -174,6 +174,7 @@
             this.cbYAxisTopToBottom.TabIndex = 6;
             this.cbYAxisTopToBottom.Text = "Y Axis: Top to Bottom";
             this.cbYAxisTopToBottom.UseVisualStyleBackColor = true;
+            this.cbYAxisTopToBottom.CheckedChanged += new System.EventHandler(this.cbYAxisTopToBottom_CheckedChanged);
             // 
             // cbWildTypeXAxis
             // 

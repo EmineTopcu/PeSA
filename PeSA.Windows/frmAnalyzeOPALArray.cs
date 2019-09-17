@@ -90,7 +90,9 @@ namespace PeSA.Windows
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            dlgSaveProject.ShowDialog();
+            DialogResult dlg = dlgSaveProject.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+            
             string filename = dlgSaveProject.FileName;
             if (OPALArray.SaveToFile(filename, OA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -100,7 +102,8 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenProject.ShowDialog();
+                DialogResult dlg = dlgOpenProject.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgOpenProject.FileName;
                 OA = OPALArray.ReadFromFile(filename);
                 threshold = OA.Threshold;
@@ -214,7 +217,9 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenQuantification.ShowDialog();
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+                
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename))
                 {
@@ -240,5 +245,6 @@ namespace PeSA.Windows
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);
         }
+        
     }
 }

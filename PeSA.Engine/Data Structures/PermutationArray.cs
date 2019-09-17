@@ -27,9 +27,10 @@ namespace PeSA.Engine
         public List<string> ModifiedPeptides { get; set; }
         public Dictionary<string, double> PeptideWeights { get; set; }
 
-        private void GenerateMatrices(string[,] values, out string error)
+        private void GenerateMatrices(string[,] values, out List<string> warnings, out string error)
         {
             error = "";
+            warnings = new List<string>();
             if (values == null) return;
             try
             {
@@ -39,6 +40,8 @@ namespace PeSA.Engine
                 QuantificationMatrix = new double[RowCount, ColCount];
                 NormalizedMatrix = new double[RowCount, ColCount];
 
+                bool nswwarning = false;
+                bool nspwarning = false;
                 //Generate Permutation and Wildtype arrays
                 if (PermutationXAxis)
                 {
@@ -48,8 +51,17 @@ namespace PeSA.Engine
                         string s = values[iRow, 0].Trim();
                         if (AminoAcids.GetAminoAcid(s[0]) == null)
                         {
-                            error = "Not a valid wildtype peptide";
-                            return;
+                            if (s.Length == 1)
+                            {
+                                if (!nswwarning)
+                                    warnings.Add("Non-standard amino acid in wildtype peptide.");
+                                nswwarning = true;
+                            }
+                            else
+                            {
+                                error = "Not a valid wildtype peptide";
+                                return;
+                            }
                         }
                         if (WildTypeYAxisTopToBottom)
                             WildTypePeptide += s[0];
@@ -63,8 +75,17 @@ namespace PeSA.Engine
                         string s = values[0, iCol].Trim();
                         if (AminoAcids.GetAminoAcid(s[0]) == null)
                         {
-                            error = "Not a valid permutation string";
-                            return;
+                            if (s.Length == 1)
+                            {
+                                if (!nspwarning)
+                                    warnings.Add("Non-standard amino acid in permutation string.");
+                                nspwarning = true;
+                            }
+                            else
+                            {
+                                error = "Not a valid permutation string";
+                                return;
+                            }
                         }
                         Permutation[iCol - 1] = s[0];
                     }
@@ -77,8 +98,17 @@ namespace PeSA.Engine
                         string s = values[0, iCol].Trim();
                         if (AminoAcids.GetAminoAcid(s[0]) == null)
                         {
-                            error = "Not a valid wildtype peptide";
-                            return;
+                            if (s.Length == 1)
+                            {
+                                if (!nswwarning)
+                                    warnings.Add("Non-standard amino acid in wildtype peptide.");
+                                nswwarning = true;
+                            }
+                            else
+                            {
+                                error = "Not a valid wildtype peptide";
+                                return;
+                            }
                         }
                         WildTypePeptide += s[0];
                     }
@@ -89,8 +119,17 @@ namespace PeSA.Engine
                         string s = values[iRow, 0].Trim();
                         if (AminoAcids.GetAminoAcid(s[0]) == null)
                         {
-                            error = "Not a valid permutation string";
-                            return;
+                            if (s.Length == 1)
+                            {
+                                if (!nspwarning)
+                                    warnings.Add("Non-standard amino acid in permutation string.");
+                                nspwarning = true;
+                            }
+                            else
+                            {
+                                error = "Not a valid permutation string";
+                                return;
+                            }
                         }
                         Permutation[iRow - 1] = s[0];
                     }
@@ -160,9 +199,10 @@ namespace PeSA.Engine
             }
         }
 
-         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out string error)
+         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
         {
             error = "";
+            warnings = new List<string>();
             try
             {
                 ModifiedPeptides = new List<string>();
@@ -170,7 +210,7 @@ namespace PeSA.Engine
                 PermutationXAxis = permutationXAxisIn;
                 WildTypeYAxisTopToBottom = wildtypeYAxisTopToBottom;
 
-                GenerateMatrices(values, out error);
+                GenerateMatrices(values, out warnings, out error);
                 if (error != "") return;
             }
             catch (Exception exc)

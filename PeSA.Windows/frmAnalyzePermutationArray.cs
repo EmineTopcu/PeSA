@@ -83,14 +83,18 @@ namespace PeSA.Windows
                     double weight = PA.NormalizedMatrix[i - 1, j - 1];
                     if (weight >= threshold)
                     {
-                        dgPeptides[j, i].Style.BackColor = Color.Gray;
+                        if (dgPeptides.ColumnCount > 1) //generated
+                        {
+                            dgPeptides[j, i].Style.BackColor = Color.Gray;
+                            if (updateModifiedPeptideList)
+                                PA.AddModifiedPeptide(dgPeptides[j, i].Value.ToString(), weight);
+                        }
                         dgQuantification[j, i].Style.BackColor = Color.Gray;
-                        if (updateModifiedPeptideList)
-                            PA.AddModifiedPeptide(dgPeptides[j, i].Value.ToString(), weight);
                     }
                     else
                     {
-                        dgPeptides[j, i].Style.BackColor = Color.White;
+                        if (dgPeptides.ColumnCount > 1) //generated
+                            dgPeptides[j, i].Style.BackColor = Color.White;
                         dgQuantification[j, i].Style.BackColor = Color.White;
                     }
                 }
@@ -99,8 +103,8 @@ namespace PeSA.Windows
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-
-            dlgSaveProject.ShowDialog();
+            DialogResult dlg = dlgSaveProject.ShowDialog();
+            if (dlg != DialogResult.OK) return;
             string filename = dlgSaveProject.FileName;
             if (PermutationArray.SaveToFile(filename, PA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -110,7 +114,8 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgOpenProject.ShowDialog();
+                DialogResult dlg = dlgOpenProject.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgOpenProject.FileName;
                 PA = PermutationArray.ReadFromFile(filename);
                 threshold = PA.Threshold;
@@ -160,8 +165,16 @@ namespace PeSA.Windows
             }
             else
             {
-                for (int rowind = 1; rowind < dg.RowCount; rowind++)
-                    dg[0, rowind].Value = PA.WildTypePeptide[rowind - 1].ToString();
+                if (cbYAxisTopToBottom.Checked)
+                    for (int rowind = 1; rowind < dg.RowCount; rowind++)
+                        dg[0, rowind].Value = PA.WildTypePeptide[rowind - 1].ToString();
+                else
+                {
+                    int len = PA.WildTypePeptide.Length;
+                    for (int rowind = 1; rowind < dg.RowCount; rowind++)
+                        dg[0, rowind].Value = PA.WildTypePeptide[len - rowind].ToString();
+                }
+
                 for (int colind = 1; colind < dg.ColumnCount; colind++)
                     dg[colind, 0].Value = PA.Permutation[colind - 1].ToString();
             }
@@ -205,13 +218,8 @@ namespace PeSA.Windows
 
         }
 
-        private void btnRun_Click(object sender, EventArgs e)
+        private void Run()
         {
-            if (!quantificationLoaded)
-            {
-                MessageBox.Show("Please load the quantification array first.", Analyzer.ProgramName);
-                return;
-            }
             string[,] values = new string[dgQuantification.RowCount, dgQuantification.ColumnCount];
             for (int iRow = 0; iRow < dgQuantification.RowCount; iRow++)
                 for (int iCol = 0; iCol < dgQuantification.ColumnCount; iCol++)
@@ -232,12 +240,18 @@ namespace PeSA.Windows
                 MessageBox.Show("Please make sure one the axes have permutation array (each amino acid has to exist at most once)", Analyzer.ProgramName);
                 return;
             };
-            PA = new PermutationArray(values, !cbWildTypeXAxis.Checked, cbYAxisTopToBottom.Checked, out string error);
+            PA = new PermutationArray(values, !cbWildTypeXAxis.Checked, cbYAxisTopToBottom.Checked, out List<string> warnings, out string error);
             if (error != "")
             {
                 MessageBox.Show(error, Analyzer.ProgramName);
                 return;
             }
+            if (warnings.Count > 0)
+            {
+                warnings.Insert(0, "Warning:");
+                MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+            }
+
             dgPeptides.ColumnCount = dgQuantification.ColumnCount;
             dgPeptides.RowCount = dgQuantification.RowCount;
             for (int iCol = 1; iCol < dgPeptides.ColumnCount; iCol++)
@@ -256,11 +270,22 @@ namespace PeSA.Windows
             SetThreshold(threshold);
         }
 
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            if (!quantificationLoaded)
+            {
+                MessageBox.Show("Please load the quantification array first.", Analyzer.ProgramName);
+                return;
+            }
+            Run();
+        }
+
         private void btnLoadQuantification_Click(object sender, EventArgs e)
         {
             try
             {
-                dlgOpenQuantification.ShowDialog();
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename))
                 {
@@ -278,6 +303,13 @@ namespace PeSA.Windows
         private void cbWildTypeXAxis_CheckedChanged(object sender, EventArgs e)
         {
             cbYAxisTopToBottom.Visible = !cbWildTypeXAxis.Checked;
+        }
+
+        private void cbYAxisTopToBottom_CheckedChanged(object sender, EventArgs e)
+        {
+            //Rerun
+            if (quantificationLoaded)
+                Run();
         }
     }
 }

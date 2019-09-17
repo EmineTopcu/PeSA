@@ -42,7 +42,8 @@ namespace PeSA.Windows
         {
             try
             {
-                dlgSaveImage.ShowDialog();
+                DialogResult dlg = dlgSaveImage.ShowDialog();
+                if (dlg != DialogResult.OK) return;
                 string filename = dlgSaveImage.FileName;
                 pictureBox1.Image.Save(filename);
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -60,7 +61,8 @@ namespace PeSA.Windows
 
         private void btnSave2_Click(object sender, EventArgs e)
         {
-            dlgSaveImage.ShowDialog();
+            DialogResult dlg = dlgSaveImage.ShowDialog();
+            if (dlg != DialogResult.OK) return;
             string filename = dlgSaveImage.FileName;
             pictureBox2.Image.Save(filename);
             MessageBox.Show(filename + " is saved", Analyzer.ProgramName);

@@ -50,7 +50,7 @@ namespace PeSA.Windows
 
         private void btnLoadPeptideList_Click(object sender, EventArgs e)
         {
-            dlgOpenPeptides.ShowDialog();
+            DialogResult dlg = dlgOpenPeptides.ShowDialog();
             string filename = dlgOpenPeptides.FileName;
             Peptides = FileUtil.ReadPeptideList(filename);
             ePeptides.Text = String.Join("\r\n", Peptides);
