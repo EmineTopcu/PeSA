@@ -51,6 +51,8 @@ namespace PeSA.Windows
         private void btnLoadPeptideList_Click(object sender, EventArgs e)
         {
             DialogResult dlg = dlgOpenPeptides.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
             string filename = dlgOpenPeptides.FileName;
             Peptides = FileUtil.ReadPeptideList(filename);
             ePeptides.Text = String.Join("\r\n", Peptides);
@@ -139,13 +141,13 @@ namespace PeSA.Windows
             {
                 Bitmap bm1 = null;
                 Bitmap bm2 = null;
-                bm1 = Analyzer.CreateMotif(Peptides.Where(s => s[keyPos - 1] == keyAA).ToList(), PepSize, threshold, widthImage, heightImage);
+                bm1 = Analyzer.CreateMotif(Peptides.Where(s => s[keyPos - 1] == keyAA).ToList(), PepSize, keyPos, threshold, widthImage, heightImage);
                 if (Peptides.Count(s => s[keyPos - 1] != keyAA) > 0)
                 {
                     List<string> replacements;
                     List<string> peptidesShifted = Analyzer.ShiftPeptides(Peptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, PepSize, keyPos - 1, out replacements);
                     eOutput.Text += String.Join("\r\nInfo: ", replacements) + "\r\n";
-                    bm2 = Analyzer.CreateMotif(peptidesShifted.Where(s => s[keyPos - 1] == keyAA).ToList(), PepSize, threshold, widthImage, heightImage);
+                    bm2 = Analyzer.CreateMotif(peptidesShifted.Where(s => s[keyPos - 1] == keyAA).ToList(), PepSize, keyPos, threshold, widthImage, heightImage);
                 }
                 frmMotifImage frmImage = new frmMotifImage(bm1, "Main motif", bm2, "Shifted motif");
                 frmImage.MdiParent = MainForm.MainFormPointer;
@@ -157,7 +159,7 @@ namespace PeSA.Windows
             else
             {
                 Bitmap bm1 = null;
-                bm1 = Analyzer.CreateMotif(Peptides, PepSize, threshold, widthImage, heightImage);
+                bm1 = Analyzer.CreateMotif(Peptides, PepSize, keyPos, threshold, widthImage, heightImage);
                 if (bm1 != null)
                 {
                     frmMotifImage frmImage = new frmMotifImage(bm1, "Main motif", null, "");

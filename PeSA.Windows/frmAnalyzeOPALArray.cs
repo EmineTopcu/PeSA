@@ -17,6 +17,8 @@ namespace PeSA.Windows
     public partial class frmAnalyzeOPALArray : Form
     {
         OPALArray OA;
+        string Title = "OPAL Array Analysis";
+        string ProjectName = "";
 
         bool quantificationLoaded = false;
         bool PermutationXAxis = false;
@@ -31,8 +33,15 @@ namespace PeSA.Windows
         private void frmOPALArray_Load(object sender, EventArgs e)
         {
             eThreshold.Text = threshold.ToString();
+            ResetSettings();
             GridUtil.FormatGrid(dgQuantification);
             GridUtil.FormatGrid(dgNormalized);
+        }
+
+        private void ResetSettings()
+        {
+            Settings settings = (ParentForm as MainForm).DefaultSettings;
+            cbYAxisTopToBottom.Checked = settings?.WildTypeYAxisTopToBottom ?? false;
         }
 
         bool skipSetThreshold = false;
@@ -87,12 +96,17 @@ namespace PeSA.Windows
                 }
             }
         }
+        private void SetText(FileDialog dlg)
+        {
+            ProjectName = FormUtil.SetText(this, dlg, Title);
+        }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            dlgSaveProject.FileName = ProjectName;
             DialogResult dlg = dlgSaveProject.ShowDialog();
             if (dlg != DialogResult.OK) return;
-            
+            SetText(dlgSaveProject);
             string filename = dlgSaveProject.FileName;
             if (OPALArray.SaveToFile(filename, OA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -104,6 +118,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenProject.ShowDialog();
                 if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
                 OA = OPALArray.ReadFromFile(filename);
                 threshold = OA.Threshold;
@@ -112,6 +127,7 @@ namespace PeSA.Windows
                 trackThreshold.Value = Math.Max(0, Math.Min(100, (int)(OA.Threshold * 100)));
                 skipSetThreshold = false;
                 cbPermutationXAxis.Checked = PermutationXAxis;
+                cbYAxisTopToBottom.Checked = OA.PositionYAxisTopToBottom;
 
                 if (OA.QuantificationMatrix != null)
                     LoadQuantificationFromOPALArrayToGrid();
@@ -154,7 +170,7 @@ namespace PeSA.Windows
 
         private void btnCreateMotif_Click(object sender, EventArgs e)
         {
-            Bitmap bm = Analyzer.CreateMotif(OA);
+            Bitmap bm = Analyzer.CreateMotifImage(OA);
             frmMotifImage frmImage = new frmMotifImage(bm, "Main motif", null, "Shifted motif")
             {
                 MdiParent = MainForm.MainFormPointer,
@@ -168,6 +184,7 @@ namespace PeSA.Windows
         {
             GridUtil.PasteClipboard(dgQuantification);
             quantificationLoaded = true;
+            ResetSettings();
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -177,6 +194,11 @@ namespace PeSA.Windows
                 MessageBox.Show("Please load the quantification array first.", Analyzer.ProgramName);
                 return;
             }
+            Run();
+        }
+
+        private void Run()
+        { 
             string[,] values = new string[dgQuantification.RowCount, dgQuantification.ColumnCount];
             for (int iRow = 0; iRow < dgQuantification.RowCount; iRow++)
                 for (int iCol = 0; iCol < dgQuantification.ColumnCount; iCol++)
@@ -202,7 +224,7 @@ namespace PeSA.Windows
                 MessageBox.Show("Please make sure one the axes have OPAL array (each amino acid has to exist at most once)", Analyzer.ProgramName);
                 return;
             };
-            OA = new OPALArray(values, PermutationXAxis, out error);
+            OA = new OPALArray(values, PermutationXAxis, cbYAxisTopToBottom.Checked, out error);
             if (error != "")
             {
                 MessageBox.Show(error, Analyzer.ProgramName);
@@ -219,7 +241,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenQuantification.ShowDialog();
                 if (dlg != DialogResult.OK) return;
-                
+                SetText(dlgOpenQuantification);
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename))
                 {
@@ -245,6 +267,26 @@ namespace PeSA.Windows
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);
         }
-        
+
+        private void cbYAxisTopToBottom_CheckedChanged(object sender, EventArgs e)
+        {
+            //Rerun
+            if (quantificationLoaded)
+                Run();
+        }
+
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (OA == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+            Motif motif = OA.CreateMotif();
+
+            if (Motif.SaveToFile(filename, motif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
     }
 }

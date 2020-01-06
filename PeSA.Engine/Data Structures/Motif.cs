@@ -1,17 +1,27 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace PeSA.Engine
 {
-     public partial class Motif
+    public partial class Motif
     {
-        private Dictionary<int, Dictionary<char, double>> Columns;
+        public int ClassVersion = 0;
+
+        public Dictionary<int, Dictionary<char, double>> Columns { get; set; }
         private Settings settings;
-        public Motif(Dictionary<int, Dictionary<char, double>> _Columns)
+        public string WildTypePeptide { get; set; }
+        public int KeyPosition { get; set; }
+
+        public Motif(Dictionary<int, Dictionary<char, double>> _Columns, string _WildTypePeptide, int _KeyPosition)
         {
+            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
             Columns = _Columns;
+            KeyPosition = _KeyPosition;
+            WildTypePeptide = _WildTypePeptide;
             settings = Settings.Load("default.settings");
         }
 
@@ -84,6 +94,8 @@ namespace PeSA.Engine
             using (var brush = new SolidBrush(color))
             {
                 source.FillRectangle(Brushes.White, 0, 0, fullSizeBitmap.Width, fullSizeBitmap.Height);
+                AminoAcid aa = AminoAcids.GetAminoAcid(c); //aa?.MolecularWeight.ToString() ?? 
+                //source.DrawString(c=='X'?"X":aa?.pI.ToString(), font, brush, 0, 0);
                 source.DrawString(c.ToString(), font, brush, 0, 0);
 
                 var sourceRectangle = SelectFilledPixels(fullSizeBitmap);
@@ -190,5 +202,29 @@ namespace PeSA.Engine
 
             return bitmap;
         }
-  }
+
+        public static Motif ReadFromFile(string filename)
+        {
+            try
+            {
+                Motif motif = null;
+                if (File.Exists(filename))
+                    motif = JsonConvert.DeserializeObject<Motif>(File.ReadAllText(filename));
+
+                return motif;
+            }
+            catch { return null; }
+        }
+
+        public static bool SaveToFile(string filename, Motif motif)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(motif);
+                File.WriteAllText(filename, json);
+                return true;
+            }
+            catch { return false; }
+        }
+    }
 }

@@ -55,7 +55,7 @@ namespace PeSA.Engine
                 }
                 return data;
             }
-            catch 
+            catch (Exception exc) 
             {
                 return null;
             }
@@ -322,7 +322,8 @@ namespace PeSA.Engine
                 heightImage = settings.MotifHeight;
                 widthImage = settings.MotifWidth;
             }
-            Bitmap bmp = Analyzer.CreateMotif(Weights, useMotifThreshold ? settings.MotifThreshold : 0, widthImage, heightImage, settings.MotifMaxAAPerColumn);
+            Motif motif = new Motif(Weights, "", -1);//TODO
+            Bitmap bmp = Analyzer.CreateMotifImage(motif, useMotifThreshold ? settings.MotifThreshold : 0, widthImage, heightImage, settings.MotifMaxAAPerColumn);
             if (bmp != null)
             {
                 var picture = worksheet.Drawings.AddPicture("Motif", bmp);
@@ -430,7 +431,8 @@ namespace PeSA.Engine
             OPALArray.CheckPermutationAxis(data, ref permX, ref permY);
             if (!permX && !permY)
                 return null;
-            OPALArray OA = new OPALArray(data, permX, out string error);
+            Settings settings = Settings.Load("default.settings");
+            OPALArray OA = new OPALArray(data, permX, settings.WildTypeYAxisTopToBottom, out string error);
             return OA;
         }
 

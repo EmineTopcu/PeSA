@@ -27,7 +27,7 @@ namespace PeSA.Windows
 
         public static void LoadStringMatrixToGrid(DataGridView dg, string[,] textMatrix, int headerRow = 0, int headerColumn = 0)
         {
-                textMatrix = MatrixUtil.StripHeaderRowColumns(textMatrix);
+                //done on pase or load file textMatrix = MatrixUtil.StripHeaderRowColumns(textMatrix);
                 int rowCount = textMatrix.GetLength(0);
                 int colCount = textMatrix.GetLength(1);
                 dg.RowCount = rowCount + headerRow;

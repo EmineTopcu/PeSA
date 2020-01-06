@@ -17,10 +17,13 @@ namespace PeSA.Windows
     public partial class frmAnalyzePermutationArray : Form
     {
         PermutationArray PA;
-
+        string Title = "Permutation Array Analysis";
+        string ProjectName = "";
         bool quantificationLoaded = false;
         double threshold = 0.50;
         bool skipSetThreshold = false;
+        int colCount;
+        int rowCount;
 
 
         public frmAnalyzePermutationArray()
@@ -103,11 +106,38 @@ namespace PeSA.Windows
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            dlgSaveProject.FileName = ProjectName;
             DialogResult dlg = dlgSaveProject.ShowDialog();
             if (dlg != DialogResult.OK) return;
+            SetText(dlgSaveProject);
             string filename = dlgSaveProject.FileName;
             if (PermutationArray.SaveToFile(filename, PA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+        private void SetText(FileDialog dlg)
+        {
+            ProjectName = FormUtil.SetText(this, dlg, Title);
+        }
+
+       private void btnLoadQuantification_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenQuantification);
+                string filename = dlgOpenQuantification.FileName;
+                if (System.IO.File.Exists(filename))
+                {
+                    PA = FileUtil.ReadPermutationArrayQuantificationData(filename);
+                    LoadQuantificationFromPermutationArrayToGrid();
+                    dgPeptides.RowCount = dgPeptides.ColumnCount = 0;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
+            }
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -116,6 +146,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenProject.ShowDialog();
                 if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
                 PA = PermutationArray.ReadFromFile(filename);
                 threshold = PA.Threshold;
@@ -125,7 +156,10 @@ namespace PeSA.Windows
                 skipSetThreshold = false;
                 cbWildTypeXAxis.Checked = !PA.PermutationXAxis;
                 cbYAxisTopToBottom.Checked = PA.WildTypeYAxisTopToBottom;
+                colCount = PA.ColCount;
+                rowCount = PA.RowCount;
 
+                SetRowColumnCount();
                 if (PA.PeptideMatrix != null)
                     LoadPeptidesFromPermutationArrayToGrid();
                 if (PA.QuantificationMatrix != null)
@@ -153,6 +187,16 @@ namespace PeSA.Windows
 
             quantificationLoaded = true;
 
+        }
+
+        private void SetRowColumnCount()
+        {
+            dgPeptides.ColumnCount = dgQuantification.ColumnCount = 0;//first set to 0 to clear
+            dgPeptides.RowCount = dgQuantification.RowCount = 0;//first set to 0 to clear
+
+            dgPeptides.ColumnCount = dgQuantification.ColumnCount = colCount;
+            dgPeptides.RowCount = dgQuantification.RowCount = rowCount;
+            
         }
         private void FillGridHeaders(DataGridView dg)
         {
@@ -197,7 +241,7 @@ namespace PeSA.Windows
         private void btnCreateMotif_Click(object sender, EventArgs e)
         {
 
-            Bitmap bm = Analyzer.CreateMotif(PA);
+            Bitmap bm = Analyzer.CreateMotifImage(PA);
             frmMotifImage frmImage = new frmMotifImage(bm, "Main motif", null, "Shifted motif")
             {
                 MdiParent = MainForm.MainFormPointer,
@@ -206,6 +250,20 @@ namespace PeSA.Windows
             frmImage.Show();
             frmImage.WindowState = FormWindowState.Normal;
 
+        }
+
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (PA == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+            Motif motif = PA.CreateMotif();
+
+            if (Motif.SaveToFile(filename, motif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
         }
 
         private void cmiPaste_Click(object sender, EventArgs e)
@@ -280,26 +338,7 @@ namespace PeSA.Windows
             Run();
         }
 
-        private void btnLoadQuantification_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DialogResult dlg = dlgOpenQuantification.ShowDialog();
-                if (dlg != DialogResult.OK) return;
-                string filename = dlgOpenQuantification.FileName;
-                if (System.IO.File.Exists(filename))
-                {
-                    PA = FileUtil.ReadPermutationArrayQuantificationData(filename);
-                    LoadQuantificationFromPermutationArrayToGrid();
-                    dgPeptides.RowCount = dgPeptides.ColumnCount = 0;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
-            }
-        }
-
+ 
         private void cbWildTypeXAxis_CheckedChanged(object sender, EventArgs e)
         {
             cbYAxisTopToBottom.Visible = !cbWildTypeXAxis.Checked;

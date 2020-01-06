@@ -95,43 +95,48 @@ namespace PeSA.Engine
             return peptidesShifted;
         }
 
-        static public Bitmap CreateMotif(Dictionary<int, Dictionary<char, double>> Weights, 
-            double threshold = 0, int widthImage = 800, int heightImage = 200, int maxAAperCol = 20)
+        static public Bitmap CreateMotifImage(Motif mf, double threshold = 0, int widthImage = 800, int heightImage = 200, int maxAAperCol = 20)
         {
-            Motif mf = new Motif(Weights);
             if (threshold < 0)
                 threshold = 0;
-
             Bitmap bm = mf.Render(widthImage, heightImage, threshold: threshold, maxAAperCol: maxAAperCol);
             return bm;
         }
 
-        static public Bitmap CreateMotif(List<string> peptides, int pepsize,
+        static public Bitmap CreateMotif(List<string> peptides, int pepsize, int keyPos,
             double threshold = 0, int widthImage = 800, int heightImage = 200)
         {
             Dictionary<int, Dictionary<char, double>> Weights = GenerateFrequencies(peptides, pepsize);
-            return CreateMotif(Weights, threshold, widthImage, heightImage);
+            Motif motif = new Motif(Weights, "", keyPos);//TODO
+            return CreateMotifImage(motif, threshold, widthImage, heightImage);
         }
 
+        static public Motif CreateMotif(List<string> peptides, int pepsize, int keyPos)
+        {
+            Dictionary<int, Dictionary<char, double>> Weights = GenerateFrequencies(peptides, pepsize);
+            return new Motif(Weights, "", keyPos);//TODO
+        }
 
-        static public Bitmap CreateMotif(PermutationArray PA)
+        static public Bitmap CreateMotifImage(PermutationArray PA)
         {
             Settings settings = Settings.Load("default.settings");
             int heightImage = settings.MotifHeight;
             int widthImage = settings.MotifWidth;
             int maxAAperCol = settings.MotifMaxAAPerColumn;
-            return CreateMotif(PA, widthImage, heightImage, maxAAperCol);
+            return CreateMotifImage(PA, widthImage, heightImage, maxAAperCol);
         }
 
-        static public Bitmap CreateMotif(PermutationArray PA,
+        static public Bitmap CreateMotifImage(PermutationArray PA,
             int widthImage = 800, int heightImage = 200, int maxAAperCol = 10)
         {
 
             Dictionary<int, Dictionary<char, double>> weights = PA.GenerateWeights();
-            return CreateMotif(weights, 0, widthImage, heightImage, maxAAperCol);
+            Motif motif = new Motif(weights, PA.WildTypePeptide, -1);
+            return CreateMotifImage(motif, 0, widthImage, heightImage, maxAAperCol);
         }
 
-        static public Bitmap CreateMotif(OPALArray OA)
+        
+        static public Bitmap CreateMotifImage(OPALArray OA)
         {
             Settings settings = Settings.Load("default.settings");
             int heightImage = 200;
@@ -143,15 +148,16 @@ namespace PeSA.Engine
                 widthImage = settings.MotifWidth;
                 maxAAperCol = settings.MotifMaxAAPerColumn;
             }
-            return CreateMotif(OA, widthImage, heightImage, maxAAperCol);
+            return CreateMotifImage(OA, widthImage, heightImage, maxAAperCol);
         }
 
-        static public Bitmap CreateMotif(OPALArray OA,
+        static public Bitmap CreateMotifImage(OPALArray OA,
             int widthImage = 800, int heightImage = 200, int maxAAperCol = 10)
         {
 
             Dictionary<int, Dictionary<char, double>> weights = OA.GenerateWeights();
-            return CreateMotif(weights, 0, widthImage, heightImage, maxAAperCol);
+            Motif motif = new Motif(weights, "", -1);
+            return CreateMotifImage(motif, 0, widthImage, heightImage, maxAAperCol);
         }
 
         static public bool CheckPeptideList(List<string> peptides, int length, out List<string> warnings, out List<string> errors)

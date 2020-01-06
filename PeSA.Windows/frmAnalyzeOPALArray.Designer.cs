@@ -37,6 +37,7 @@
             this.cmsClipBoard = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmiPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.pQuantificationTop = new System.Windows.Forms.Panel();
+            this.cbYAxisTopToBottom = new System.Windows.Forms.CheckBox();
             this.cbPermutationXAxis = new System.Windows.Forms.CheckBox();
             this.btnRun = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -56,6 +57,8 @@
             this.dgNormalized = new System.Windows.Forms.DataGridView();
             this.pNormalizedTop = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.dlgSaveMotif = new System.Windows.Forms.SaveFileDialog();
+            this.btnSaveMotif = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgQuantification)).BeginInit();
             this.cmsClipBoard.SuspendLayout();
@@ -135,6 +138,7 @@
             // 
             // pQuantificationTop
             // 
+            this.pQuantificationTop.Controls.Add(this.cbYAxisTopToBottom);
             this.pQuantificationTop.Controls.Add(this.cbPermutationXAxis);
             this.pQuantificationTop.Controls.Add(this.btnRun);
             this.pQuantificationTop.Controls.Add(this.label3);
@@ -144,6 +148,18 @@
             this.pQuantificationTop.Name = "pQuantificationTop";
             this.pQuantificationTop.Size = new System.Drawing.Size(584, 30);
             this.pQuantificationTop.TabIndex = 1;
+            // 
+            // cbYAxisTopToBottom
+            // 
+            this.cbYAxisTopToBottom.AutoSize = true;
+            this.cbYAxisTopToBottom.Location = new System.Drawing.Point(335, 7);
+            this.cbYAxisTopToBottom.Margin = new System.Windows.Forms.Padding(2);
+            this.cbYAxisTopToBottom.Name = "cbYAxisTopToBottom";
+            this.cbYAxisTopToBottom.Size = new System.Drawing.Size(128, 17);
+            this.cbYAxisTopToBottom.TabIndex = 7;
+            this.cbYAxisTopToBottom.Text = "Y Axis: Top to Bottom";
+            this.cbYAxisTopToBottom.UseVisualStyleBackColor = true;
+            this.cbYAxisTopToBottom.CheckedChanged += new System.EventHandler(this.cbYAxisTopToBottom_CheckedChanged);
             // 
             // cbPermutationXAxis
             // 
@@ -199,6 +215,7 @@
             // 
             // pBottom
             // 
+            this.pBottom.Controls.Add(this.btnSaveMotif);
             this.pBottom.Controls.Add(this.btnCreateMotif);
             this.pBottom.Controls.Add(this.btnExport);
             this.pBottom.Controls.Add(this.btnLoad);
@@ -333,6 +350,21 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Normalized";
             // 
+            // dlgSaveMotif
+            // 
+            this.dlgSaveMotif.Filter = "PeSA Motif File|*.pmtf";
+            this.dlgSaveMotif.Title = "Save Motif File";
+            // 
+            // btnSaveMotif
+            // 
+            this.btnSaveMotif.Location = new System.Drawing.Point(464, 6);
+            this.btnSaveMotif.Name = "btnSaveMotif";
+            this.btnSaveMotif.Size = new System.Drawing.Size(117, 23);
+            this.btnSaveMotif.TabIndex = 6;
+            this.btnSaveMotif.Text = "Save Motif";
+            this.btnSaveMotif.UseVisualStyleBackColor = true;
+            this.btnSaveMotif.Click += new System.EventHandler(this.btnSaveMotif_Click);
+            // 
             // frmAnalyzeOPALArray
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,5 +420,8 @@
         private System.Windows.Forms.DataGridView dgNormalized;
         private System.Windows.Forms.Panel pNormalizedTop;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox cbYAxisTopToBottom;
+        private System.Windows.Forms.Button btnSaveMotif;
+        private System.Windows.Forms.SaveFileDialog dlgSaveMotif;
     }
 }

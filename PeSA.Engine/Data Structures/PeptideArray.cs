@@ -10,6 +10,8 @@ namespace PeSA.Engine
 {
     public class PeptideArray
     {
+        public int ClassVersion = 0;
+
         public int PeptideLength { get; set; }
         public int RowCount { get; set; }
         public int ColCount { get; set; }
@@ -26,6 +28,7 @@ namespace PeSA.Engine
         public List<string> ModifiedPeptides { get; set; }
         public PeptideArray(int nRow, int nCol, bool rowsFirst)
         {
+            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
             RowCount = nRow;
             ColCount = nCol;
             RowsFirst = rowsFirst;
@@ -79,7 +82,15 @@ namespace PeSA.Engine
             if (matrix == null) return;
 
             if (matrix.Length > 0)
-                PeptideLength = matrix[0, 0].Length;
+                for (int rowind = 0; rowind < matrix.GetLength(0); rowind++)
+                {
+                    for (int colind = 0; colind < matrix.GetLength(1); colind++)
+                    {
+                        PeptideLength = matrix[rowind, colind]?.Length ?? 0;
+                        if (PeptideLength > 0) break;
+                    }
+                    if (PeptideLength > 0) break;
+                }
             if (RowsFirst)
             {
                 for (int rowind = 0; rowind < matrix.GetLength(0); rowind++)

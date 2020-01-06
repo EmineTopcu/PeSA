@@ -15,6 +15,8 @@ namespace PeSA.Windows
     public partial class frmAnalyzePeptideArray : Form
     {
         PeptideArray PA;
+        string Title = "Peptide Array Analysis";
+        string ProjectName = "";
 
         bool peptidesLoaded = false;
         bool quantificationLoaded = false;
@@ -110,6 +112,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenQuantification.ShowDialog();
                 if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenQuantification);
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename) &&
                     FileUtil.ReadQuantificationData(filename, PA, headersExist: true))
@@ -227,11 +230,18 @@ namespace PeSA.Windows
             ColorGrids(true);
         }
 
+        private void SetText(FileDialog dlg)
+        {
+            ProjectName = FormUtil.SetText(this, dlg, Title);
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (PA == null) return;
+            dlgSaveProject.FileName = ProjectName;
             DialogResult dlg = dlgSaveProject.ShowDialog();
             if (dlg != DialogResult.OK) return;
+            SetText(dlgSaveProject);
             string filename = dlgSaveProject.FileName;
             if (PeptideArray.SaveToFile(filename, PA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -243,6 +253,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenProject.ShowDialog();
                 if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
                 PA = PeptideArray.ReadFromFile(filename);
                 peptidelength = PA.PeptideLength;
@@ -441,7 +452,7 @@ namespace PeSA.Windows
             }
             catch
             {
-                MessageBox.Show("There is a problem with loading the peptide list.\r\nPlease make sure the peptode list is the only data in the loaded file.\r\n", Application.ProductName);
+                MessageBox.Show("There is a problem with loading the peptide list.\r\nPlease make sure the peptide list is the only data in the loaded file.\r\n", Application.ProductName);
             }
         }
 
@@ -459,11 +470,27 @@ namespace PeSA.Windows
             }
         }
 
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (PA == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+            Motif motif = Analyzer.CreateMotif(PA.PeptideList, PA.PeptideLength, -1);
+
+            if (Motif.SaveToFile(filename, motif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
         private void cmiLoadPeptideMatrix_Click(object sender, EventArgs e)
         {
             try
             {
                 DialogResult dlg = dlgOpenPeptideMatrix.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+
                 string filename = dlgOpenPeptideMatrix.FileName;
                 string[,] peptides = FileUtil.ReadPeptideMatrix(filename);
                 rowCount = peptides.GetLength(0);
@@ -483,7 +510,7 @@ namespace PeSA.Windows
             }
             catch
             {
-                MessageBox.Show("There is a problem with loading the peptide matrix file.\r\nPlease make sure the peptode matrix is the only data in the loaded file.\r\n", Application.ProductName);
+                MessageBox.Show("There is a problem with loading the peptide matrix file.\r\nPlease make sure the peptide matrix is the only data in the loaded file.\r\n", Application.ProductName);
             }
         }
 

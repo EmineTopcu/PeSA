@@ -75,6 +75,12 @@
     <Compile Include="frmAnalyzePermutationArray.Designer.cs">
       <DependentUpon>frmAnalyzePermutationArray.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSequenceGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSequenceGenerator.Designer.cs">
+      <DependentUpon>frmSequenceGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPermutationArraySettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +112,7 @@
       <DependentUpon>frmMotifCreator.cs</DependentUpon>
     </Compile>
     <Compile Include="GridUtil.cs" />
+    <Compile Include="Helpers\FormUtil.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAnalyzePermutationArray.resx">
       <DependentUpon>frmAnalyzePermutationArray.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSequenceGenerator.resx">
+      <DependentUpon>frmSequenceGenerator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPermutationArraySettings.resx">
       <DependentUpon>frmPermutationArraySettings.cs</DependentUpon>
@@ -186,4 +196,9 @@
     <Content Include="Images\BtnPermutation.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>CD $(SolutionDir)
+
+$(SolutionDir)zip.bat</PostBuildEvent>
+  </PropertyGroup>
 </Project>

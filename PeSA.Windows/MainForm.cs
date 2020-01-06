@@ -52,6 +52,12 @@ namespace PeSA.Windows
             frm.MdiParent = this;
             frm.Show();
         }
+        private void RunSequenceGenerator()
+        {
+            frmSequenceGenerator frm = new frmSequenceGenerator();
+            frm.MdiParent = this;
+            frm.Show();
+        }
 
         private void mAnalyzePeptideList_Click(object sender, EventArgs e)
         {
@@ -73,6 +79,10 @@ namespace PeSA.Windows
             AnalyzeOPALArray();
         }
 
+        private void mToolsSequenceGenerator_Click(object sender, EventArgs e)
+        {
+            RunSequenceGenerator();
+        }
         private void btnPeptideList_Click(object sender, EventArgs e)
         {
             AnalyzePeptideList();
@@ -94,6 +104,10 @@ namespace PeSA.Windows
             AnalyzeOPALArray();
         }
 
+        private void btnSequenceGenerator_Click(object sender, EventArgs e)
+        {
+            RunSequenceGenerator();
+        }
         private void mWindowCascadeAll_Click(object sender, EventArgs e)
         {
             this.LayoutMdi(MdiLayout.Cascade);

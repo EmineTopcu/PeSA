@@ -10,6 +10,8 @@ namespace PeSA.Engine
 {
     public class OPALArray
     {
+        public int ClassVersion = 0;
+
         public int RowCount { get; set; }
         public int ColCount { get; set; }
         public bool PermutationXAxis { get; set; }
@@ -18,6 +20,7 @@ namespace PeSA.Engine
         public double[] NormBy;
         public char[] Permutation;
         public string[] PositionCaptions;
+        public bool PositionYAxisTopToBottom { get; set; }
 
         public double Threshold { get; set; }
 
@@ -51,11 +54,13 @@ namespace PeSA.Engine
                         }
                         Permutation[iCol - 1] = s[0];
                     }
+                    //PositionYAxisTopToBottom is not used in setting the positio captions. What user sees should not change. Use it only during the motif generation
                     for (int iRow = 1; iRow <= RowCount; iRow++)
                     {
                         string s = values[iRow, 0].Trim();
                         PositionCaptions[iRow - 1] = s;
                     }
+
                 }
                 else //if(PermutationYAxis)
                 {
@@ -114,13 +119,15 @@ namespace PeSA.Engine
             }
         }
 
-        public OPALArray(string[,] values, bool permutationXAxisIn, out string error)
+        public OPALArray(string[,] values, bool permutationXAxisIn, bool positionYAxisTopToBottom, out string error)
         {
+            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
             error = "";
             try
             {
                 PeptideWeights = new Dictionary<string, double>();
                 PermutationXAxis = permutationXAxisIn;
+                PositionYAxisTopToBottom = positionYAxisTopToBottom;
                 GenerateMatrices(values, out error);
                 if (error != "") return;
             }
@@ -213,8 +220,16 @@ namespace PeSA.Engine
                         {
                             if (PermutationXAxis)
                             {
-                                weights[rowind].Add(Permutation[colind], weight);
-                                totalWeightsPerPos[rowind] += weight;
+                                if (this.PositionYAxisTopToBottom)
+                                {
+                                    weights[rowind].Add(Permutation[colind], weight);
+                                    totalWeightsPerPos[rowind] += weight;
+                                }
+                                else //if Position Matrix is read from bottom to top, rowind should be reversed
+                                {
+                                    weights[RowCount -  rowind - 1].Add(Permutation[colind], weight);
+                                    totalWeightsPerPos[RowCount - rowind - 1] += weight;
+                                }
                             }
                             else
                             {
@@ -238,6 +253,10 @@ namespace PeSA.Engine
             }
         }
 
-
+        public Motif CreateMotif()
+        {
+            Dictionary<int, Dictionary<char, double>> weights = GenerateWeights();
+            return new Motif(weights, "", -1);
+        }
     }
 }

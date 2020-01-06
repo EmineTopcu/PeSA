@@ -36,9 +36,9 @@
             this.btnSave1 = new System.Windows.Forms.Button();
             this.lMotif1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCopyToClipboard2 = new System.Windows.Forms.Button();
             this.btnSave2 = new System.Windows.Forms.Button();
             this.lMotif2 = new System.Windows.Forms.Label();
-            this.btnCopyToClipboard2 = new System.Windows.Forms.Button();
             this.dlgSaveImage = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -121,7 +121,7 @@
             // 
             this.btnSave1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSave1.AutoSize = true;
-            this.btnSave1.Location = new System.Drawing.Point(248, 6);
+            this.btnSave1.Location = new System.Drawing.Point(245, 6);
             this.btnSave1.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave1.Name = "btnSave1";
             this.btnSave1.Size = new System.Drawing.Size(93, 23);
@@ -150,6 +150,19 @@
             this.panel1.Size = new System.Drawing.Size(549, 36);
             this.panel1.TabIndex = 3;
             // 
+            // btnCopyToClipboard2
+            // 
+            this.btnCopyToClipboard2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCopyToClipboard2.AutoSize = true;
+            this.btnCopyToClipboard2.Location = new System.Drawing.Point(98, 6);
+            this.btnCopyToClipboard2.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCopyToClipboard2.Name = "btnCopyToClipboard2";
+            this.btnCopyToClipboard2.Size = new System.Drawing.Size(143, 23);
+            this.btnCopyToClipboard2.TabIndex = 1;
+            this.btnCopyToClipboard2.Text = "Copy Image to Clipboard";
+            this.btnCopyToClipboard2.UseVisualStyleBackColor = true;
+            this.btnCopyToClipboard2.Click += new System.EventHandler(this.btnCopyToClipboard2_Click);
+            // 
             // btnSave2
             // 
             this.btnSave2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -171,19 +184,6 @@
             this.lMotif2.Size = new System.Drawing.Size(36, 13);
             this.lMotif2.TabIndex = 2;
             this.lMotif2.Text = "Motif2";
-            // 
-            // btnCopyToClipboard2
-            // 
-            this.btnCopyToClipboard2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCopyToClipboard2.AutoSize = true;
-            this.btnCopyToClipboard2.Location = new System.Drawing.Point(98, 6);
-            this.btnCopyToClipboard2.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCopyToClipboard2.Name = "btnCopyToClipboard2";
-            this.btnCopyToClipboard2.Size = new System.Drawing.Size(143, 23);
-            this.btnCopyToClipboard2.TabIndex = 1;
-            this.btnCopyToClipboard2.Text = "Copy Image to Clipboard";
-            this.btnCopyToClipboard2.UseVisualStyleBackColor = true;
-            this.btnCopyToClipboard2.Click += new System.EventHandler(this.btnCopyToClipboard2_Click);
             // 
             // dlgSaveImage
             // 

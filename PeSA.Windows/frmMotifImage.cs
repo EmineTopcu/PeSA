@@ -67,5 +67,7 @@ namespace PeSA.Windows
             pictureBox2.Image.Save(filename);
             MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
         }
+
+       
     }
 }

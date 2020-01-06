@@ -61,6 +61,7 @@
     <Compile Include="Helpers\MatrixUtil.cs" />
     <Compile Include="Data Structures\Motif.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SequenceGenerator.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>

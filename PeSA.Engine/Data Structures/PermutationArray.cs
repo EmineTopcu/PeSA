@@ -10,6 +10,8 @@ namespace PeSA.Engine
 {
     public class PermutationArray
     {
+        public int ClassVersion = 0;
+
         public string WildTypePeptide { get; set; }
         public int RowCount { get; set; }
         public int ColCount { get; set; }
@@ -199,8 +201,9 @@ namespace PeSA.Engine
             }
         }
 
-         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
+        public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
         {
+            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
             error = "";
             warnings = new List<string>();
             try
@@ -309,7 +312,7 @@ namespace PeSA.Engine
                     weights.Add(i, new Dictionary<char, double>());
                 }
 
-                double weight = PeptideWeights[WildTypePeptide];
+                double weight = PeptideWeights.ContainsKey(WildTypePeptide) ? PeptideWeights[WildTypePeptide] : 1;
                 for (int i = 0; i < pepsize; i++)
                 {
                     char c = WildTypePeptide[i];
@@ -343,6 +346,12 @@ namespace PeSA.Engine
             {
                 return null;
             }
+        }
+
+        public Motif CreateMotif()
+        {
+            Dictionary<int, Dictionary<char, double>> weights = GenerateWeights();
+            return new Motif(weights, WildTypePeptide, -1);
         }
 
     }
