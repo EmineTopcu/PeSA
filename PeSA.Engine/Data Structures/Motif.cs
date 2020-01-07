@@ -9,7 +9,7 @@ namespace PeSA.Engine
 {
     public partial class Motif
     {
-        public int ClassVersion = 0;
+        public string Version = "";
 
         public Dictionary<int, Dictionary<char, double>> Columns { get; set; }
         private Settings settings;
@@ -18,7 +18,7 @@ namespace PeSA.Engine
 
         public Motif(Dictionary<int, Dictionary<char, double>> _Columns, string _WildTypePeptide, int _KeyPosition)
         {
-            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
+            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             Columns = _Columns;
             KeyPosition = _KeyPosition;
             WildTypePeptide = _WildTypePeptide;

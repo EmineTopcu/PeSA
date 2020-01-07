@@ -10,7 +10,7 @@ namespace PeSA.Engine
 {
     public class OPALArray
     {
-        public int ClassVersion = 0;
+        public string Version = "";
 
         public int RowCount { get; set; }
         public int ColCount { get; set; }
@@ -121,7 +121,7 @@ namespace PeSA.Engine
 
         public OPALArray(string[,] values, bool permutationXAxisIn, bool positionYAxisTopToBottom, out string error)
         {
-            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
+            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             error = "";
             try
             {

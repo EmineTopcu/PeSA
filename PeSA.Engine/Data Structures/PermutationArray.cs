@@ -10,7 +10,7 @@ namespace PeSA.Engine
 {
     public class PermutationArray
     {
-        public int ClassVersion = 0;
+        public string Version = "";
 
         public string WildTypePeptide { get; set; }
         public int RowCount { get; set; }
@@ -203,7 +203,7 @@ namespace PeSA.Engine
 
         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
         {
-            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
+            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             error = "";
             warnings = new List<string>();
             try
@@ -279,6 +279,7 @@ namespace PeSA.Engine
             }
             catch { return null; }
         }
+    
 
         public static bool SaveToFile(string filename, PermutationArray PA)
         {

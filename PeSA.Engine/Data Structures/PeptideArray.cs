@@ -10,7 +10,7 @@ namespace PeSA.Engine
 {
     public class PeptideArray
     {
-        public int ClassVersion = 0;
+        public string Version = "";
 
         public int PeptideLength { get; set; }
         public int RowCount { get; set; }
@@ -28,7 +28,7 @@ namespace PeSA.Engine
         public List<string> ModifiedPeptides { get; set; }
         public PeptideArray(int nRow, int nCol, bool rowsFirst)
         {
-            ClassVersion = typeof(Analyzer).Assembly.GetName().Version.Build;
+            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             RowCount = nRow;
             ColCount = nCol;
             RowsFirst = rowsFirst;
