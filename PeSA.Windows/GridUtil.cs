@@ -14,29 +14,29 @@ namespace PeSA.Windows
     {
         public static void LoadNumericMatrixToGrid(DataGridView dg, double[,] numericMatrix, int headerRow = 0, int headerColumn = 0)
         {
-                int rowCount = numericMatrix.GetLength(0);
-                int colCount = numericMatrix.GetLength(1);
-                dg.RowCount = rowCount + headerRow;
-                dg.ColumnCount = colCount + headerColumn;
-                for (int i = 0; i < rowCount; i++)
-                    for (int j = 0; j < colCount; j++)
-                    {
-                        dg[j + headerColumn, i + headerRow].Value = numericMatrix[i, j];
-                    }
+            int rowCount = numericMatrix.GetLength(0);
+            int colCount = numericMatrix.GetLength(1);
+            dg.RowCount = rowCount + headerRow;
+            dg.ColumnCount = colCount + headerColumn;
+            for (int i = 0; i < rowCount; i++)
+                for (int j = 0; j < colCount; j++)
+                {
+                    dg[j + headerColumn, i + headerRow].Value = numericMatrix[i, j];
+                }
         }
 
         public static void LoadStringMatrixToGrid(DataGridView dg, string[,] textMatrix, int headerRow = 0, int headerColumn = 0)
         {
-                //done on pase or load file textMatrix = MatrixUtil.StripHeaderRowColumns(textMatrix);
-                int rowCount = textMatrix.GetLength(0);
-                int colCount = textMatrix.GetLength(1);
-                dg.RowCount = rowCount + headerRow;
-                dg.ColumnCount = colCount + headerColumn;
-                for (int i = 0; i < rowCount; i++)
-                    for (int j = 0; j < colCount; j++)
-                    {
-                        dg[j + headerColumn, i + headerRow].Value = textMatrix[i, j];
-                    }
+            //done on pase or load file textMatrix = MatrixUtil.StripHeaderRowColumns(textMatrix);
+            int rowCount = textMatrix.GetLength(0);
+            int colCount = textMatrix.GetLength(1);
+            dg.RowCount = rowCount + headerRow;
+            dg.ColumnCount = colCount + headerColumn;
+            for (int i = 0; i < rowCount; i++)
+                for (int j = 0; j < colCount; j++)
+                {
+                    dg[j + headerColumn, i + headerRow].Value = textMatrix[i, j];
+                }
         }
 
         public static void PasteClipboard(DataGridView dgGrid)
@@ -101,7 +101,7 @@ namespace PeSA.Windows
             }
             catch (Exception exc)
             {
-                MessageBox.Show("The data you pasted is not formatted correctly: "+exc.Message, Analyzer.ProgramName);
+                MessageBox.Show("The data you pasted is not formatted correctly: " + exc.Message, Analyzer.ProgramName);
             }
             finally
             {
@@ -119,7 +119,7 @@ namespace PeSA.Windows
                 dg.RowHeightChanged += GridRowHeightChanged;
                 dg.ColumnWidthChanged += GridColumnWidthChanged;
             }
-            catch 
+            catch
             {
             }
         }
@@ -155,7 +155,7 @@ namespace PeSA.Windows
             finally
             {
                 skipColWidthChange = false;
-            }            
+            }
         }
 
         static bool skipRowHeightChange = false;
@@ -169,7 +169,7 @@ namespace PeSA.Windows
                 int height = e.Row.Height;
                 if (dg.SelectedRows.Count > 0)
                     foreach (DataGridViewRow row in dg.SelectedRows)
-                    row.Height = height;
+                        row.Height = height;
                 else if (dg.SelectedCells.Count > 0)
                 {
                     List<int> rowList = new List<int>();
@@ -182,7 +182,7 @@ namespace PeSA.Windows
                         dg.Rows[rowind].Height = height;
                 }
             }
-            catch 
+            catch
             {
             }
             finally
