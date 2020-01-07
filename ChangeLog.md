@@ -1,3 +1,6 @@
+__Version 1.3__
+
+
 __Version 1.2__
 * Various bug fixes in saving and exporting
 * Motif save capability - to be used for future enhancements
