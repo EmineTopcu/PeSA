@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace PeSA.Windows
 {
-    public partial class frmMotifSettings : Form
+    public partial class frmSettings : Form
     {
         Settings settings;
-        public frmMotifSettings()
+        public frmSettings()
         {
             InitializeComponent();
         }
@@ -27,18 +27,30 @@ namespace PeSA.Windows
                 eMaxAAPerColumn.Text = settings.MotifMaxAAPerColumn.ToString();
                 eThreshold.Text = settings.MotifThreshold.ToString();
 
-                LoadColors();
+            if (settings.WildTypeYAxisTopToBottom)
+                rbTopToBottom.Checked = true;
+            else
+                rbBottomToTop.Checked = true;
+
+            eRowNumber.Text = settings.PeptideArrayRows.ToString();
+            eColumnNumber.Text = settings.PeptideArrayColumns.ToString();
+            if (settings.PeptideArrayRowsFirst)
+                rbRowFirst.Checked = true;
+            else
+                rbColumnsFirst.Checked = true;
+            LoadColors();
         }
 
         private void LoadColors()
         {
             pColors.SuspendLayout();
-            if (pColors.Controls.Count == 0)
+            if (pColors.Controls.Count < 2)
             {
                 int rowind = 1;
-                int top = 8;
+                int top = 20;
                 int left = 10;
-                foreach (char c in settings.AminoAcidMotifColors.Keys)
+                int bottommost = 0;
+                foreach (char c in settings.AminoAcidMotifColors.Keys.Union(AminoAcids.GetFullAminoAcidList().Select(aa=>aa.Abbrev1)))
                 {
                     Label label = new Label();
                     label.Text = c.ToString();
@@ -52,7 +64,7 @@ namespace PeSA.Windows
                     pColors.Controls.Add(label);
                     Button button = new Button
                     {
-                        BackColor = settings.AminoAcidMotifColors[c],
+                        BackColor = settings.GetColorOfAminoAcid(c),
                         Tag = c
                     };
                     button.Click += Button_Click;
@@ -64,11 +76,11 @@ namespace PeSA.Windows
                     left -= 20;
                     top += 25;
                     pColors.Controls.Add(button);
-                    if (++rowind > 7)
+                    if (++rowind > 6)
                     {
                         rowind = 1;
                         left += 60;
-                        top = 8;
+                        top = 20;
                     }
                 }
             }
@@ -114,13 +126,24 @@ namespace PeSA.Windows
             settings.MotifWidth = w;
             settings.MotifMaxAAPerColumn = m;
             settings.MotifThreshold = t;
+            settings.WildTypeYAxisTopToBottom = rbTopToBottom.Checked;
+
+            if (!Int32.TryParse(eRowNumber.Text, out int r))
+                r = 20;
+            if (!Int32.TryParse(eColumnNumber.Text, out int c))
+                c = 30;
+            settings.PeptideArrayRows = r;
+            settings.PeptideArrayColumns = c;
+            settings.PeptideArrayRowsFirst = rbRowFirst.Checked;
+
             if (!settings.Save("default.settings"))
                 MessageBox.Show("There was a problem in savings the settings.");
             else
                 this.Close();
         }
 
-        private void btnDefaultColors_Click(object sender, EventArgs e)
+
+        private void linkResetColors_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             settings.SetDefaultColors();
             LoadColors();

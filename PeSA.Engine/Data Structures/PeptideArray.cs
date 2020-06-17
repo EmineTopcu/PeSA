@@ -8,27 +8,23 @@ using System.Threading.Tasks;
 
 namespace PeSA.Engine
 {
-    public class PeptideArray
+    public class PeptideArray: BaseArray
     {
-        public string Version = "";
-
         public int PeptideLength { get; set; }
-        public int RowCount { get; set; }
-        public int ColCount { get; set; }
         public bool RowsFirst { get; set; }
         public List<string> PeptideList { get; set; }
         public string[,] PeptideMatrix { get; set; }
-        public double[,] QuantificationMatrix { get; set; }
-        public double[,] NormalizedMatrix { get; set; }
 
         public double MaxValue { get; private set; }
-        public double NormalizationValue { get; set; }
-        public double Threshold { get; set; }
+
+        public double FrequencyThreshold { get; set; }
+        public int? KeyPosition { get; set; }
+        public char KeyAA { get; set; }
 
         public List<string> ModifiedPeptides { get; set; }
+        
         public PeptideArray(int nRow, int nCol, bool rowsFirst)
         {
-            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             RowCount = nRow;
             ColCount = nCol;
             RowsFirst = rowsFirst;
@@ -36,6 +32,7 @@ namespace PeSA.Engine
             QuantificationMatrix = new double[nRow, nCol];
             NormalizedMatrix = new double[nRow, nCol];
             ModifiedPeptides = new List<string>();
+            NormalizedPeptideWeights = new Dictionary<string, double>();
         }
 
         public void SetPeptideList(List<string> list)
@@ -127,15 +124,49 @@ namespace PeSA.Engine
             NormalizationValue = MaxValue;
         }
 
+        private void AddModifiedPeptide(string s)
+        {
+            if (!ModifiedPeptides.Contains(s))
+                ModifiedPeptides.Add(s);
+        }
+
+        private void AddNormalizedPeptideWeight(string peptide, double weight)
+        {
+            if (string.IsNullOrEmpty(peptide))
+                return;
+            if (NormalizedPeptideWeights.ContainsKey(peptide))
+                return;
+            NormalizedPeptideWeights.Add(peptide, weight);
+        }
+
+        override public void SetPositiveThreshold(double value, out bool negChanged)
+        {
+            base.SetPositiveThreshold(value, out negChanged);
+            GenerateModifiedPeptideList();
+        }
+
+        private void GenerateModifiedPeptideList()
+        {
+            ModifiedPeptides.Clear();
+            foreach (string s in NormalizedPeptideWeights.Keys)
+            {
+                if (NormalizedPeptideWeights[s] >= PositiveThreshold)
+                    AddModifiedPeptide(s);
+            }
+        }
+
         public void Normalize(double normBy)
         {
+            NormalizedPeptideWeights.Clear();
             if (normBy == 0) return;
             NormalizationValue = normBy;
             for (int i = 0; i < RowCount; i++)
                 for (int j = 0; j < ColCount; j++)
                 {
                     NormalizedMatrix[i, j] = QuantificationMatrix[i, j] / normBy;
+                    AddNormalizedPeptideWeight(PeptideMatrix[i, j], NormalizedMatrix[i, j]);
                 }
+            GenerateModifiedPeptideList();
         }
         public int[,] BinaryMatrix {
             get
@@ -144,7 +175,7 @@ namespace PeSA.Engine
                 for (int i = 0; i < RowCount; i++)
                     for (int j = 0; j < ColCount; j++)
                     {
-                        _BinaryMatrix[i, j] = NormalizedMatrix[i, j] <= Threshold ? 0 : 1;
+                        _BinaryMatrix[i, j] = NormalizedMatrix[i, j] <= PositiveThreshold ? 0 : 1;
                     }
                 return _BinaryMatrix;
             }
@@ -155,8 +186,14 @@ namespace PeSA.Engine
             {
                 PeptideArray PA = null;
                 if (File.Exists(filename))
+                {
                     PA = JsonConvert.DeserializeObject<PeptideArray>(File.ReadAllText(filename));
-
+                    if (PA.Version == "")
+                    {
+                        PA.Version = "Old version";
+                        PA.Upgrade("PositiveThreshold");
+                    }
+                }
                 return PA;
             }
             catch { return null; }
@@ -166,6 +203,7 @@ namespace PeSA.Engine
         {
             try
             {
+                PA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
                 string json = JsonConvert.SerializeObject(PA);
                 File.WriteAllText(filename, json);
                 return true;

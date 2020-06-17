@@ -21,40 +21,39 @@ namespace PeSA.Windows
         bool peptidesLoaded = false;
         bool quantificationLoaded = false;
 
-        double _normalizeBy = 1;
-        double threshold = 0.50;
         int colCount;
         int rowCount;
         bool rowsFirst;
         int peptidelength = 0;
-
-        bool skipSetThreshold = false;
-        int searchLastRow = 0, searchLastCol = 0;
-        string searchString = "";
-
-        public double normalizeBy
-        {
-            get => _normalizeBy;
-            set
-            {
-                _normalizeBy = value;
-                eNormalizeBy.Text = _normalizeBy.ToString();
-            }
-        }
+        
+        GridUtil dgPeptideHelper;
 
         public frmAnalyzePeptideArray()
         {
             InitializeComponent();
+            dgPeptideHelper = new GridUtil(dgPeptides);
         }
 
         private void frmPeptideArray_Load(object sender, EventArgs e)
         {
             ResetSettings();
-            eThreshold.Text = threshold.ToString();
             UpdateArrayInfo();
             GridUtil.FormatGrid(dgPeptides);
             GridUtil.FormatGrid(dgQuantification);
             GridUtil.FormatGrid(dgNormalized);
+        }
+
+        private void FillPAValues()
+        {
+            if (PA == null) return;
+            PA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
+            PA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
+            if (double.TryParse(eFreqThreshold.Text, out double d))
+                PA.FrequencyThreshold = d;
+            if (char.TryParse(eAminoAcid.Text, out char c))
+                PA.KeyAA = c;
+            if (int.TryParse(eKeyPosition.Text, out int i))
+                PA.KeyPosition = i;
         }
 
         private void ResetSettings()
@@ -95,11 +94,6 @@ namespace PeSA.Windows
             UpdateArrayInfo();
         }
 
-        private void btnLoadPeptideList_Click(object sender, EventArgs e)
-        {
-            cmsLoadPeptide.Show(btnLoadPeptideList, (int)(btnLoadPeptideList.Width / 2), (int)(btnLoadPeptideList.Height / 2));
-        }
-
         private void LoadPeptidesFromPeptideArrayToGrid()
         {
             GridUtil.LoadStringMatrixToGrid(dgPeptides, PA.PeptideMatrix);
@@ -108,52 +102,11 @@ namespace PeSA.Windows
 
         private void btnLoadQuantification_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DialogResult dlg = dlgOpenQuantification.ShowDialog();
-                if (dlg != DialogResult.OK) return;
-                SetText(dlgOpenQuantification);
-                string filename = dlgOpenQuantification.FileName;
-                if (System.IO.File.Exists(filename) &&
-                    FileUtil.ReadQuantificationData(filename, PA, headersExist: true))
-                {
-                    LoadQuantificationFromPeptideArrayToGrid();
-                    normalizeBy = PA.MaxValue;
-                    Renormalize();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
-            }
         }
         private void LoadQuantificationFromPeptideArrayToGrid()
         {
             GridUtil.LoadNumericMatrixToGrid(dgQuantification, PA.QuantificationMatrix);
             quantificationLoaded = true;
-        }
-
-        private void eThreshold_Leave(object sender, EventArgs e)
-        {
-            double d;
-            if (double.TryParse(eThreshold.Text, out d))
-            {
-                SetThreshold(d);
-                skipSetThreshold = true;
-                trackThreshold.Value = Math.Max(0, Math.Min(100, (int)(d * 100)));
-                skipSetThreshold = false;
-            }
-        }
-
-        private void trackThreshold_ValueChanged(object sender, EventArgs e)
-        {
-            if (skipSetThreshold) return;
-            if (sender == trackThreshold)
-            {
-                double d = (double)trackThreshold.Value / 100;
-                eThreshold.Text = d.ToString();
-                SetThreshold(d);
-            }
         }
 
         private void eNormalizeBy_Leave(object sender, EventArgs e)
@@ -180,8 +133,15 @@ namespace PeSA.Windows
         {
             PA.Normalize(val);
             LoadNormalizedMatrixFromPeptideArrayToGrid();
-            SetThreshold(threshold);
+            ColorGrids();
         }
+
+        private void ClearMotifs()
+        {
+            mdMain.Image = null;
+            mdShifted.Image = null;
+        }
+
         private void LoadNormalizedMatrixFromPeptideArrayToGrid()
         {
             if (dgNormalized.RowCount < PA.NormalizedMatrix.GetLength(0))
@@ -194,40 +154,34 @@ namespace PeSA.Windows
                     dgNormalized[colind, rowind].Value = PA.NormalizedMatrix[rowind, colind];
         }
 
-        private void ColorGrids(bool updateModifiedPeptideList)
+        private bool ColorGrids()
         {
-            if (updateModifiedPeptideList)
-                PA.ModifiedPeptides.Clear();
-            for (int i = 0; i < rowCount; i++)
-                for (int j = 0; j < colCount; j++)
+            try
+            {
+                for (int i = 0; i < rowCount; i++)
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        double weight = Convert.ToDouble(dgNormalized[j, i].Value);
+                        Color col;
+                        if (weight >= PA.PositiveThreshold)
+                            col = Common.ColorPositive;
+                        else if (weight < PA.NegativeThreshold)
+                            col = Common.ColorNegative;
+                        else
+                            col = Common.ColorNeutral;
+                        dgPeptides[j, i].Style.BackColor = col;
+                        dgQuantification[j, i].Style.BackColor = col;
+                        dgNormalized[j, i].Style.BackColor = col;
+                    }
+                if (!thresholdEntry.trackThresholdMouseDown && !thresholdEntry.trackNegThresholdMouseDown)
                 {
-                    if (Convert.ToDouble(dgNormalized[j, i].Value) >= threshold)
-                    {
-                        dgPeptides[j, i].Style.BackColor = Color.Gray;
-                        dgQuantification[j, i].Style.BackColor = Color.Gray;
-                        dgNormalized[j, i].Style.BackColor = Color.Gray;
-                        if (updateModifiedPeptideList)
-                        {
-                            string s = dgPeptides[j, i].Value.ToString();
-                            if (peptidelength > 0 && s.Length > peptidelength)
-                                s = s.Substring(0, peptidelength);
-                            PA.ModifiedPeptides.Add(s);
-                        }
-                    }
-                    else
-                    {
-                        dgPeptides[j, i].Style.BackColor = Color.White;
-                        dgQuantification[j, i].Style.BackColor = Color.White;
-                        dgNormalized[j, i].Style.BackColor = Color.White;
-                    }
+                    FillDecisionGrid();
+                    if (!DrawMotifs())
+                        return false;
                 }
-        }
-
-        private void SetThreshold(double val)
-        {
-            PA.Threshold = val;
-            threshold = val;
-            ColorGrids(true);
+                return true;
+            }
+            catch { return false; }
         }
 
         private void SetText(FileDialog dlg)
@@ -242,6 +196,8 @@ namespace PeSA.Windows
             DialogResult dlg = dlgSaveProject.ShowDialog();
             if (dlg != DialogResult.OK) return;
             SetText(dlgSaveProject);
+            PA.Notes = eNotes.Text;
+            PA.ImageStr = FileUtil.ImageToBase64(imageReference.Image);
             string filename = dlgSaveProject.FileName;
             if (PeptideArray.SaveToFile(filename, PA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -255,7 +211,14 @@ namespace PeSA.Windows
                 if (dlg != DialogResult.OK) return;
                 SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
-                PA = PeptideArray.ReadFromFile(filename);
+                try
+                {
+                    PA = PeptideArray.ReadFromFile(filename);
+                }
+                catch
+                {
+                    MessageBox.Show("The file may be corrupted or not a valid PeSA project file.", Analyzer.ProgramName);
+                }
                 peptidelength = PA.PeptideLength;
                 ePeptideLength.Text = peptidelength.ToString();
                 rowsFirst = PA.RowsFirst;
@@ -263,13 +226,13 @@ namespace PeSA.Windows
                 rowCount = PA.RowCount;
                 UpdateArrayInfo();
 
-                normalizeBy = PA.NormalizationValue;
-                skipSetThreshold = true;
-                threshold = PA.Threshold;
-                eThreshold.Text = PA.Threshold.ToString();
-                trackThreshold.Value = Math.Max(0, Math.Min(100, (int)(PA.Threshold * 100)));
-                skipSetThreshold = false;
+                eNormalizeBy.Text = PA.NormalizationValue.ToString();
 
+                thresholdEntry.SetInitialValues(PA.GetPositiveThreshold(), PA.GetNegativeThreshold());
+
+                eFreqThreshold.Text = PA.FrequencyThreshold.ToString();
+                eAminoAcid.Text = PA.KeyAA.ToString();
+                eKeyPosition.Text = PA.KeyPosition?.ToString() ?? "";
                 SetRowColumnCount();
                 if (PA.PeptideMatrix != null)
                     LoadPeptidesFromPeptideArrayToGrid();
@@ -277,17 +240,29 @@ namespace PeSA.Windows
                     LoadQuantificationFromPeptideArrayToGrid();
                 if (PA.NormalizedMatrix != null)
                     LoadNormalizedMatrixFromPeptideArrayToGrid();
-                ColorGrids(false);
+                bool gridsOK = ColorGrids();
+                eNotes.Text = PA.Notes;
+                imageReference.Image = null;
+                try
+                {
+                    Image img = FileUtil.Base64ToImage(PA.ImageStr);
+                    imageReference.Image = img;
+                }
+                catch { }
+                if (!gridsOK)
+                    MessageBox.Show("There is a problem in loading the file. It is highly recommended to re-run the analysis.", Analyzer.ProgramName);
             }
-            catch 
+            catch
             {
-                MessageBox.Show("The file may be corrupted or not a valid PeSA project file.", Analyzer.ProgramName);
+                MessageBox.Show("There is a problem in loading the file. It is highly recommended to re-run the analysis.", Analyzer.ProgramName);
             }
+            linkRun.Visible = true;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
         {
             if (PA == null) return;
+            dlgExcelExport.FileName = ProjectName;
             DialogResult dlg = dlgExcelExport.ShowDialog();
             if (dlg != DialogResult.OK) return;
             string filename = dlgExcelExport.FileName;
@@ -298,88 +273,102 @@ namespace PeSA.Windows
                 MessageBox.Show(errormsg, Analyzer.ProgramName);
         }
 
-        private void btnMotifGenerator_Click(object sender, EventArgs e)
-        {
-            if (PA == null) return;
-            frmMotifCreator frm = new frmMotifCreator(PA.ModifiedPeptides);
-            frm.MdiParent = this.MdiParent;
-            frm.Show();
-        }
-
-        private void SearchPeptide(bool next)
+        private bool DrawMotifs()
         {
             try
             {
-                bool found = false;
-                if (searchString.Length > 0)
+                ClearMotifs();
+                if (PA == null)
+                    return true;
+                Settings settings = Settings.Load("default.settings");
+                int heightImage = 200;
+                int widthImage = 800;
+                if (settings != null)
                 {
-                    int startrow = next ? searchLastRow : 0;
-                    int startcol = next ? searchLastCol+1 : 0;
-                    if (startcol >= dgPeptides.ColumnCount)
-                    {
-                        startrow++;
-                        startcol = 0;
-                        if (startcol >= dgPeptides.RowCount)
-                            startcol = 0;
-                    }
-                    for (int rowind = startrow; rowind < dgPeptides.RowCount; rowind++)
-                    {
-                        for (int colind = startcol; colind < dgPeptides.ColumnCount; colind++)
-                        {
-                            if (dgPeptides[colind, rowind].Value == null) continue;
-                            if (dgPeptides[colind, rowind].Value.ToString().Contains(searchString))
-                            {
-                                found = true;
-                                dgPeptides.CurrentCell = dgPeptides[colind, rowind];
-                                searchLastRow = rowind;
-                                searchLastCol = colind;
-                                try { dgQuantification.CurrentCell = dgQuantification[colind, rowind]; } catch { }
-                                try { dgNormalized.CurrentCell = dgNormalized[colind, rowind]; } catch { }
-                                break;
-                            }
-                        }
-                        startcol = startrow = 0;
-                    }
-                    if (next && !found && searchLastRow + searchLastCol > 0) //start from the top
-                    {
-                        for (int rowind = 0; rowind <= searchLastRow; rowind++)
-                        {
-                            for (int colind = 0; colind < dgPeptides.ColumnCount; colind++)
-                            {
-                                if (dgPeptides[colind, rowind].Value == null) continue;
-                                if (rowind == searchLastRow && colind == searchLastCol) break;
-                                if (dgPeptides[colind, rowind].Value.ToString().Contains(searchString))
-                                {
-                                    found = true;
-                                    dgPeptides.CurrentCell = dgPeptides[colind, rowind];
-                                    searchLastRow = rowind;
-                                    searchLastCol = colind;
-                                    try { dgQuantification.CurrentCell = dgQuantification[colind, rowind]; } catch { }
-                                    try { dgNormalized.CurrentCell = dgNormalized[colind, rowind]; } catch { }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (!found)
-                        MessageBox.Show("Peptide sequence not found.", Analyzer.ProgramName);
+                    heightImage = settings.MotifHeight;
+                    widthImage = settings.MotifWidth;
                 }
+
+                int midpoint = peptidelength / 2;
+                if (Int32.TryParse(eKeyPosition.Text, out int keyPos) && keyPos <= peptidelength && keyPos > 0)
+                    midpoint = keyPos - 1;
+                else
+                {
+                    keyPos = midpoint + 1;
+                    eKeyPosition.Text = keyPos.ToString();
+                }
+                PA.KeyPosition = keyPos;
+
+                if (!Char.TryParse(eAminoAcid.Text.Trim(), out char keyAA))
+                {
+                    keyAA = ' ';
+                    eAminoAcid.Text = keyAA.ToString();
+                }
+                else if (Char.IsLower(keyAA))
+                    keyAA = Char.ToUpper(keyAA);
+
+                PA.KeyAA = keyAA;
+                if (keyAA != ' ')
+                {
+                    List<string> mainList = PA.ModifiedPeptides.Where(s => s[keyPos - 1] == keyAA).ToList();
+
+                    List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
+                    Motif motif = new Motif(mainList, peptidelength);
+                    motif.FreqThreshold = PA.FrequencyThreshold;
+                    Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    mdMain.Image = bm;
+
+                    motif = new Motif(shiftedList, peptidelength);
+                    motif.FreqThreshold = PA.FrequencyThreshold;
+                    bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    mdShifted.Image = bm;
+                    mdShifted.Visible = true;
+                }
+                else
+                {
+                    Motif motif = new Motif(PA.ModifiedPeptides, peptidelength);
+                    motif.FreqThreshold = PA.FrequencyThreshold;
+                    Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    mdMain.Image = bm;
+                    mdShifted.Visible = false;
+                }
+                return true;
             }
-            catch 
+            catch { return false; }
+        }
+
+        private void FillDecisionGrid()
+        {
+            dgDecision.Rows.Clear();
+            dgDecision.RowCount = PA.NormalizedPeptideWeights.Count;
+            int rowind = 0;
+            foreach (string key in PA.NormalizedPeptideWeights.Keys.OrderBy(k => k))
             {
+                dgDecision[0, rowind].Value = key;
+                double val = PA.NormalizedPeptideWeights[key];
+                dgDecision[1, rowind].Value = val;
+                dgDecision[2, rowind++].Value = val >= PA.PositiveThreshold ? "Pos" : val < PA.NegativeThreshold ? "Neg" : "";
             }
         }
 
-        private void cmiSearchPeptide_Click(object sender, EventArgs e)
+        private void cmiFindPeptide_Click(object sender, EventArgs e)
         {
-                searchString = Microsoft.VisualBasic.Interaction.InputBox("Search", DefaultResponse:searchString);
-                SearchPeptide(false);
-            
+            dgPeptideHelper.SearchPeptide(false);
+            if (dgPeptideHelper.StringFound)
+            {
+                try { dgQuantification.CurrentCell = dgQuantification[dgPeptideHelper.searchLastCol, dgPeptideHelper.searchLastRow]; } catch { }
+                try { dgNormalized.CurrentCell = dgNormalized[dgPeptideHelper.searchLastCol, dgPeptideHelper.searchLastRow]; } catch { }
+            }
         }
 
         private void cmiFindNext_Click(object sender, EventArgs e)
         {
-                SearchPeptide(true);
+            dgPeptideHelper.SearchPeptide(true);
+            if (dgPeptideHelper.StringFound)
+            {
+                try { dgQuantification.CurrentCell = dgQuantification[dgPeptideHelper.searchLastCol, dgPeptideHelper.searchLastRow]; } catch { }
+                try { dgNormalized.CurrentCell = dgNormalized[dgPeptideHelper.searchLastCol, dgPeptideHelper.searchLastRow]; } catch { }
+            }
         }
 
         private void cmiPastePeptide_Click(object sender, EventArgs e)
@@ -387,30 +376,38 @@ namespace PeSA.Windows
             try
             {
                 string[,] matrix = MatrixUtil.ClipboardToMatrix();
-                matrix = MatrixUtil.StripHeaderRowColumns(matrix);
+                matrix = MatrixUtil.StripHeaderRowColumns(matrix, false);
                 rowCount = matrix.GetLength(0);
                 colCount = matrix.GetLength(1);
                 PA = new PeptideArray(rowCount, colCount, rowsFirst);
                 PA.SetPeptideMatrix(matrix);
+                peptidelength = PA.PeptideLength;
+                ePeptideLength.Text = peptidelength.ToString();
                 dgQuantification.RowCount = dgQuantification.ColumnCount = 0;
                 dgNormalized.RowCount = dgNormalized.ColumnCount = 0;
                 SetRowColumnCount();
                 GridUtil.LoadStringMatrixToGrid(dgPeptides, matrix);
                 peptidesLoaded = true;
                 quantificationLoaded = false;
+                FillPAValues();
+                ClearMotifs();
             }
             catch
             {
             }
         }
 
-
         private void cmiPasteQuantification_Click(object sender, EventArgs e)
         {
             try
             {
+                if (PA == null)
+                {
+                    MessageBox.Show("The peptide array needs to be loaded before the quantification array.", Analyzer.ProgramName);
+                    return;
+                }
                 string[,] matrix = MatrixUtil.ClipboardToMatrix();
-                matrix = MatrixUtil.StripHeaderRowColumns(matrix);
+                matrix = MatrixUtil.StripHeaderRowColumns(matrix, true);
                 if (matrix == null || rowCount != matrix.GetLength(0) || colCount != matrix.GetLength(1))
                 {
                     MessageBox.Show("The dimensions of the quantification data does not match the peptide matrix.", Analyzer.ProgramName);
@@ -419,7 +416,8 @@ namespace PeSA.Windows
                 double[,] dMatrix = MatrixUtil.ConvertToNumericMatrix(matrix);
                 PA.SetQuantificationMatrix(matrix, false);
                 GridUtil.LoadNumericMatrixToGrid(dgQuantification, dMatrix);
-                normalizeBy= MatrixUtil.GetMaxValue(dMatrix);
+                PA.NormalizationValue = MatrixUtil.GetMaxValue(dMatrix);
+                eNormalizeBy.Text = PA.NormalizationValue.ToString();
                 quantificationLoaded = true;
                 Renormalize();
             }
@@ -447,6 +445,8 @@ namespace PeSA.Windows
                     ePeptideLength.Text = peptidelength.ToString();
                     LoadPeptidesFromPeptideArrayToGrid();
                     peptidesLoaded = true;
+                    quantificationLoaded = false;
+                    FillPAValues();
                     Renormalize();
                 }
             }
@@ -459,7 +459,7 @@ namespace PeSA.Windows
         private void ePeptideLength_Leave(object sender, EventArgs e)
         {
             int i = 0;
-            if (int.TryParse(ePeptideLength.Text, out i) && i > 0)
+            if (int.TryParse(ePeptideLength.Text, out i) && i > 0 && peptidelength != i)
             {
                 peptidelength = i;
                 if (PA != null)
@@ -470,18 +470,87 @@ namespace PeSA.Windows
             }
         }
 
-        private void btnSaveMotif_Click(object sender, EventArgs e)
+        private void thresholdEntry_ThresholdChanged(object sender, EventArgs e)
         {
-            if (PA == null) return;
-            dlgSaveMotif.FileName = ProjectName;
-            DialogResult dlg = dlgSaveMotif.ShowDialog();
-            if (dlg != DialogResult.OK) return;
+            if (PA == null)
+                return;
+            PA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
+            PA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
+            ColorGrids();
+        }
 
-            string filename = dlgSaveMotif.FileName;
-            Motif motif = Analyzer.CreateMotif(PA.PeptideList, PA.PeptideLength, -1);
+        private void lQuestion_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("If not blank, only peptides with the target amino acid at the key position will be used to create the motif.\r\n" +
+            "For others, second motif will be created by bringing another target amino acid to key position if possible.", Analyzer.ProgramName);
+        }
 
-            if (Motif.SaveToFile(filename, motif))
-                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        private void eAminoAcid_Leave(object sender, EventArgs e)
+        {
+            if (char.TryParse(eAminoAcid.Text.Trim(), out char c) && PA.KeyAA != c)
+            {
+                PA.KeyAA = c;
+                DrawMotifs();
+            }
+            else if (string.IsNullOrWhiteSpace(eAminoAcid.Text))
+            {
+                PA.KeyAA = ' ';
+                DrawMotifs();
+            }
+        }
+
+        private void eKeyPosition_Leave(object sender, EventArgs e)
+        {
+            if (int.TryParse(eKeyPosition.Text, out int i) && PA.KeyPosition != i)
+            {
+                PA.KeyPosition = i;
+                DrawMotifs();
+            }
+        }
+
+        private void eFreqThreshold_Leave(object sender, EventArgs e)
+        {
+            if (double.TryParse(eFreqThreshold.Text, out double d) && PA.FrequencyThreshold != d)
+            {
+                PA.FrequencyThreshold = d;
+                DrawMotifs();
+            }
+        }
+
+        private void lLoadPeptides_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            cmsLoadPeptide.Show(lLoadPeptides, (int)(lLoadPeptides.Width / 2), (int)(lLoadPeptides.Height / 2));
+        }
+
+        private void linkLoadQuantification_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenQuantification);
+                string filename = dlgOpenQuantification.FileName;
+                if (System.IO.File.Exists(filename) &&
+                    FileUtil.ReadQuantificationData(filename, PA, headersExist: true))
+                {
+                    LoadQuantificationFromPeptideArrayToGrid();
+                    eNormalizeBy.Text = PA.MaxValue.ToString();
+                    Renormalize();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
+            }
+        }
+
+        private void flowpanelReference_ClientSizeChanged(object sender, EventArgs e)
+        {
+            imageReference.Width = flowpanelReference.ClientSize.Width - 8;
+            imageReference.SetHeightAndMode();
+            eNotes.Width = flowpanelReference.ClientSize.Width - 8;
+            eNotes.Height = Math.Max(flowpanelReference.ClientSize.Height - imageReference.Height - lNotes.Height - 16, 40);
+
         }
 
         private void cmiLoadPeptideMatrix_Click(object sender, EventArgs e)
@@ -505,6 +574,8 @@ namespace PeSA.Windows
                     ePeptideLength.Text = peptidelength.ToString();
                     LoadPeptidesFromPeptideArrayToGrid();
                     peptidesLoaded = true;
+                    quantificationLoaded = false;
+                    FillPAValues();
                     Renormalize();
                 }
             }
@@ -514,6 +585,9 @@ namespace PeSA.Windows
             }
         }
 
-
+        private void linkRun_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Renormalize();
+        }
     }
 }

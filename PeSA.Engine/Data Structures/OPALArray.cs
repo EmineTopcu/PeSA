@@ -8,35 +8,96 @@ using System.Threading.Tasks;
 
 namespace PeSA.Engine
 {
-    public class OPALArray
+    public class OPALArray: BaseArray
     {
-        public string Version = "";
-
-        public int RowCount { get; set; }
-        public int ColCount { get; set; }
         public bool PermutationXAxis { get; set; }
-        public double[,] QuantificationMatrix { get; set; }
-        public double[,] NormalizedMatrix { get; set; }
+
+        public double NormalizedMatrixMax { get; set; }
+        public double NormalizedMatrixMin { get; set; }
+
         public double[] NormBy;
+        public NormalizationMode NormMode = NormalizationMode.Max;
+
         public char[] Permutation;
         public string[] PositionCaptions;
         public bool PositionYAxisTopToBottom { get; set; }
 
-        public double Threshold { get; set; }
+        /// <summary>
+        /// In OPAL arrays, wild type array is set as XXXXXXXX to be used by the motif class
+        /// </summary>
+        public string WildTypePeptide { get; set; }
 
-        public Dictionary<string, double> PeptideWeights { get; set; }
+        override protected void Upgrade(string mode)
+        {
+            base.Upgrade(mode);
+            if (mode == "NormalizedMatrixRange")
+            {
+                if (NormalizedPeptideWeights == null || NormalizedPeptideWeights.Count == 0)
+                    GenerateNormalizedPeptideWeights();
+                else
+                {
+                    NormalizedMatrixMin = double.MaxValue;
+                    NormalizedMatrixMax = double.MinValue;
+                    for (int iRow = 0; iRow < RowCount; iRow++)
+                        for (int iCol = 0; iCol < ColCount; iCol++)
+                        {
+                            if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
+                                NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
+                            if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
+                                NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
+                        }
+                }
+            }
+        }
+
+        private void GenerateNormalizedPeptideWeights()
+        {
+            NormalizedPeptideWeights.Clear();
+            NormalizedMatrixMin = double.MaxValue;
+            NormalizedMatrixMax = double.MinValue;
+            for (int iRow = 0; iRow < RowCount; iRow++)
+                for (int iCol = 0; iCol < ColCount; iCol++)
+                {
+                    int pos = PermutationXAxis ? iRow : iCol;
+                    double normby = NormMode == NormalizationMode.Max ? NormalizationValue :
+                        NormBy == null ? 1 : NormBy[pos];
+
+                    if (normby != 0)
+                        NormalizedMatrix[iRow, iCol] = QuantificationMatrix[iRow, iCol] / normby;
+                    if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
+                        NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
+                    if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
+                        NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
+
+                    double weight = NormalizedMatrix[iRow, iCol];
+                    if (PermutationXAxis)
+                    {
+                        if (this.PositionYAxisTopToBottom)
+                            AddNormalizedPeptideWeight(weight, iRow, Permutation[iCol]);
+                        else //if Position Matrix is read from bottom to top, rowind should be reversed
+                            AddNormalizedPeptideWeight(weight, RowCount - iRow - 1, Permutation[iCol]);
+                     }
+                    else
+                    {
+                        AddNormalizedPeptideWeight(weight, iCol, Permutation[iRow]);
+                    }
+                }
+        }
 
         private void GenerateMatrices(string[,] values, out string error)
         {
             error = "";
             try
             {
+                if (values == null) return;
                 RowCount = values.GetLength(0) - 1;
                 ColCount = values.GetLength(1) - 1;
                 QuantificationMatrix = new double[RowCount, ColCount];
                 NormalizedMatrix = new double[RowCount, ColCount];
 
-                //Generate Permutation array
+                WildTypePeptide = new string('X', PermutationXAxis ? RowCount : ColCount);
+
+                #region Generate permutation, position, and NormBy arrays
                 if (PermutationXAxis)
                 {
                     NormBy = new double[RowCount];
@@ -54,7 +115,7 @@ namespace PeSA.Engine
                         }
                         Permutation[iCol - 1] = s[0];
                     }
-                    //PositionYAxisTopToBottom is not used in setting the positio captions. What user sees should not change. Use it only during the motif generation
+                    //PositionYAxisTopToBottom is not used in setting the position captions. What user sees should not change. Use it only during the motif generation
                     for (int iRow = 1; iRow <= RowCount; iRow++)
                     {
                         string s = values[iRow, 0].Trim();
@@ -68,6 +129,7 @@ namespace PeSA.Engine
                     for (int iCol = 1; iCol <= ColCount; iCol++)
                         NormBy[iCol - 1] = 0;
                     Permutation = new char[RowCount];
+                    PositionCaptions = new string[ColCount];
                     for (int iRow = 1; iRow <= RowCount; iRow++)
                     {
                         string s = values[iRow, 0].Trim();
@@ -84,6 +146,7 @@ namespace PeSA.Engine
                         PositionCaptions[iCol - 1] = s;
                     }
                 }
+                #endregion
 
                 //Generate Matrices and Normalization values
                 for (int iRow = 0; iRow < RowCount; iRow++)
@@ -105,6 +168,7 @@ namespace PeSA.Engine
                         else
                             NormBy[iCol] = Math.Max(d, NormBy[iCol]);
                     }
+
                 for (int iRow = 0; iRow < RowCount; iRow++)
                     for (int iCol = 0; iCol < ColCount; iCol++)
                     {
@@ -112,6 +176,8 @@ namespace PeSA.Engine
                         if (normby != 0)
                             NormalizedMatrix[iRow, iCol] = QuantificationMatrix[iRow, iCol] / normby;
                     }
+                NormalizationValue = NormBy.Max();
+                GenerateNormalizedPeptideWeights();
             }
             catch (Exception exc)
             {
@@ -119,15 +185,19 @@ namespace PeSA.Engine
             }
         }
 
+        public void Renormalize()
+        {
+            GenerateNormalizedPeptideWeights();
+        }
+
         public OPALArray(string[,] values, bool permutationXAxisIn, bool positionYAxisTopToBottom, out string error)
         {
-            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             error = "";
             try
             {
-                PeptideWeights = new Dictionary<string, double>();
                 PermutationXAxis = permutationXAxisIn;
                 PositionYAxisTopToBottom = positionYAxisTopToBottom;
+                NormalizedPeptideWeights = new Dictionary<string, double>();
                 GenerateMatrices(values, out error);
                 if (error != "") return;
             }
@@ -173,8 +243,15 @@ namespace PeSA.Engine
             {
                 OPALArray OA = null;
                 if (File.Exists(filename))
+                {
                     OA = JsonConvert.DeserializeObject<OPALArray>(File.ReadAllText(filename));
-
+                    if (OA.Version == "")
+                    {
+                        OA.Version = "Old version";
+                        OA.Upgrade("PositiveThreshold");
+                        OA.Upgrade("NormalizedMatrixRange");
+                    }
+                }
                 return OA;
             }
             catch { return null; }
@@ -184,6 +261,7 @@ namespace PeSA.Engine
         {
             try
             {
+                OA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
                 string json = JsonConvert.SerializeObject(OA);
                 File.WriteAllText(filename, json);
                 return true;
@@ -191,6 +269,21 @@ namespace PeSA.Engine
             catch { return false; }
         }
 
+        private void AddNormalizedPeptideWeight(double weight, int pos, char replaceBy)
+        {
+            if (string.IsNullOrEmpty(WildTypePeptide))
+                return;
+            string s = "", e = "";
+            if (pos > 0)
+                s = WildTypePeptide.Substring(0, pos);
+            if (pos < WildTypePeptide.Length - 1)
+                e = WildTypePeptide.Substring(pos + 1);
+            string peptide = s + replaceBy + e;
+            if (/*peptide == WildTypePeptide && */NormalizedPeptideWeights.ContainsKey(peptide))
+                return;
+            NormalizedPeptideWeights.Add(peptide, weight);
+        }
+               
         /// <summary>
         /// Dictionary of weight for each char at every position
         /// </summary>
@@ -201,6 +294,9 @@ namespace PeSA.Engine
             try
             {
                 int motifsize = PermutationXAxis ? RowCount : ColCount;
+                WildTypePeptide = new string('X', motifsize);
+                NormalizedPeptideWeights.Clear();
+                
                 Dictionary<int, Dictionary<char, double>> weights;
                 Dictionary<int, double> totalWeightsPerPos;
                 weights = new Dictionary<int, Dictionary<char, double>>();
@@ -216,27 +312,37 @@ namespace PeSA.Engine
                     for (int colind = 0; colind < ColCount; colind++)
                     {
                         double weight = NormalizedMatrix[rowind, colind];
-                        if (weight> Threshold)
-                        {
                             if (PermutationXAxis)
                             {
                                 if (this.PositionYAxisTopToBottom)
                                 {
-                                    weights[rowind].Add(Permutation[colind], weight);
-                                    totalWeightsPerPos[rowind] += weight;
+                                    if (weight > PositiveThreshold)
+                                    {
+                                        weights[rowind].Add(Permutation[colind], weight);
+                                        totalWeightsPerPos[rowind] += weight;
+                                    }
+                                    AddNormalizedPeptideWeight(weight, rowind, Permutation[colind]);
                                 }
                                 else //if Position Matrix is read from bottom to top, rowind should be reversed
                                 {
-                                    weights[RowCount -  rowind - 1].Add(Permutation[colind], weight);
-                                    totalWeightsPerPos[RowCount - rowind - 1] += weight;
+                                    if (weight > PositiveThreshold)
+                                    {
+                                        weights[RowCount - rowind - 1].Add(Permutation[colind], weight);
+                                        totalWeightsPerPos[RowCount - rowind - 1] += weight;
+                                    }
+                                    AddNormalizedPeptideWeight(weight, RowCount - rowind - 1, Permutation[colind]);
                                 }
                             }
                             else
                             {
-                                weights[colind].Add(Permutation[rowind], weight);
-                                totalWeightsPerPos[colind] += weight;
+                                if (weight > PositiveThreshold)
+                                {
+                                    weights[colind].Add(Permutation[rowind], weight);
+                                    totalWeightsPerPos[colind] += weight;
+                                }
+                                AddNormalizedPeptideWeight(weight, colind, Permutation[rowind]);
                             }
-                        }
+                        
                     }
                 }
                 for (int i = 0; i < motifsize; i++)
@@ -251,12 +357,6 @@ namespace PeSA.Engine
             {
                 return null;
             }
-        }
-
-        public Motif CreateMotif()
-        {
-            Dictionary<int, Dictionary<char, double>> weights = GenerateWeights();
-            return new Motif(weights, "", -1);
         }
     }
 }

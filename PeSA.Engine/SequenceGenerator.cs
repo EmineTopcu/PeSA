@@ -40,7 +40,7 @@ namespace PeSA.Engine
             string chars = input.Substring(start + 1, end - start - 1);
             string firstpart = start > 0 ? input.Substring(0, start) : "";
             string lastpart = end < input.Length - 1 ? input.Substring(end + 1) : "";
-            if (chars.Substring(0, 1) == "-") //use all minoacids except the ones listed
+            if (chars.Substring(0, 1) == "-" || chars == "X") //use all aminoacids except the ones listed - X: use all
             {
                 string charstouse = "";
                 foreach (AminoAcid aa in AminoAcids.GetAminoAcidList())

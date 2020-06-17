@@ -26,33 +26,33 @@ namespace PeSA.Engine
         public double? pKa1, pKa2, pKa3, pI;
         public int NumericPolarity
         {
-        get
-        {
-            switch (Polarity)
+            get
             {
-                case "acidic polar": return 0;
-                case "basic polar": return 1;
-                case "polar": return 2;
-                case "nonpolar": return 3;
-                default:
-                    return 99;
+                switch (Polarity)
+                {
+                    case "acidic polar": return 0;
+                    case "basic polar": return 1;
+                    case "polar": return 2;
+                    case "nonpolar": return 3;
+                    default:
+                        return 99;
+                }
             }
-        }
         }
         public int NumericCharge
-    {
-        get
         {
-            switch (Polarity)
+            get
             {
-                case "negative": return -1;
-                case "neutral": return 0;
-                case "positive": return 1;
-                default:
-                    return 99;
+                switch (Polarity)
+                {
+                    case "negative": return -1;
+                    case "neutral": return 0;
+                    case "positive": return 1;
+                    default:
+                        return 99;
+                }
             }
         }
-    }
     }
 
     static public class AminoAcids
@@ -87,11 +87,18 @@ namespace PeSA.Engine
             if (!AminoAcids.IsStandardAminoAcid(c))
                 return null;
             return AminoAcidList[c]; }
-        public static List<AminoAcid> GetAminoAcidList() { return AminoAcidList.Values.ToList(); }
-   
-        public static List<AminoAcid> GetSortedAminoAcidList()
+        public static List<AminoAcid> GetFullAminoAcidList() { return AminoAcidList.Values.ToList(); }
+        public static List<AminoAcid> GetAminoAcidList()
         {
-            return AminoAcidList.Values.OrderBy(aa => aa, new AminoAcidComp()).ToList();
+            Settings settings = Settings.Load("default.settings");
+            if (settings.AminoAcidExcludeList == null || settings.AminoAcidExcludeList.Count == 0)
+                return AminoAcidList.Values.ToList();
+            return AminoAcidList.Where(aa => !settings.AminoAcidExcludeList.Contains(aa.Key)).Select(aa => aa.Value).ToList();
+        }
+
+        public static List<AminoAcid> GetSortedFullAminoAcidList()
+        {
+            return AminoAcidList.Values.OrderBy(aa => aa.Name).ToList();//, new AminoAcidComp()).ToList();
         }
     }
 

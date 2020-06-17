@@ -23,8 +23,6 @@ namespace PeSA.Windows
         bool quantificationLoaded = false;
         bool PermutationXAxis = false;
 
-        double threshold = 0.50;
-
         public frmAnalyzeOPALArray()
         {
             InitializeComponent();
@@ -32,7 +30,7 @@ namespace PeSA.Windows
 
         private void frmOPALArray_Load(object sender, EventArgs e)
         {
-            eThreshold.Text = threshold.ToString();
+            thresholdEntry.SetInitialValues(0.5, 0.5);
             ResetSettings();
             GridUtil.FormatGrid(dgQuantification);
             GridUtil.FormatGrid(dgNormalized);
@@ -43,58 +41,115 @@ namespace PeSA.Windows
             Settings settings = (ParentForm as MainForm).DefaultSettings;
             cbYAxisTopToBottom.Checked = settings?.WildTypeYAxisTopToBottom ?? false;
         }
-
-        bool skipSetThreshold = false;
-        private void eThreshold_Leave(object sender, EventArgs e)
+        private void ClearMotifs()
         {
-            double d;
-            if (double.TryParse(eThreshold.Text, out d))
-            {
-                SetThreshold(d);
-                skipSetThreshold = true;
-                trackThreshold.Value = Math.Max(0, Math.Min(100, (int)(d * 100)));
-                skipSetThreshold = false;
-            }
+            mdPositive.Image = mdNegative.Image = mdChart.Image = null;
         }
 
-        private void trackThreshold_ValueChanged(object sender, EventArgs e)
+        private bool DrawMotifs()
         {
-
-            if (skipSetThreshold) return;
-            if (sender == trackThreshold)
+            try
             {
-                double d = (double)trackThreshold.Value / 100;
-                eThreshold.Text = d.ToString();
-                SetThreshold(d);
-            }
-        }
-
-        private void SetThreshold(double val)
-        {
-            OA.Threshold = val;
-            threshold = val;
-            ColorGrids();
-        }
-
-        private void ColorGrids()
-        {
-            for (int i = 1; i < dgQuantification.RowCount; i++)
-            {
-                for (int j = 1; j < dgQuantification.ColumnCount; j++)
+                ClearMotifs();
+                if (OA == null) return true;
+                Settings settings = Settings.Load("default.settings");
+                int heightImage = 200;
+                int widthImage = 800;
+                if (settings != null)
                 {
-                    double weight = OA.NormalizedMatrix[i - 1, j - 1];
-                    if (weight >= threshold)
+                    heightImage = settings.MotifHeight;
+                    widthImage = settings.MotifWidth;
+                }
+                Motif motif = new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
+
+                mdPositive.Image = motif.GetPositiveMotif(widthImage, heightImage);
+
+                mdNegative.Image = motif.GetNegativeMotif(widthImage, heightImage);
+
+                mdChart.Image = motif.GetBarChart(pMotif.Width - 6);
+                return true;
+            }
+            catch { return false; }
+        }
+
+        /*private void FillDecisionGrid()
+        {
+            dgDecision.Rows.Clear();
+            dgDecision.RowCount = OA.NormalizedPeptideWeights.Count;
+            int rowind = 0;
+            foreach (string key in OA.NormalizedPeptideWeights.Keys.OrderBy(k => k))
+            {
+                dgDecision[0, rowind].Value = key;
+                double val = OA.NormalizedPeptideWeights[key];
+                dgDecision[1, rowind].Value = val;
+                dgDecision[2, rowind++].Value = val >= OA.PositiveThreshold ? "Pos" : val < OA.NegativeThreshold ? "Neg" : "";
+            }
+        }*/
+
+        private bool ColorGrids()
+        {
+            try
+            {
+                if (OA == null)
+                    return true;
+                for (int i = 1; i < dgQuantification.RowCount; i++)
+                {
+                    for (int j = 1; j < dgQuantification.ColumnCount; j++)
                     {
-                        dgQuantification[j, i].Style.BackColor = Color.Gray;
-                        dgNormalized[j, i].Style.BackColor = Color.Gray;
-                    }
-                    else
-                    {
-                        dgQuantification[j, i].Style.BackColor = Color.White;
-                        dgNormalized[j, i].Style.BackColor = Color.White;
+                        double weight = OA.NormalizedMatrix[i - 1, j - 1];
+                        if (weight >= OA.PositiveThreshold)
+                        {
+                            dgQuantification[j, i].Style.BackColor = Common.ColorPositive;
+                            dgNormalized[j, i].Style.BackColor = Common.ColorPositive;
+                        }
+                        else if (weight < OA.NegativeThreshold)
+                        {
+                            dgQuantification[j, i].Style.BackColor = Common.ColorNegative;
+                            dgNormalized[j, i].Style.BackColor = Common.ColorNegative;
+                        }
+                        else
+                        {
+                            dgQuantification[j, i].Style.BackColor = Common.ColorNeutral;
+                            dgNormalized[j, i].Style.BackColor = Common.ColorNeutral;
+                        }
                     }
                 }
+                if (!thresholdEntry.trackThresholdMouseDown && !thresholdEntry.trackNegThresholdMouseDown)
+                {
+                    //FillDecisionGrid();
+                    if (!DrawMotifs())
+                        return false;
+                }
+                return true;
             }
+            catch { return false; }
+        }
+
+        private void DrawColorMatrix()
+        {
+            try
+            {
+                char[] colHeader, rowHeader;
+                if (OA.PermutationXAxis)
+                {
+                    colHeader = OA.Permutation;
+                    char[] charArray = OA.WildTypePeptide.ToCharArray();
+                    if (!OA.PositionYAxisTopToBottom)
+                        Array.Reverse(charArray);
+                    rowHeader = charArray;
+                }
+                else
+                {
+                    colHeader = OA.WildTypePeptide.ToCharArray();
+                    rowHeader = OA.Permutation;
+                }
+
+                ColorMatrix cm = new ColorMatrix();
+                cm.SetData(OA.NormalizedMatrix, colHeader, rowHeader);
+                mdMatrix.SetThreshold(OA.PositiveThreshold, OA.NegativeThreshold);
+                mdMatrix.SetColorMatrix(cm);
+            }
+            catch { }
         }
         private void SetText(FileDialog dlg)
         {
@@ -107,6 +162,8 @@ namespace PeSA.Windows
             DialogResult dlg = dlgSaveProject.ShowDialog();
             if (dlg != DialogResult.OK) return;
             SetText(dlgSaveProject);
+            OA.Notes = eNotes.Text;
+            OA.ImageStr = FileUtil.ImageToBase64(imageReference.Image);
             string filename = dlgSaveProject.FileName;
             if (OPALArray.SaveToFile(filename, OA))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
@@ -114,18 +171,29 @@ namespace PeSA.Windows
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
+            LoadProject();
+        }
+
+        private void LoadProject()
+        { 
             try
             {
                 DialogResult dlg = dlgOpenProject.ShowDialog();
                 if (dlg != DialogResult.OK) return;
                 SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
-                OA = OPALArray.ReadFromFile(filename);
-                threshold = OA.Threshold;
-                skipSetThreshold = true;
-                eThreshold.Text = OA.Threshold.ToString();
-                trackThreshold.Value = Math.Max(0, Math.Min(100, (int)(OA.Threshold * 100)));
-                skipSetThreshold = false;
+                try
+                {
+                    OA = OPALArray.ReadFromFile(filename);
+                }
+                catch
+                {
+                    MessageBox.Show("The file may be corrupted or not a valid PeSA project file.", Analyzer.ProgramName);
+                }
+                thresholdEntry.SetInitialValues(OA.GetPositiveThreshold(), OA.GetNegativeThreshold());
+                rbMaxValue.Checked = OA.NormMode == NormalizationMode.Max;
+                rbPerRowColumn.Checked = OA.NormMode != NormalizationMode.Max;
+
                 cbPermutationXAxis.Checked = PermutationXAxis;
                 cbYAxisTopToBottom.Checked = OA.PositionYAxisTopToBottom;
 
@@ -133,13 +201,27 @@ namespace PeSA.Windows
                     LoadQuantificationFromOPALArrayToGrid();
                 GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
                 FillGridHeaders(dgNormalized);
+                
+                bool gridOK = ColorGrids();
 
-                ColorGrids();
+                eNotes.Text = OA.Notes;
+                imageReference.Image = null;
+                try
+                {
+                    Image img = FileUtil.Base64ToImage(OA.ImageStr);
+                    imageReference.Image = img;
+                }
+                catch { }
+
+                DrawColorMatrix();
+                if (!gridOK)
+                    MessageBox.Show("There is a problem in loading the file. It is highly recommended to re-run the analysis.", Analyzer.ProgramName);
             }
             catch
             {
-                MessageBox.Show("The file may be corrupted or not a valid PeSA project file.", Analyzer.ProgramName);
+                MessageBox.Show("There is a problem in loading the file. It is highly recommended to re-run the analysis.", Analyzer.ProgramName);
             }
+            linkRun.Visible = true;
         }
 
         private void LoadQuantificationFromOPALArrayToGrid()
@@ -168,23 +250,12 @@ namespace PeSA.Windows
             }
         }
 
-        private void btnCreateMotif_Click(object sender, EventArgs e)
-        {
-            Bitmap bm = Analyzer.CreateMotifImage(OA);
-            frmMotifImage frmImage = new frmMotifImage(bm, "Main motif", null, "Shifted motif")
-            {
-                MdiParent = MainForm.MainFormPointer,
-                WindowState = FormWindowState.Normal
-            };
-            frmImage.Show();
-            frmImage.WindowState = FormWindowState.Normal;
-        }
-
         private void cmiPaste_Click(object sender, EventArgs e)
         {
             GridUtil.PasteClipboard(dgQuantification);
             quantificationLoaded = true;
             ResetSettings();
+            Run();
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -225,6 +296,8 @@ namespace PeSA.Windows
                 return;
             };
             OA = new OPALArray(values, PermutationXAxis, cbYAxisTopToBottom.Checked, out error);
+            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
+            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
             if (error != "")
             {
                 MessageBox.Show(error, Analyzer.ProgramName);
@@ -232,7 +305,8 @@ namespace PeSA.Windows
             }
             GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
             FillGridHeaders(dgNormalized);
-            SetThreshold(threshold);
+            ColorGrids();
+            DrawColorMatrix();
         }
 
         private void btnLoadQuantification_Click(object sender, EventArgs e)
@@ -257,9 +331,11 @@ namespace PeSA.Windows
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            if (OA == null) return;
+            dlgExcelExport.FileName = ProjectName;
             DialogResult dlg = dlgExcelExport.ShowDialog();
-
             if (dlg != DialogResult.OK) return;
+
             string filename = dlgExcelExport.FileName;
             string errormsg = "";
             if (FileUtil.ExportOPALArrayToExcel(filename, OA, true, out errormsg))
@@ -283,10 +359,97 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgSaveMotif.FileName;
-            Motif motif = OA.CreateMotif();
+            Motif motif = new Motif(OA);
 
             if (Motif.SaveToFile(filename, motif))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
+
+        private void thresholdEntry_ThresholdChanged(object sender, EventArgs e)
+        {
+            if (OA == null)
+                return;
+            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
+            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
+            ColorGrids();
+            mdMatrix.SetThreshold(OA.PositiveThreshold, OA.NegativeThreshold);
+        }
+
+        private void cbPermutationXAxis_CheckedChanged(object sender, EventArgs e)
+        {
+            cbYAxisTopToBottom.Visible = cbPermutationXAxis.Checked;
+        }
+
+        private void linkLoadFromFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                DialogResult dlg = dlgOpenQuantification.ShowDialog();
+                if (dlg != DialogResult.OK) return;
+                SetText(dlgOpenProject);
+                string filename = dlgOpenQuantification.FileName;
+
+                if (System.IO.File.Exists(filename))
+                {
+                    OA = FileUtil.ReadOPALArrayQuantificationData(filename);
+                    thresholdEntry.SetInitialValues(OA.GetPositiveThreshold(), OA.GetNegativeThreshold());
+                    
+                    cbPermutationXAxis.Checked = PermutationXAxis;
+                    cbYAxisTopToBottom.Checked = OA.PositionYAxisTopToBottom;
+
+                    if (OA.QuantificationMatrix != null)
+                        LoadQuantificationFromOPALArrayToGrid();
+                    GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
+                    FillGridHeaders(dgNormalized);
+                    Run();
+                    ColorGrids();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
+            }
+
+        }
+
+        private void flowpanelReference_ClientSizeChanged(object sender, EventArgs e)
+        {
+            imageReference.Width = flowpanelReference.ClientSize.Width - 8;
+            imageReference.SetHeightAndMode();
+            eNotes.Width = flowpanelReference.ClientSize.Width - 8;
+            eNotes.Height = Math.Max(flowpanelReference.ClientSize.Height - imageReference.Height - lNotes.Height - 16, 40);
+        }
+
+        private void linkRun_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Run();
+        }
+
+        private void rbMaxValue_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rbMaxValue.Focused && !rbPerRowColumn.Focused) return;
+            if (rbMaxValue.Checked && OA != null)
+            {
+                OA.NormMode = NormalizationMode.Max;
+                OA.Renormalize();
+                GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
+                ColorGrids();
+                DrawColorMatrix();
+            }
+        }
+
+        private void rbPerRowColumn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rbMaxValue.Focused && !rbPerRowColumn.Focused) return;
+            if (rbPerRowColumn.Checked && OA != null)
+            {
+                OA.NormMode = NormalizationMode.PerRowColumn;
+                OA.Renormalize();
+                GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
+                ColorGrids();
+                DrawColorMatrix();
+            }
         }
     }
 }

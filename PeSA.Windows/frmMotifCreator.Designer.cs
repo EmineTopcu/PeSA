@@ -29,269 +29,322 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMotifCreator));
-            this.eOutput = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnLoadPeptideList = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.eMotifWidth = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.eMotifHeight = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.eKeyPosition = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.ePeptideLength = new System.Windows.Forms.TextBox();
-            this.lAminoAcid = new System.Windows.Forms.Label();
-            this.eAminoAcid = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.eThreshold = new System.Windows.Forms.TextBox();
-            this.btnCreateMotif = new System.Windows.Forms.Button();
             this.dlgOpenPeptides = new System.Windows.Forms.OpenFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lQuestion = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.ePeptideLength = new System.Windows.Forms.TextBox();
             this.lOutput = new System.Windows.Forms.Label();
             this.ePeptides = new System.Windows.Forms.RichTextBox();
+            this.pMotif = new System.Windows.Forms.Panel();
+            this.eOutput = new System.Windows.Forms.RichTextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.mdShifted = new PeSA.Windows.MotifDisplay();
+            this.mdMain = new PeSA.Windows.MotifDisplay();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.lQuestion = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.eKeyPosition = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.eAminoAcid = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.eFreqThreshold = new System.Windows.Forms.TextBox();
+            this.splitMain = new System.Windows.Forms.SplitContainer();
+            this.lLoadPeptides = new System.Windows.Forms.LinkLabel();
+            this.pMotif.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
+            this.splitMain.Panel1.SuspendLayout();
+            this.splitMain.Panel2.SuspendLayout();
+            this.splitMain.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // eOutput
-            // 
-            this.eOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.eOutput.Location = new System.Drawing.Point(240, 135);
-            this.eOutput.Margin = new System.Windows.Forms.Padding(2);
-            this.eOutput.Name = "eOutput";
-            this.eOutput.Size = new System.Drawing.Size(331, 267);
-            this.eOutput.TabIndex = 11;
-            this.eOutput.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 14);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 13);
+            this.label1.Size = new System.Drawing.Size(82, 17);
             this.label1.TabIndex = 12;
             this.label1.Text = "Peptide List";
             this.toolTip1.SetToolTip(this.label1, "You can manually enter the peptide list, use copy/paste or load from file using t" +
         "he button below.");
-            // 
-            // btnLoadPeptideList
-            // 
-            this.btnLoadPeptideList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLoadPeptideList.Location = new System.Drawing.Point(15, 408);
-            this.btnLoadPeptideList.Name = "btnLoadPeptideList";
-            this.btnLoadPeptideList.Size = new System.Drawing.Size(114, 23);
-            this.btnLoadPeptideList.TabIndex = 13;
-            this.btnLoadPeptideList.Text = "Load from File";
-            this.btnLoadPeptideList.UseVisualStyleBackColor = true;
-            this.btnLoadPeptideList.Click += new System.EventHandler(this.btnLoadPeptideList_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(431, 18);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 13);
-            this.label4.TabIndex = 33;
-            this.label4.Text = "Motif Width";
-            // 
-            // eMotifWidth
-            // 
-            this.eMotifWidth.Location = new System.Drawing.Point(507, 15);
-            this.eMotifWidth.Name = "eMotifWidth";
-            this.eMotifWidth.Size = new System.Drawing.Size(55, 20);
-            this.eMotifWidth.TabIndex = 30;
-            this.eMotifWidth.Text = "800";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(431, 41);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(64, 13);
-            this.label5.TabIndex = 32;
-            this.label5.Text = "Motif Height";
-            // 
-            // eMotifHeight
-            // 
-            this.eMotifHeight.Location = new System.Drawing.Point(507, 38);
-            this.eMotifHeight.Name = "eMotifHeight";
-            this.eMotifHeight.Size = new System.Drawing.Size(55, 20);
-            this.eMotifHeight.TabIndex = 31;
-            this.eMotifHeight.Text = "200";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(239, 41);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 29;
-            this.label3.Text = "Key position";
-            this.toolTip1.SetToolTip(this.label3, "Default: Center position");
-            // 
-            // eKeyPosition
-            // 
-            this.eKeyPosition.Location = new System.Drawing.Point(349, 37);
-            this.eKeyPosition.Name = "eKeyPosition";
-            this.eKeyPosition.Size = new System.Drawing.Size(55, 20);
-            this.eKeyPosition.TabIndex = 22;
-            this.toolTip1.SetToolTip(this.eKeyPosition, "Default: Center position");
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(239, 18);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
-            this.label2.TabIndex = 28;
-            this.label2.Text = "Peptide Length";
-            this.toolTip1.SetToolTip(this.label2, "Default: length of the first peptide");
-            // 
-            // ePeptideLength
-            // 
-            this.ePeptideLength.Location = new System.Drawing.Point(349, 14);
-            this.ePeptideLength.Name = "ePeptideLength";
-            this.ePeptideLength.Size = new System.Drawing.Size(55, 20);
-            this.ePeptideLength.TabIndex = 21;
-            this.toolTip1.SetToolTip(this.ePeptideLength, "Default: length of the first peptide");
-            // 
-            // lAminoAcid
-            // 
-            this.lAminoAcid.AutoSize = true;
-            this.lAminoAcid.Location = new System.Drawing.Point(239, 65);
-            this.lAminoAcid.Name = "lAminoAcid";
-            this.lAminoAcid.Size = new System.Drawing.Size(94, 13);
-            this.lAminoAcid.TabIndex = 27;
-            this.lAminoAcid.Text = "Target Amino Acid";
-            // 
-            // eAminoAcid
-            // 
-            this.eAminoAcid.Location = new System.Drawing.Point(349, 61);
-            this.eAminoAcid.Name = "eAminoAcid";
-            this.eAminoAcid.Size = new System.Drawing.Size(55, 20);
-            this.eAminoAcid.TabIndex = 23;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(239, 88);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 13);
-            this.label6.TabIndex = 26;
-            this.label6.Text = "Frequency Threshold";
-            this.toolTip1.SetToolTip(this.label6, "Amino acids with less frequency will be merged as X.");
-            // 
-            // eThreshold
-            // 
-            this.eThreshold.Location = new System.Drawing.Point(349, 84);
-            this.eThreshold.Name = "eThreshold";
-            this.eThreshold.Size = new System.Drawing.Size(55, 20);
-            this.eThreshold.TabIndex = 24;
-            this.eThreshold.Text = "0.1";
-            this.toolTip1.SetToolTip(this.eThreshold, "Amino acids with less frequency will be merged as X.");
-            // 
-            // btnCreateMotif
-            // 
-            this.btnCreateMotif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCreateMotif.Location = new System.Drawing.Point(134, 408);
-            this.btnCreateMotif.Name = "btnCreateMotif";
-            this.btnCreateMotif.Size = new System.Drawing.Size(89, 23);
-            this.btnCreateMotif.TabIndex = 34;
-            this.btnCreateMotif.Text = "Create Motif";
-            this.btnCreateMotif.UseVisualStyleBackColor = true;
-            this.btnCreateMotif.Click += new System.EventHandler(this.btnCreateMotif_Click);
             // 
             // dlgOpenPeptides
             // 
             this.dlgOpenPeptides.FileName = "Peptides.txt";
             this.dlgOpenPeptides.Filter = "Text Files|*.txt|Excel Files|*.xls;*.xlsx;*.xlsm|Comma Delimited|*.csv";
             // 
-            // lQuestion
+            // label11
             // 
-            this.lQuestion.AutoSize = true;
-            this.lQuestion.Location = new System.Drawing.Point(410, 65);
-            this.lQuestion.Name = "lQuestion";
-            this.lQuestion.Size = new System.Drawing.Size(13, 13);
-            this.lQuestion.TabIndex = 36;
-            this.lQuestion.Text = "?";
-            this.toolTip1.SetToolTip(this.lQuestion, resources.GetString("lQuestion.ToolTip"));
-            this.lQuestion.Click += new System.EventHandler(this.lQuestion_Click);
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(12, 14);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(79, 13);
+            this.label11.TabIndex = 45;
+            this.label11.Text = "Peptide Length";
+            this.toolTip1.SetToolTip(this.label11, "Default: length of the first peptide");
+            // 
+            // ePeptideLength
+            // 
+            this.ePeptideLength.Location = new System.Drawing.Point(122, 10);
+            this.ePeptideLength.Name = "ePeptideLength";
+            this.ePeptideLength.Size = new System.Drawing.Size(55, 20);
+            this.ePeptideLength.TabIndex = 44;
+            this.toolTip1.SetToolTip(this.ePeptideLength, "Default: length of the first peptide");
+            this.ePeptideLength.Leave += new System.EventHandler(this.ePeptideLength_Leave);
             // 
             // lOutput
             // 
             this.lOutput.AutoSize = true;
-            this.lOutput.Location = new System.Drawing.Point(239, 120);
+            this.lOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lOutput.Location = new System.Drawing.Point(3, 4);
             this.lOutput.Name = "lOutput";
-            this.lOutput.Size = new System.Drawing.Size(39, 13);
-            this.lOutput.TabIndex = 37;
+            this.lOutput.Size = new System.Drawing.Size(51, 17);
+            this.lOutput.TabIndex = 13;
             this.lOutput.Text = "Output";
+            this.toolTip1.SetToolTip(this.lOutput, "You can manually enter the peptide list, use copy/paste or load from file using t" +
+        "he button below.");
             // 
             // ePeptides
             // 
-            this.ePeptides.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ePeptides.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ePeptides.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ePeptides.Location = new System.Drawing.Point(15, 30);
+            this.ePeptides.Location = new System.Drawing.Point(6, 30);
             this.ePeptides.Name = "ePeptides";
-            this.ePeptides.Size = new System.Drawing.Size(208, 372);
+            this.ePeptides.Size = new System.Drawing.Size(163, 595);
             this.ePeptides.TabIndex = 38;
             this.ePeptides.Text = "";
+            this.ePeptides.TextChanged += new System.EventHandler(this.ePeptides_TextChanged);
+            // 
+            // pMotif
+            // 
+            this.pMotif.AutoScroll = true;
+            this.pMotif.Controls.Add(this.eOutput);
+            this.pMotif.Controls.Add(this.panel1);
+            this.pMotif.Controls.Add(this.mdShifted);
+            this.pMotif.Controls.Add(this.mdMain);
+            this.pMotif.Controls.Add(this.panel3);
+            this.pMotif.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pMotif.Location = new System.Drawing.Point(0, 0);
+            this.pMotif.Name = "pMotif";
+            this.pMotif.Padding = new System.Windows.Forms.Padding(4);
+            this.pMotif.Size = new System.Drawing.Size(473, 629);
+            this.pMotif.TabIndex = 0;
+            // 
+            // eOutput
+            // 
+            this.eOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.eOutput.Location = new System.Drawing.Point(4, 456);
+            this.eOutput.Name = "eOutput";
+            this.eOutput.Size = new System.Drawing.Size(465, 169);
+            this.eOutput.TabIndex = 3;
+            this.eOutput.Text = "";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.lOutput);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(4, 429);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(465, 27);
+            this.panel1.TabIndex = 4;
+            // 
+            // mdShifted
+            // 
+            this.mdShifted.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mdShifted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mdShifted.Image = null;
+            this.mdShifted.LabelText = "Shifted Motif";
+            this.mdShifted.Location = new System.Drawing.Point(4, 273);
+            this.mdShifted.Margin = new System.Windows.Forms.Padding(4);
+            this.mdShifted.Name = "mdShifted";
+            this.mdShifted.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.mdShifted.Size = new System.Drawing.Size(465, 156);
+            this.mdShifted.TabIndex = 1;
+            this.mdShifted.Visible = false;
+            // 
+            // mdMain
+            // 
+            this.mdMain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mdMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mdMain.Image = null;
+            this.mdMain.LabelText = "Motif";
+            this.mdMain.Location = new System.Drawing.Point(4, 117);
+            this.mdMain.Margin = new System.Windows.Forms.Padding(4);
+            this.mdMain.Name = "mdMain";
+            this.mdMain.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.mdMain.Size = new System.Drawing.Size(465, 156);
+            this.mdMain.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.label11);
+            this.panel3.Controls.Add(this.ePeptideLength);
+            this.panel3.Controls.Add(this.lQuestion);
+            this.panel3.Controls.Add(this.label8);
+            this.panel3.Controls.Add(this.eKeyPosition);
+            this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.eAminoAcid);
+            this.panel3.Controls.Add(this.label10);
+            this.panel3.Controls.Add(this.eFreqThreshold);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel3.Location = new System.Drawing.Point(4, 4);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(465, 113);
+            this.panel3.TabIndex = 2;
+            // 
+            // lQuestion
+            // 
+            this.lQuestion.AutoSize = true;
+            this.lQuestion.Location = new System.Drawing.Point(183, 62);
+            this.lQuestion.Name = "lQuestion";
+            this.lQuestion.Size = new System.Drawing.Size(13, 13);
+            this.lQuestion.TabIndex = 43;
+            this.lQuestion.Text = "?";
+            this.lQuestion.Click += new System.EventHandler(this.lQuestion_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(12, 38);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(64, 13);
+            this.label8.TabIndex = 42;
+            this.label8.Text = "Key position";
+            // 
+            // eKeyPosition
+            // 
+            this.eKeyPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.eKeyPosition.Location = new System.Drawing.Point(122, 34);
+            this.eKeyPosition.Name = "eKeyPosition";
+            this.eKeyPosition.Size = new System.Drawing.Size(55, 20);
+            this.eKeyPosition.TabIndex = 37;
+            this.eKeyPosition.Leave += new System.EventHandler(this.eKeyPosition_Leave);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(12, 62);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(94, 13);
+            this.label9.TabIndex = 41;
+            this.label9.Text = "Target Amino Acid";
+            // 
+            // eAminoAcid
+            // 
+            this.eAminoAcid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.eAminoAcid.Location = new System.Drawing.Point(122, 58);
+            this.eAminoAcid.Name = "eAminoAcid";
+            this.eAminoAcid.Size = new System.Drawing.Size(55, 20);
+            this.eAminoAcid.TabIndex = 38;
+            this.eAminoAcid.Leave += new System.EventHandler(this.eAminoAcid_Leave);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(12, 86);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(107, 13);
+            this.label10.TabIndex = 40;
+            this.label10.Text = "Frequency Threshold";
+            // 
+            // eFreqThreshold
+            // 
+            this.eFreqThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.eFreqThreshold.Location = new System.Drawing.Point(122, 82);
+            this.eFreqThreshold.Name = "eFreqThreshold";
+            this.eFreqThreshold.Size = new System.Drawing.Size(55, 20);
+            this.eFreqThreshold.TabIndex = 39;
+            this.eFreqThreshold.Text = "0.1";
+            this.eFreqThreshold.Leave += new System.EventHandler(this.eFreqThreshold_Leave);
+            // 
+            // splitMain
+            // 
+            this.splitMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitMain.Location = new System.Drawing.Point(0, 0);
+            this.splitMain.Name = "splitMain";
+            // 
+            // splitMain.Panel1
+            // 
+            this.splitMain.Panel1.Controls.Add(this.lLoadPeptides);
+            this.splitMain.Panel1.Controls.Add(this.ePeptides);
+            this.splitMain.Panel1.Controls.Add(this.label1);
+            this.splitMain.Panel1MinSize = 175;
+            // 
+            // splitMain.Panel2
+            // 
+            this.splitMain.Panel2.Controls.Add(this.pMotif);
+            this.splitMain.Size = new System.Drawing.Size(652, 629);
+            this.splitMain.SplitterDistance = 175;
+            this.splitMain.TabIndex = 40;
+            // 
+            // lLoadPeptides
+            // 
+            this.lLoadPeptides.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lLoadPeptides.AutoSize = true;
+            this.lLoadPeptides.Location = new System.Drawing.Point(96, 13);
+            this.lLoadPeptides.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lLoadPeptides.Name = "lLoadPeptides";
+            this.lLoadPeptides.Size = new System.Drawing.Size(73, 13);
+            this.lLoadPeptides.TabIndex = 39;
+            this.lLoadPeptides.TabStop = true;
+            this.lLoadPeptides.Text = "Load from File";
+            this.lLoadPeptides.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lLoadPeptides_LinkClicked);
             // 
             // frmMotifCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 443);
-            this.Controls.Add(this.ePeptides);
-            this.Controls.Add(this.lOutput);
-            this.Controls.Add(this.lQuestion);
-            this.Controls.Add(this.btnCreateMotif);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.eMotifWidth);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.eMotifHeight);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.eKeyPosition);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.ePeptideLength);
-            this.Controls.Add(this.lAminoAcid);
-            this.Controls.Add(this.eAminoAcid);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.eThreshold);
-            this.Controls.Add(this.btnLoadPeptideList);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.eOutput);
+            this.ClientSize = new System.Drawing.Size(652, 629);
+            this.Controls.Add(this.splitMain);
             this.Name = "frmMotifCreator";
-            this.Text = "Create Motif from Peptide List";
+            this.Text = "Create Sequence Motif from Peptide List";
+            this.pMotif.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.splitMain.Panel1.ResumeLayout(false);
+            this.splitMain.Panel1.PerformLayout();
+            this.splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).EndInit();
+            this.splitMain.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox eOutput;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnLoadPeptideList;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox eMotifWidth;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox eMotifHeight;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox eKeyPosition;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox ePeptideLength;
-        private System.Windows.Forms.Label lAminoAcid;
-        private System.Windows.Forms.TextBox eAminoAcid;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox eThreshold;
-        private System.Windows.Forms.Button btnCreateMotif;
         private System.Windows.Forms.OpenFileDialog dlgOpenPeptides;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Label lQuestion;
-        private System.Windows.Forms.Label lOutput;
         private System.Windows.Forms.RichTextBox ePeptides;
+        private System.Windows.Forms.Panel pMotif;
+        private MotifDisplay mdShifted;
+        private MotifDisplay mdMain;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox ePeptideLength;
+        private System.Windows.Forms.Label lQuestion;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox eKeyPosition;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox eAminoAcid;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox eFreqThreshold;
+        private System.Windows.Forms.SplitContainer splitMain;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lOutput;
+        private System.Windows.Forms.RichTextBox eOutput;
+        private System.Windows.Forms.LinkLabel lLoadPeptides;
     }
 }

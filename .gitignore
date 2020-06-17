@@ -3,6 +3,7 @@ Sample Data/
 Versions/
 *.dll
 *.exe
+*.psd
 zip.bat
 zipfiles.txt
 

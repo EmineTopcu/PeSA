@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using PeSA.Engine.Data_Structures;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +13,25 @@ namespace PeSA.Engine
 {
     public class FileUtil
     {
+        public static string ImageToBase64(System.Drawing.Image image)
+        {
+            using (MemoryStream m = new MemoryStream())
+            {
+                image.Save(m, image.RawFormat);
+                byte[] imageBytes = m.ToArray();
+                string base64String = Convert.ToBase64String(imageBytes);
+                return base64String;
+            }
+        }
+        public static System.Drawing.Image Base64ToImage(string base64String)
+        {
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+            MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+            ms.Write(imageBytes, 0, imageBytes.Length);
+            System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);
+            return image;
+        }
+
         private static string[,] ReadArrayFromFile(string fileName)
         {
             try
@@ -55,7 +75,7 @@ namespace PeSA.Engine
                 }
                 return data;
             }
-            catch (Exception exc) 
+            catch (Exception exc)
             {
                 return null;
             }
@@ -93,29 +113,38 @@ namespace PeSA.Engine
 
         public static List<string> ReadPeptideList(string fileName)
         {
-                FileInfo existingFile = new FileInfo(fileName);
+            FileInfo existingFile = new FileInfo(fileName);
 
-                if (existingFile.Extension.StartsWith(".txt"))
-                {
-                    return ReadListFromText(existingFile);
-                }
+            if (existingFile.Extension.StartsWith(".txt"))
+            {
+                return ReadListFromText(existingFile);
+            }
 
-                string[,] data = null;
-                if (existingFile.Extension.StartsWith(".xls"))
-                {
-                    data = ReadArrayFromExcel(existingFile);
-                }
-                else if (existingFile.Extension.StartsWith(".csv"))
-                {
-                    data = ReadArrayFromCSV(existingFile);
-                }
+            string[,] data = null;
+            if (existingFile.Extension.StartsWith(".xls"))
+            {
+                data = ReadArrayFromExcel(existingFile);
+            }
+            else if (existingFile.Extension.StartsWith(".csv"))
+            {
+                data = ReadArrayFromCSV(existingFile);
+            }
 
-                List<string> peptideList = new List<string>();
-                int colind = 0;
-                for (int rowind = 0; rowind < data.GetLength(0); rowind++)
-                    //Read only the first column for (int colind = 0; colind < data.GetLength(1); colind++)
-                        peptideList.Add(data[rowind, colind]);
-                return peptideList;
+            List<string> peptideList = new List<string>();
+            int colind = 0;
+            for (int rowind = 0; rowind < data.GetLength(0); rowind++)
+                //Read only the first column for (int colind = 0; colind < data.GetLength(1); colind++)
+                peptideList.Add(data[rowind, colind]);
+            return peptideList;
+        }
+
+        public static List<Protein> ReadProtein(string fileName)
+        {            
+            FileInfo existingFile = new FileInfo(fileName);
+
+            List<Protein> proteins = Protein.GenerateProteins(string.Join("\r\n", System.IO.File.ReadAllLines(existingFile.FullName)));
+
+            return proteins;
         }
 
         public static string[,] ReadPeptideMatrix(string fileName)
@@ -132,7 +161,7 @@ namespace PeSA.Engine
                 data = ReadArrayFromCSV(existingFile);
             }
             if (data != null)
-                data = MatrixUtil.StripHeaderRowColumns(data);
+                data = MatrixUtil.StripHeaderRowColumns(data, false);
 
             return data;
         }
@@ -153,9 +182,9 @@ namespace PeSA.Engine
                 }
 
                 PA.SetQuantificationMatrix(data, headersExist);
-                return true;                
+                return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -170,7 +199,7 @@ namespace PeSA.Engine
                     worksheet.Cells[startrow++, colind].Value = s;
                 return startrow;
             }
-            catch 
+            catch
             {
                 return -1;
             }
@@ -185,7 +214,7 @@ namespace PeSA.Engine
                     worksheet.Cells[rowind, startcol++].Value = s;
                 return startcol;
             }
-            catch 
+            catch
             {
                 return -1;
             }
@@ -200,7 +229,7 @@ namespace PeSA.Engine
                     worksheet.Cells[startrow++, colind].Value = d;
                 return startrow;
             }
-            catch 
+            catch
             {
                 return -1;
             }
@@ -215,7 +244,7 @@ namespace PeSA.Engine
                     worksheet.Cells[rowind, startcol++].Value = d;
                 return startcol;
             }
-            catch 
+            catch
             {
                 return -1;
             }
@@ -243,9 +272,9 @@ namespace PeSA.Engine
                     {
                         if (sMatrix != null)
                             worksheet.Cells[rowind + startrow, colind + 1].Value = sMatrix[rowind - 1, colind - 1];
-                        else if (dMatrix!=null)
+                        else if (dMatrix != null)
                             worksheet.Cells[rowind + startrow, colind + 1].Value = dMatrix[rowind - 1, colind - 1];
-                        else 
+                        else
                             worksheet.Cells[rowind + startrow, colind + 1].Value = iMatrix[rowind - 1, colind - 1];
                     }
                 }
@@ -257,14 +286,24 @@ namespace PeSA.Engine
             }
         }
 
-        private static void ClearWorksheet(ExcelWorksheet worksheet)
+        private static ExcelWorksheet GetWorksheetBlank(ExcelPackage package, string sheetname)
         {
-            if (worksheet == null) return;
-            worksheet.Cells.Clear();
-            worksheet.Drawings.Clear();
-        }
+            try
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[sheetname];
 
-        private static ExcelWorksheet GetWorksheet(ExcelPackage package, string sheetname)
+                if (worksheet != null)
+                    package.Workbook.Worksheets.Delete(worksheet);
+                worksheet = package.Workbook.Worksheets.Add(sheetname);
+                return worksheet;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        private static ExcelWorksheet GetWorksheetKeepData(ExcelPackage package, string sheetname)
         {
             try
             {
@@ -272,47 +311,183 @@ namespace PeSA.Engine
 
                 if (worksheet == null)
                     worksheet = package.Workbook.Worksheets.Add(sheetname);
-                else
-                    ClearWorksheet(worksheet);
                 return worksheet;
             }
-            catch 
+            catch
             {
                 return null;
             }
         }
-        private static void WriteToSheetModifiedPeptideList(ExcelPackage package, List<string> peptidelist, double threshold, string wildtypesequence = "")
+
+        private static void WriteToSheetValidator(ExcelPackage package, MotifValidator validator)
         {
-            ExcelWorksheet worksheet = GetWorksheet(package, "Modified Peptides");
+            ExcelWorksheet worksheet = GetWorksheetBlank(package, "Motif Validation Sequence");
+            int rowind = 1;
+
+            if (validator.PositiveSpecificity > 0)
+            {
+                worksheet.Cells[rowind, 1].Value = "Positive Specificity";
+                worksheet.Cells[rowind++, 2].Value = validator.PositiveSpecificity;
+            }
+            if (validator.NegativeSpecificity > 0)
+            {
+                worksheet.Cells[rowind, 1].Value = "Negative Specificity";
+                worksheet.Cells[rowind++, 2].Value = validator.NegativeSpecificity;
+            }
+
+            int startrow = rowind;
+            worksheet.Cells[rowind++, 1].Value = "Positive Motif only";
+            worksheet.Cells[rowind, 1].Value = "Count:";
+            worksheet.Cells[rowind++, 2].Value = validator.PositiveSequenceList.Count();
+            rowind = ListToExcelColumn(worksheet, rowind, 2, "Sequence", validator.PositiveSequenceList);
+
+            rowind = startrow;
+            worksheet.Cells[rowind++, 4].Value = "Including Negative Motif";
+            worksheet.Cells[rowind, 4].Value = "Count:";
+            worksheet.Cells[rowind++, 5].Value = validator.NegativeSequenceList.Count();
+            rowind = ListToExcelColumn(worksheet, rowind, 5, "Sequence", validator.NegativeSequenceList);
+
+            worksheet.Column(2).AutoFit();
+            worksheet.Column(5).AutoFit();
+        }
+        private static void WriteToSheetScoreList(ExcelPackage package, Scorer scorer)
+        {
+            ExcelWorksheet worksheet = GetWorksheetBlank(package, "Scores");
+            int rowind = 1;
+
+            if (scorer.PosMatchCutoff > 0)
+            {
+                worksheet.Cells[rowind, 1].Value = "Positive Match Cutoff";
+                worksheet.Cells[rowind++, 2].Value = scorer.PosMatchCutoff;
+            }
+            if (scorer.NegMatchCutoff < 20)
+            {
+                worksheet.Cells[rowind, 1].Value = "Negative Match Cutoff";
+                worksheet.Cells[rowind++, 2].Value = scorer.NegMatchCutoff;
+            }
+            if (scorer.UserEnteredPosThreshold != null)
+            {
+                worksheet.Cells[rowind, 1].Value = "Scorer Positive Threshold";
+                worksheet.Cells[rowind++, 2].Value = scorer.UserEnteredPosThreshold;
+            }
+            if (scorer.UserEnteredNegThreshold != null)
+            {
+                worksheet.Cells[rowind, 1].Value = "Scorer Negative Threshold";
+                worksheet.Cells[rowind++, 2].Value = scorer.UserEnteredNegThreshold;
+            }
+            if (scorer.KeyPosition >= 0)
+            {
+                worksheet.Cells[rowind, 1].Value = "Key Position";
+                worksheet.Cells[rowind++, 2].Value = scorer.KeyPosition;
+                worksheet.Cells[rowind, 1].Value = "Key Amino Acid";
+                worksheet.Cells[rowind++, 2].Value = scorer.KeyChar.ToString();
+            }
+
+            rowind++;
+            worksheet.Cells[rowind, 1, rowind, 7].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
+            worksheet.Cells[rowind, 1].Value = "Peptide";
+            worksheet.Cells[rowind, 2].Value = "Segment";
+            worksheet.Cells[rowind, 3].Value = "Pos Match";
+            worksheet.Cells[rowind, 4].Value = "Neg Match";
+            worksheet.Cells[rowind, 5].Value = "Match";
+            worksheet.Cells[rowind, 6].Value = "Weight Score";
+            worksheet.Cells[rowind++, 7].Value = "Priority Score";
+
+            foreach (Score s in scorer.ScoreList)
+            {
+                worksheet.Cells[rowind, 1].Value = s.Peptide;
+                worksheet.Cells[rowind, 2].Value = s.Segment;
+                worksheet.Cells[rowind, 3].Value = s.posMatch;
+                worksheet.Cells[rowind, 4].Value = s.negMatch;
+                worksheet.Cells[rowind, 5].Value = s.posMatch - s.negMatch;
+                worksheet.Cells[rowind, 6].Value = s.weightedMatch;
+                worksheet.Cells[rowind++, 7].Value = s.priorityMatch;
+            }
+
+            for (int i = 1; i <= 7; i++)
+                worksheet.Column(i).AutoFit();
+        }
+
+        private static void WriteToSheetWeighedPeptideList(ExcelPackage package, Dictionary<string, double> peptidelist,
+            double positiveThreshold, double negativeThreshold, string wildtypesequence = "")
+        {
+            ExcelWorksheet worksheet = GetWorksheetBlank(package, "Peptide Weights");
 
             int rowind = 1;
-            worksheet.Cells[rowind, 1].Value = "Threshold:";
-            worksheet.Cells[rowind++, 2].Value = threshold;
+            worksheet.Cells[rowind, 1].Value = "Positive Threshold:";
+            worksheet.Cells[rowind++, 2].Value = positiveThreshold;
+            worksheet.Cells[rowind, 1].Value = "Negative Threshold:";
+            worksheet.Cells[rowind++, 2].Value = negativeThreshold;
             if (wildtypesequence != "")
             {
                 worksheet.Cells[rowind, 1].Value = "Wildtype Sequence:";
                 worksheet.Cells[rowind++, 2].Value = wildtypesequence;
             }
 
-            ListToExcelColumn(worksheet, rowind + 1, 1, "Peptides", peptidelist);
+            ListToExcelColumn(worksheet, rowind + 1, 1, "Peptide", peptidelist.Keys.ToList());
+            ListToExcelColumn(worksheet, rowind + 1, 2, "Weight", peptidelist.Values.ToList());
+            ListToExcelColumn(worksheet, rowind + 1, 3, "Result", peptidelist.Values.Select(v => v >= positiveThreshold ? "Pos" : v < negativeThreshold ? "Neg" : "").ToList());
+
             worksheet.Column(1).AutoFit();
             worksheet.Column(2).AutoFit();
         }
 
-        private static void WriteToSheetMotif(ExcelPackage package, Dictionary<int, Dictionary<char, double>> Weights, double threshold, bool useMotifThreshold, string wildtypesequence = "")
+
+        private static void DumpMotifData(ExcelWorksheet worksheet, ref int rowind,
+            Dictionary<int, Dictionary<char, double>> WeightColumns, Dictionary<int, Dictionary<char, double>> ScaledColumns)
         {
-            ExcelWorksheet worksheet = GetWorksheet(package, "Motif");
+            worksheet.Cells[rowind++, 1].Value = "Motif Data:";
+            int startrow = rowind;
+            worksheet.Row(startrow).Style.Font.Bold = true;
+            worksheet.Row(startrow + 1).Style.Font.Bold = true;
+            int colind = 1;
+            int lastrow = rowind;
+            int colInc = WeightColumns != null ? 2 : 1;
+            foreach (int pos in ScaledColumns.Keys)
+            {
+                worksheet.Cells[startrow, colind].Value = "Position: " + (pos + 1).ToString();
+                worksheet.Cells[startrow, colind, startrow, colind + colInc].Merge = true;
+
+                worksheet.Cells[startrow + 1, colind].Value = "Amino-acid";
+                worksheet.Cells[startrow + 1, colind + 1].Value = "Percentage";
+                if (WeightColumns != null)
+                    worksheet.Cells[startrow + 1, colind + 2].Value = "Weight";
+                Dictionary<char, double> perCol = ScaledColumns[pos];
+                Dictionary<char, double> weightCol = WeightColumns?[pos];
+                rowind = startrow + 2;
+                foreach (char aa in perCol.Keys)
+                {
+                    worksheet.Cells[rowind, colind].Value = aa.ToString();
+                    worksheet.Cells[rowind, colind + 1].Value = perCol[aa];
+                    worksheet.Cells[rowind, colind + 1].Style.Numberformat.Format = "0.00%";
+                    if (WeightColumns != null)
+                    {
+                        worksheet.Cells[rowind, colind + 2].Value = weightCol[aa];
+                        worksheet.Cells[rowind, colind + 2].Style.Numberformat.Format = "0.00";
+                    }
+                    if (lastrow < rowind)
+                        lastrow = rowind;
+                    rowind++;
+                }
+                worksheet.Column(colind).AutoFit();
+                worksheet.Column(colind + 1).AutoFit();
+                if (WeightColumns != null)
+                    worksheet.Column(colind + 2).AutoFit();
+                worksheet.Cells[startrow, colind, rowind - 1, colind].Style.Border.Left.Style = ExcelBorderStyle.Medium;
+                worksheet.Cells[startrow, colind + colInc, rowind - 1, colind + colInc].Style.Border.Right.Style = ExcelBorderStyle.Medium;
+                worksheet.Cells[startrow, colind, rowind - 1, colind + colInc].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                colind += colInc + 1;
+            }
+            if (rowind < lastrow)
+                rowind = lastrow;
+
+        }
+
+        private static void WriteToSheetMotif(ExcelPackage package, Motif motif)
+        {
+            ExcelWorksheet worksheet = GetWorksheetBlank(package, "Motif");
 
             worksheet.Drawings.Clear();
-
-            int rowind = 1;
-            worksheet.Cells[rowind, 1].Value = "Threshold:";
-            worksheet.Cells[rowind++, 2].Value = threshold;
-            if (wildtypesequence != "")
-            {
-                worksheet.Cells[rowind, 1].Value = "Wildtype Sequence:";
-                worksheet.Cells[rowind++, 2].Value = wildtypesequence;
-            }
 
             Settings settings = Settings.Load("default.settings");
             int heightImage = 200;
@@ -322,42 +497,117 @@ namespace PeSA.Engine
                 heightImage = settings.MotifHeight;
                 widthImage = settings.MotifWidth;
             }
-            Motif motif = new Motif(Weights, "", -1);//TODO
-            Bitmap bmp = Analyzer.CreateMotifImage(motif, useMotifThreshold ? settings.MotifThreshold : 0, widthImage, heightImage, settings.MotifMaxAAPerColumn);
+
+            int rowind = 1;
+            worksheet.Cells[rowind, 1].Value = "Positive Threshold:";
+            worksheet.Cells[rowind++, 2].Value = motif.PositiveThreshold;
+            if (motif.WildTypePeptide != "")
+            {
+                worksheet.Cells[rowind, 1].Value = "Wildtype Sequence:";
+                worksheet.Cells[rowind++, 2].Value = motif.WildTypePeptide;
+            }
+
+            Bitmap bmp = motif.GetPositiveMotif(widthImage, heightImage);
             if (bmp != null)
             {
-                var picture = worksheet.Drawings.AddPicture("Motif", bmp);
+                var picture = worksheet.Drawings.AddPicture("Positive Motif", bmp);
                 picture.SetPosition(rowind, 0, 1, 0);
             }
 
             int occupiedRows = (int)Math.Round(heightImage / worksheet.Row(rowind).Height);
             rowind += occupiedRows + 1;
 
-            worksheet.Cells[rowind++, 1].Value = "Motif Data:";
-            int startrow = rowind;
-            worksheet.Row(startrow).Style.Font.Bold = true;
-            worksheet.Row(startrow + 1).Style.Font.Bold = true;
-            int colind = 1;
-            foreach (int pos in Weights.Keys)
-            {
-                worksheet.Cells[startrow, colind].Value = "Position: " + (pos + 1).ToString();
-                worksheet.Cells[startrow, colind, startrow, colind + 1].Merge = true;
-                worksheet.Cells[startrow, colind, startrow, colind + 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            Dictionary<int, Dictionary<char, double>> scaledcolumns = motif.GetScaledColumns(motif.PositiveColumns);
+            DumpMotifData(worksheet, ref rowind, motif.PositiveColumns, scaledcolumns);
 
-                worksheet.Cells[startrow + 1, colind].Value = "Amino-acid";
-                worksheet.Cells[startrow + 1, colind + 1].Value = "Percentage";
-                Dictionary<char, double> perCol = Weights[pos];
-                rowind = startrow + 2;
-                foreach (char aa in perCol.Keys)
-                {
-                    worksheet.Cells[rowind, colind].Value = aa.ToString();
-                    worksheet.Cells[rowind, colind + 1].Value = perCol[aa];
-                    worksheet.Cells[rowind++, colind + 1].Style.Numberformat.Format = "0.00%";
-                }
-                worksheet.Column(colind).AutoFit();
-                worksheet.Column(colind + 1).AutoFit();
-                colind += 2;
+            rowind += 2;
+
+            worksheet.Cells[rowind, 1].Value = "Negative Threshold:";
+            worksheet.Cells[rowind++, 2].Value = motif.NegativeThreshold;
+
+            bmp = motif.GetNegativeMotif(widthImage, heightImage);
+            if (bmp != null)
+            {
+                var picture = worksheet.Drawings.AddPicture("Negative Motif", bmp);
+                picture.SetPosition(rowind, 0, 1, 0);
             }
+
+            occupiedRows = (int)Math.Round(heightImage / worksheet.Row(rowind).Height);
+            rowind += occupiedRows + 1;
+
+            scaledcolumns = motif.GetScaledColumns(motif.NegativeColumns);
+            DumpMotifData(worksheet, ref rowind, motif.NegativeColumns, scaledcolumns);
+
+            rowind += 2;
+
+            worksheet.Cells[rowind++, 1].Value = "Bar Chart:";
+            bmp = motif.GetBarChart(widthImage / 2);
+            if (bmp != null)
+            {
+                var picture = worksheet.Drawings.AddPicture("Bar Chart", bmp);
+                picture.SetPosition(rowind, 0, 1, 0);
+            }
+
+            occupiedRows = (int)Math.Round(heightImage / worksheet.Row(rowind).Height);
+            rowind += occupiedRows + 1;
+        }
+
+        private static void WriteToSheetFrequencyMotif(ExcelPackage package, Motif motif, string title, ref int rowind, bool clear = true)
+        {
+            ExcelWorksheet worksheet =
+                clear ? GetWorksheetBlank(package, "Motif") : GetWorksheetKeepData(package, "Motif");
+
+            if (clear)
+                worksheet.Drawings.Clear();
+
+            worksheet.Cells[rowind, 1].Value = "Frequency Threshold:";
+            worksheet.Cells[rowind++, 2].Value = motif.PositiveThreshold;
+
+            Settings settings = Settings.Load("default.settings");
+            int heightImage = 200;
+            int widthImage = 800;
+            if (settings != null)
+            {
+                heightImage = settings.MotifHeight;
+                widthImage = settings.MotifWidth;
+            }
+            Bitmap bmp = motif.GetFrequencyMotif(widthImage, heightImage);
+            if (bmp != null)
+            {
+                var picture = worksheet.Drawings.AddPicture(title, bmp);
+                picture.SetPosition(rowind, 0, 1, 0);
+            }
+            int occupiedRows = (int)Math.Round(heightImage / worksheet.Row(rowind).Height);
+            rowind += occupiedRows + 1;
+            DumpMotifData(worksheet, ref rowind, null, motif.Frequencies);
+
+
+        }
+
+        private static bool WriteToSheetReferenceInfo(ExcelPackage package, BaseArray array)
+        {
+            try
+            {
+                ExcelWorksheet worksheet = GetWorksheetBlank(package, "ReferenceInfo");
+
+                worksheet.Drawings.Clear();
+
+                worksheet.Cells[1, 1].Value = "Notes:";
+                worksheet.Cells[1, 2].Value = array.Notes;
+
+                Settings settings = Settings.Load("default.settings");
+                int heightImage = 200;
+                int widthImage = 800;
+                if (settings != null)
+                {
+                    heightImage = settings.MotifHeight;
+                    widthImage = settings.MotifWidth;
+                }
+                var picture = worksheet.Drawings.AddPicture("Reference Image", FileUtil.Base64ToImage(array.ImageStr));
+                picture.SetPosition(3, 0, 1, 0);
+                return true;
+            }
+            catch { return false; }
         }
 
         public static bool ExportPeptideArrayToExcel(string fileName, PeptideArray PA, bool overwrite, out string errormsg)
@@ -370,13 +620,12 @@ namespace PeSA.Engine
                     return false;
                 using (ExcelPackage package = new ExcelPackage(existingFile))
                 {
-                    //get the first worksheet in the workbook
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets["Arrays"];
-
-                    if (worksheet == null)
-                        worksheet = package.Workbook.Worksheets.Add("Arrays");
-                    else
-                        ClearWorksheet(worksheet);
+                    if (existingFile.Exists)
+                    {
+                        while (package.Workbook.Worksheets.Count > 0)
+                            package.Workbook.Worksheets.Delete(1);
+                    }
+                    ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                     int lastrow = MatrixToExcel(worksheet, 1, "Peptide Matrix", PA.PeptideMatrix);
                     if (lastrow < 0) return false;
@@ -384,10 +633,40 @@ namespace PeSA.Engine
                     if (lastrow < 0) return false;
                     lastrow = MatrixToExcel(worksheet, lastrow + 3, "Quantification Matrix", PA.QuantificationMatrix);
                     if (lastrow < 0) return false;
+
+                    worksheet.Cells[++lastrow, 1].Value = "Norm By:";
+                    worksheet.Cells[lastrow, 2].Value = PA.NormalizationValue;
                     lastrow = MatrixToExcel(worksheet, lastrow + 3, "Normalized Matrix", PA.NormalizedMatrix);
 
-                    WriteToSheetModifiedPeptideList(package, PA.ModifiedPeptides, PA.Threshold);
-                    WriteToSheetMotif(package, Analyzer.GenerateFrequencies(PA.ModifiedPeptides, PA.PeptideLength), PA.Threshold, /*useMotifThreshold*/true);
+                    WriteToSheetWeighedPeptideList(package, PA.NormalizedPeptideWeights, PA.PositiveThreshold, PA.NegativeThreshold);
+
+                    if (PA.KeyPosition != null && PA.KeyAA != ' ')
+                    {
+                        int rowind = 1;
+                        List<string> mainList = PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] == PA.KeyAA).ToList();
+                        List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] != PA.KeyAA).ToList(), PA.KeyAA, PA.PeptideLength, (int)PA.KeyPosition - 1,
+                            out List<string> replacements);
+                        Motif motif = new Motif(mainList, PA.PeptideLength);
+                        motif.FreqThreshold = PA.FrequencyThreshold;
+
+                        WriteToSheetFrequencyMotif(package, motif, "Motif", ref rowind);
+                        rowind++;
+
+                        motif = new Motif(shiftedList, PA.PeptideLength);
+                        motif.FreqThreshold = PA.FrequencyThreshold;
+                        WriteToSheetFrequencyMotif(package, motif, "Shifted Motif", ref rowind, false);
+                    }
+                    else
+                    {
+                        Motif motif = new Motif(PA.ModifiedPeptides, PA.PeptideLength);
+                        motif.FreqThreshold = PA.FrequencyThreshold;
+
+                        int rowind = 1;
+                        WriteToSheetFrequencyMotif(package, motif, "Motif", ref rowind);
+                    }
+
+                    WriteToSheetReferenceInfo(package, PA);
+
                     try
                     {
                         package.Save();
@@ -446,14 +725,12 @@ namespace PeSA.Engine
                     return false;
                 using (ExcelPackage package = new ExcelPackage(existingFile))
                 {
-                    int pc = package.Workbook.Worksheets.Count();
-                    //get the first worksheet in the workbook
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets["Arrays"];
-
-                    if (worksheet == null)
-                        worksheet = package.Workbook.Worksheets.Add("Arrays");
-                    else
-                        ClearWorksheet(worksheet);
+                    if (existingFile.Exists)
+                    {
+                        while (package.Workbook.Worksheets.Count > 0)
+                            package.Workbook.Worksheets.Delete(1);
+                    }
+                    ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                     List<string> headerrow = new List<string>();
                     List<string> headercolumn = new List<string>();
@@ -480,11 +757,15 @@ namespace PeSA.Engine
                     startrow = lastrow + 3;
                     lastrow = MatrixToExcel(worksheet, lastrow + 3, "Quantification Matrix", PA.QuantificationMatrix);
                     if (lastrow < 0) return false;
-
                     ListToExcelRow(worksheet, startrow + 1, 1, "", headerrow);
                     ListToExcelColumn(worksheet, startrow + 1, 1, "", headercolumn);
                     //put the normalization values
-                    if (PA.PermutationXAxis)
+                    if (PA.NormMode == NormalizationMode.Mean)
+                    {
+                        worksheet.Cells[++lastrow, 1].Value = "Norm By:";
+                        worksheet.Cells[lastrow, 2].Value = PA.NormalizationValue;
+                    }
+                    else if (PA.PermutationXAxis)
                         ListToExcelColumn(worksheet, startrow + 1, PA.QuantificationMatrix.GetLength(1) + 2, "Norm By", PA.NormBy.ToList());
                     else
                         ListToExcelRow(worksheet, lastrow + 1, 1, "Norm By", PA.NormBy.ToList());
@@ -494,12 +775,15 @@ namespace PeSA.Engine
                     ListToExcelRow(worksheet, startrow + 1, 1, "", headerrow);
                     ListToExcelColumn(worksheet, startrow + 1, 1, "", headercolumn);
 
-                    worksheet.Cells[lastrow + 2, 1].Value = "Threshold: ";
-                    worksheet.Cells[lastrow + 2, 2].Value = PA.Threshold;
+                    worksheet.Cells[lastrow + 2, 1].Value = "Positive Threshold: ";
+                    worksheet.Cells[lastrow + 2, 2].Value = PA.GetPositiveThreshold();
 
-                    WriteToSheetModifiedPeptideList(package, PA.ModifiedPeptides, PA.Threshold, PA.WildTypePeptide);
-                    WriteToSheetMotif(package, PA.GenerateWeights(), PA.Threshold, /*useMotifThreshold*/false, PA.WildTypePeptide);
+                    worksheet.Cells[lastrow + 3, 1].Value = "Negative Threshold: ";
+                    worksheet.Cells[lastrow + 3, 2].Value = PA.GetNegativeThreshold();
 
+                    WriteToSheetWeighedPeptideList(package, PA.NormalizedPeptideWeights, PA.GetPositiveThreshold(), PA.GetNegativeThreshold(), PA.WildTypePeptide);
+                    WriteToSheetMotif(package, new Motif(PA));
+                    WriteToSheetReferenceInfo(package, PA);
                     try
                     {
                         package.Save();
@@ -531,14 +815,12 @@ namespace PeSA.Engine
                     return false;
                 using (ExcelPackage package = new ExcelPackage(existingFile))
                 {
-                    int pc = package.Workbook.Worksheets.Count();
-                    //get the first worksheet in the workbook
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets["Arrays"];
-
-                    if (worksheet == null)
-                        worksheet = package.Workbook.Worksheets.Add("Arrays");
-                    else
-                        ClearWorksheet(worksheet);
+                    if (existingFile.Exists)
+                    {
+                        while (package.Workbook.Worksheets.Count > 0)
+                            package.Workbook.Worksheets.Delete(1);
+                    }
+                    ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                     List<string> headerrow = new List<string>();
                     List<string> headercolumn = new List<string>();
@@ -559,13 +841,25 @@ namespace PeSA.Engine
                     ListToExcelRow(worksheet, startrow + 1, 1, "", headerrow);
                     ListToExcelColumn(worksheet, startrow + 1, 1, "", headercolumn);
 
+                    //put the normalization values
+                    if (OA.NormMode == NormalizationMode.Max)
+                    {
+                        worksheet.Cells[++lastrow, 1].Value = "Norm By:";
+                        worksheet.Cells[lastrow, 2].Value = OA.NormalizationValue;
+                    }
+                    else if (OA.PermutationXAxis)
+                        ListToExcelColumn(worksheet, startrow + 1, OA.QuantificationMatrix.GetLength(1) + 2, "Norm By", OA.NormBy.ToList());
+                    else
+                        ListToExcelRow(worksheet, lastrow + 1, 1, "Norm By", OA.NormBy.ToList());
+
                     startrow = lastrow + 3;
                     lastrow = MatrixToExcel(worksheet, startrow, "Normalized Matrix", OA.NormalizedMatrix);
+
                     ListToExcelRow(worksheet, startrow + 1, 1, "", headerrow);
                     ListToExcelColumn(worksheet, startrow + 1, 1, "", headercolumn);
 
-                    WriteToSheetMotif(package, OA.GenerateWeights(), OA.Threshold, /*useMotifThreshold*/false);
-
+                    WriteToSheetMotif(package, new Motif(OA));
+                    WriteToSheetReferenceInfo(package, OA);
                     try
                     {
                         package.Save();
@@ -587,6 +881,79 @@ namespace PeSA.Engine
             }
         }
 
+        public static bool ExportScoresToExcel(string fileName, Scorer scorer, bool overwrite, out string errormsg)
+        {
+            try
+            {
+                errormsg = "";
+                FileInfo existingFile = new FileInfo(fileName);
+                if (existingFile.Exists && !overwrite)
+                    return false;
+                using (ExcelPackage package = new ExcelPackage(existingFile))
+                {
+                    if (existingFile.Exists)
+                    {
+                        while (package.Workbook.Worksheets.Count > 0)
+                            package.Workbook.Worksheets.Delete(1);
+                    }
+                    WriteToSheetScoreList(package, scorer);
+                    WriteToSheetMotif(package, scorer.Motif);
+
+                    try
+                    {
+                        package.Save();
+                    }
+                    catch
+                    {
+                        errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                errormsg = "There is a problem with creating the export file. Please try again.";
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ExportMotifValidatorToExcel(string fileName, MotifValidator validator, bool overwrite, out string errormsg)
+        {
+            try
+            {
+                errormsg = "";
+                FileInfo existingFile = new FileInfo(fileName);
+                if (existingFile.Exists && !overwrite)
+                    return false;
+                using (ExcelPackage package = new ExcelPackage(existingFile))
+                {
+                    if (existingFile.Exists)
+                    {
+                        while (package.Workbook.Worksheets.Count > 0)
+                            package.Workbook.Worksheets.Delete(1);
+                    }
+                    WriteToSheetValidator(package, validator);
+                    WriteToSheetMotif(package, validator.Motif);
+
+                    try
+                    {
+                        package.Save();
+                    }
+                    catch
+                    {
+                        errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                errormsg = "There is a problem with creating the export file. Please try again.";
+                return false;
+            }
+            return true;
+        }
     }
 }
    

@@ -8,26 +8,80 @@ using System.Threading.Tasks;
 
 namespace PeSA.Engine
 {
-    public class PermutationArray
+    public enum NormalizationMode { Mean, PerRowColumn, Max}
+    public class PermutationArray: BaseArray
     {
-        public string Version = "";
-
         public string WildTypePeptide { get; set; }
-        public int RowCount { get; set; }
-        public int ColCount { get; set; }
+        /// <summary>
+        /// Multiple wildtype values may exist with different values per position
+        /// </summary>
+        public Dictionary<int, double> NormalizedWildtypeWeights { get; set; }
         public bool WildTypeAxisExists { get; set; }
         public bool PermutationXAxis { get; set; }
         public bool WildTypeYAxisTopToBottom { get; set; }
         public string[,] PeptideMatrix { get; set; }
-        public double[,] QuantificationMatrix { get; set; }
-        public double[,] NormalizedMatrix { get; set; }
+        public double NormalizedMatrixMax { get; set; }
+        public double NormalizedMatrixMin { get; set; }
+
         public double[] NormBy;
         public char[] Permutation;
+        public NormalizationMode NormMode = NormalizationMode.Mean;
 
-        public double Threshold { get; set; }
+        override public void SetPositiveThreshold(double value, out bool negChanged)
+        {
+            base.SetPositiveThreshold(value, out negChanged);
+        }
 
-        public List<string> ModifiedPeptides { get; set; }
-        public Dictionary<string, double> PeptideWeights { get; set; }
+        override public void SetNegativeThreshold(double value, out bool posChanged)
+        {
+            base.SetNegativeThreshold(value, out posChanged);
+        }
+
+        override protected void Upgrade(string mode)
+        {
+            base.Upgrade(mode);
+            if (mode == "NormalizedPeptideWeights")
+            {
+                GenerateNormalizedPeptideWeights();
+            }
+            if (mode == "NormalizedMatrixRange")
+            {
+                NormalizedMatrixMin = double.MaxValue;
+                NormalizedMatrixMax = double.MinValue;
+                for (int iRow = 0; iRow < RowCount; iRow++)
+                    for (int iCol = 0; iCol < ColCount; iCol++)
+                    {
+                        if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
+                            NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
+                        if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
+                            NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
+                    }
+            }
+        }
+
+        private void GenerateNormalizedPeptideWeights()
+        {
+            NormalizedPeptideWeights.Clear();
+            NormalizedWildtypeWeights.Clear();
+
+            NormalizedMatrixMin = double.MaxValue;
+            NormalizedMatrixMax = double.MinValue;
+            for (int iRow = 0; iRow < RowCount; iRow++)
+                for (int iCol = 0; iCol < ColCount; iCol++)
+                {
+                    int pos = PermutationXAxis ? iRow : iCol;
+                    double normby = NormMode == NormalizationMode.Mean ? NormalizationValue :
+                        NormBy == null ? 1 : NormBy[pos];
+                    if (normby != 0)
+                        NormalizedMatrix[iRow, iCol] = QuantificationMatrix[iRow, iCol] / normby;
+                    if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
+                        NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
+                    if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
+                        NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
+
+                    AddNormalizedPeptideWeight(PeptideMatrix[iRow, iCol], pos, NormalizedMatrix[iRow, iCol]);
+                }
+        }
 
         private void GenerateMatrices(string[,] values, out List<string> warnings, out string error)
         {
@@ -137,7 +191,6 @@ namespace PeSA.Engine
                     }
                 }
 
-
                 //Generate Matrices and Normalization values
                 int wtl = WildTypePeptide.Length;
 
@@ -187,13 +240,8 @@ namespace PeSA.Engine
                             NormBy[i] = totalNorm / counter;
                     }
                 }
-                for (int iRow = 0; iRow < RowCount; iRow++)
-                    for (int iCol = 0; iCol < ColCount; iCol++)
-                    {
-                        double normby = PermutationXAxis ? NormBy[iRow] : NormBy[iCol];
-                        if (normby != 0)
-                            NormalizedMatrix[iRow, iCol] = QuantificationMatrix[iRow, iCol] / normby;
-                    }
+                NormalizationValue = totalNorm / counter;
+                GenerateNormalizedPeptideWeights();
             }
             catch (Exception exc)
             {
@@ -201,15 +249,20 @@ namespace PeSA.Engine
             }
         }
 
+        public void Renormalize()
+        {
+            GenerateNormalizedPeptideWeights();
+        }
+
         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
         {
-            Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
             error = "";
             warnings = new List<string>();
             try
             {
-                ModifiedPeptides = new List<string>();
-                PeptideWeights = new Dictionary<string, double>();
+                NormalizedPeptideWeights = new Dictionary<string, double>();
+                NormalizedWildtypeWeights = new Dictionary<int, double>();
+
                 PermutationXAxis = permutationXAxisIn;
                 WildTypeYAxisTopToBottom = wildtypeYAxisTopToBottom;
 
@@ -252,19 +305,17 @@ namespace PeSA.Engine
             }
         }
 
-        public void ClearModifiedPeptides()
-        {
-            ModifiedPeptides?.Clear();
-            PeptideWeights?.Clear();
-        }
-        public void AddModifiedPeptide(string peptide, double weight)
+        private void AddNormalizedPeptideWeight(string peptide, int pos, double weight)
         {
             if (string.IsNullOrEmpty(peptide))
                 return;
-            if (peptide == WildTypePeptide && ModifiedPeptides.Contains(peptide))
+            if (peptide == WildTypePeptide)
+            {
+                NormalizedWildtypeWeights.Add(pos, weight);
                 return;
-            ModifiedPeptides.Add(peptide);
-            PeptideWeights.Add(peptide, weight);
+            }
+            if (!NormalizedPeptideWeights.ContainsKey(peptide))
+                NormalizedPeptideWeights.Add(peptide, weight);
         }
 
         public static PermutationArray ReadFromFile(string filename)
@@ -273,8 +324,17 @@ namespace PeSA.Engine
             {
                 PermutationArray PA = null;
                 if (File.Exists(filename))
+                {
                     PA = JsonConvert.DeserializeObject<PermutationArray>(File.ReadAllText(filename));
-
+                    if (PA.Version == "")
+                    {
+                        PA.Version = "Old version";
+                        PA.Upgrade("NormalizedPeptideWeights");
+                        PA.Upgrade("PositiveThreshold");
+                    }
+                    if (PA.NormalizedMatrixMin == PA.NormalizedMatrixMax)
+                        PA.Upgrade("NormalizedMatrixRange");
+                }
                 return PA;
             }
             catch { return null; }
@@ -285,74 +345,12 @@ namespace PeSA.Engine
         {
             try
             {
+                PA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
                 string json = JsonConvert.SerializeObject(PA);
                 File.WriteAllText(filename, json);
                 return true;
             }
             catch { return false; }
-        }
-
-        /// <summary>
-        /// Dictionary of weight for each char at every position, setting the value of 1 to wildtype aminoacid
-        /// </summary>
-        /// <param name="PA"></param>
-        /// <returns></returns>
-        public Dictionary<int, Dictionary<char, double>> GenerateWeights()
-        {
-            try
-            {
-                Dictionary<int, double> totalWeightsPerPos;
-                Dictionary<int, Dictionary<char, double>> weights;
-                int pepsize = ModifiedPeptides[0].Length;
-
-                totalWeightsPerPos = new Dictionary<int, double>();
-                weights = new Dictionary<int, Dictionary<char, double>>();
-                for (int i = 0; i < pepsize; i++)
-                {
-                    totalWeightsPerPos.Add(i, 0);
-                    weights.Add(i, new Dictionary<char, double>());
-                }
-
-                double weight = PeptideWeights.ContainsKey(WildTypePeptide) ? PeptideWeights[WildTypePeptide] : 1;
-                for (int i = 0; i < pepsize; i++)
-                {
-                    char c = WildTypePeptide[i];
-                    totalWeightsPerPos[i] += weight;
-                    weights[i].Add(c, weight);
-                }
-
-                foreach (string s in ModifiedPeptides.Where(ps => ps != WildTypePeptide))
-                {
-                    for (int i = 0; i < pepsize; i++)
-                    {
-                        char c = s[i];
-                        if (c != WildTypePeptide[i])
-                        {
-                            weight = PeptideWeights[s];
-                            totalWeightsPerPos[i] += weight;
-                            weights[i].Add(c, weight);
-                            break;//there can be one aa change per peptide 
-                        }
-                    }
-                }
-                for (int i = 0; i < pepsize; i++)
-                {
-                    List<char> charlist = weights[i].Keys.ToList();
-                    foreach (char c in charlist)
-                        weights[i][c] /= totalWeightsPerPos[i];
-                }
-                return weights;
-            }
-            catch 
-            {
-                return null;
-            }
-        }
-
-        public Motif CreateMotif()
-        {
-            Dictionary<int, Dictionary<char, double>> weights = GenerateWeights();
-            return new Motif(weights, WildTypePeptide, -1);
         }
 
     }

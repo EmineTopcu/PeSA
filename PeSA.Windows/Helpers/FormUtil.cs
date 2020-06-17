@@ -9,11 +9,24 @@ namespace PeSA.Windows
 {
     public class FormUtil
     {
+        private static void UpdateMenuText(Form form)
+        {
+            if (form.MdiParent != null)
+            {
+                try
+                {
+                    MainForm mainform = form.MdiParent as MainForm;
+                    mainform.UpdateWindowMenuItem(form);
+                }
+                catch { }
+            }
+        }
         public static string SetText(Form form, FileDialog dlg, string deftext)
         {
             if (string.IsNullOrEmpty(dlg.FileName))
             {
                 form.Text = deftext;
+                UpdateMenuText(form);
                 return "";
             }
             string filename = dlg.FileName;
@@ -28,7 +41,19 @@ namespace PeSA.Windows
             if (ind > 0)
                 filename = filename.Substring(0, ind);
             form.Text = deftext + " - " + filename;
+            UpdateMenuText(form);
             return filename;
         }
+
+        public static void SetTrackBarValue(TrackBar trackbar, int d)
+        {
+            if (d <= trackbar.Minimum)
+                trackbar.Value = trackbar.Minimum;
+            else if (d >= trackbar.Maximum)
+                trackbar.Value = trackbar.Maximum;
+            else
+                trackbar.Value = d;
+        }
+
     }
 }

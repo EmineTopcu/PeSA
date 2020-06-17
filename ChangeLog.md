@@ -1,5 +1,40 @@
-__Version 1.3__
+__Version 1.9__
+* Improve visual color matrix
+* Protein based motif scoring
 
+__Version 1.8__
+* Motif Validation Designer
+* Review settings menu
+* Negative motif color change
+* Chart upgrade
+
+__Version 1.7__
+* Amino acid list under Settings menu
+* New featues moved to OPAL analysis
+* Motif scorer
+* Motif save
+* Min/Max.Threshold values to color matrix scala
+* Normalization of permutation array can be done by average or per row/column
+* Normalization of OPAL array can be done by max of whole matrix or per row/column
+
+__Version 1.6__
+* Permutation array normalization is updated - normby as the average of all wildtype sequence values
+* Scala for the color matrix is displayed
+
+__Version 1.5__
+* Bug fix with OPAL array motif generation
+* First draft of color matrix
+
+__Version 1.4__
+* Ability to add a reference image and notes to peptide array and permutation array files
+* Automatic motif generation with threshold change
+* Bar chart plotting of the motif
+* Excel export: include negative motif, and normalized weight of amino acid residues as well as percentage
+
+__Version 1.3__
+* Visual improvements: MdiChildren added to the Windows menu
+* Visual improvements: Double click on grid corner selects the whole grid, for easy column/row resizing
+* Excel export: include peptide weights
 
 __Version 1.2__
 * Various bug fixes in saving and exporting

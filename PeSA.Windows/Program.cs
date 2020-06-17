@@ -14,6 +14,8 @@ namespace PeSA.Windows
         [STAThread]
         static void Main()
         {
+           //new Cybele.Thinfinity.VirtualUI().Start();
+
             Application.ThreadException += (s, e) => MessageBox.Show(e.Exception.Message, "PeSA");
             AppDomain.CurrentDomain.UnhandledException += (s, e) => MessageBox.Show((e.ExceptionObject as Exception)?.Message ?? "An exception occured.", "PeSA");
 

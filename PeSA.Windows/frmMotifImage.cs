@@ -21,7 +21,7 @@ namespace PeSA.Windows
             lMotif2.Text = label2;
             if (bm2 == null)
             {
-                splitContainer1.Panel2Collapsed = true;
+                splitMain.Panel2Collapsed = true;
                 this.Height = bm1.Height + 80;
             }
             else
@@ -29,7 +29,7 @@ namespace PeSA.Windows
                 pictureBox2.Image = bm2;
                 this.Height = bm1.Height + bm2.Height + 120;
             }
-            splitContainer1.SplitterDistance = bm1.Height + 36;
+            splitMain.SplitterDistance = bm1.Height + 36;
             this.Width = bm1.Width + 30;
         }
 
@@ -68,6 +68,9 @@ namespace PeSA.Windows
             MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
         }
 
-       
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
