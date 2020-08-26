@@ -16,11 +16,10 @@ namespace PeSA.Windows
         {
             set => progressBar1.Maximum = value;
         }
-
-        public int ProgressValue
+    public int ProgressValue
         {
             get => progressBar1.Value;
-            set => progressBar1.Value= value; 
+            set { progressBar1.Value = Math.Min(value, progressBar1.Maximum); }
         }
 
         public frmProgressDialog()

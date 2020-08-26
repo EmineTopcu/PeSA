@@ -43,6 +43,7 @@ namespace PeSA.Engine
             }
         }
 
+        private int fullPos = 0;
         private Score GetScore(string peptide, string inputSegment, int startpos = 0)
         {
             try
@@ -83,7 +84,7 @@ namespace PeSA.Engine
             }
         }
 
-        public List<Score> ScoreSequence(string inputSeq, Action progressCallback, string proteinName=null)
+        public List<Score> ScoreSequence(string inputSeq, Action<int> progressCallback, string proteinName=null)
         {
             List<Score> scores = new List<Score>();
             int startInd = 0;
@@ -96,7 +97,13 @@ namespace PeSA.Engine
                     
                     if (s != null && s.posMatch >= PosMatchCutoff && s.negMatch <= NegMatchCutoff)
                         scores.Add(s);
+                    s.StartPos = startInd + 1;
                     startInd++;
+                    fullPos++;
+                    if (progressCallback != null)//protein scoring
+                    {
+                        progressCallback(fullPos);
+                    }
                 }
             }
             else
@@ -104,7 +111,12 @@ namespace PeSA.Engine
                 while (startInd < inputSeq.Length)
                 {
                     int ind = inputSeq.IndexOf(KeyChar, startInd);
-                    if (ind < 0) break;
+                    if (ind < 0)
+                    {
+                        fullPos += inputSeq.Length - startInd;
+                        break;
+                    }
+                    fullPos += (ind - startInd);
                     int startPos = 0;
                     string segment;
                     int relPos = startInd + 1;
@@ -125,8 +137,8 @@ namespace PeSA.Engine
                     startInd = ind + 1;
                     if (progressCallback != null)//protein scoring
                     {
-                        s.StartPos = relPos;
-                        progressCallback();
+                        s.StartPos = relPos + 1;
+                        progressCallback(fullPos);
                     }
                 }
             }
@@ -146,9 +158,10 @@ namespace PeSA.Engine
             }
             return ScoreList;
         }
-        public List<Score> ScoreProteinList(Action progressCallback)
+        public List<Score> ScoreProteinList(Action<int> progressCallback)
         {
             if (ProteinList == null) return null;
+            fullPos = 0;
             ScoreList = new List<Score>();
             foreach (Protein p in ProteinList)
             {

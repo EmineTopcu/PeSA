@@ -1,5 +1,8 @@
-__Version 1.9__
+__Version 1.10__
+* Amino acid letter images are saved as resource for better resolution and optimization
 * Improve visual color matrix
+
+__Version 1.9__
 * Protein based motif scoring
 
 __Version 1.8__

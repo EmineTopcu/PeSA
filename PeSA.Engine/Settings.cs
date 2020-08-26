@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,10 +14,12 @@ namespace PeSA.Engine
     {
         //MotifSettings
         public Dictionary<char, Color> AminoAcidMotifColors;
-        private Dictionary<char, Color> DefaultAminoAcidMotifColors;
+        private static Dictionary<char, Color> DefaultAminoAcidMotifColors;
         public int MotifWidth, MotifHeight;
         public int MotifMaxAAPerColumn = 10;
         public double MotifThreshold = 0.1;
+        static private Dictionary<char, Bitmap> PositiveImages;
+        static private Dictionary<char, Bitmap> NegativeImages;
 
         //PeptideArraySettings
         public int PeptideArrayColumns, PeptideArrayRows;
@@ -30,7 +33,7 @@ namespace PeSA.Engine
 
         public Settings()
         {
-            this.DefaultAminoAcidMotifColors = new Dictionary<char, Color>() {
+            DefaultAminoAcidMotifColors = new Dictionary<char, Color>() {
                     {'A', Color.Fuchsia },
                     {'R',Color.Green },
                     {'N', Color.FromArgb(128,255,255) },
@@ -55,7 +58,7 @@ namespace PeSA.Engine
                     {'V', Color.Fuchsia },
                     {'X', Color.Black }
                 };
-
+            AminoAcidMotifColors = new Dictionary<char, Color>(DefaultAminoAcidMotifColors);
         }
         public Color GetColorOfAminoAcid(char aa)
         {
@@ -162,6 +165,7 @@ namespace PeSA.Engine
         {
             try
             {
+                GeneratePositiveImageResources(true);//to update the colored images
                 string folder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/PeSA";
                 if (Directory.Exists(folder) && File.Exists(folder + "/" + name))
                 {
@@ -172,6 +176,92 @@ namespace PeSA.Engine
             }
             catch { return false; }
         }
+
+        private static void SetImage(Dictionary<char, Bitmap> dict, char c, Bitmap bmp)
+        {
+            if (dict.ContainsKey(c))
+                dict[c] = bmp;
+            else dict.Add(c, bmp);
+        }
+        private static void GenerateImageResourcesOfAminoAcid(char aa, string filename, bool pos, Color color)
+        {
+            try
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                if (!filename.StartsWith("PeSA"))
+                    filename = "PeSA.Engine.Resources." + filename;
+                Stream stream = assembly.GetManifestResourceStream(filename);
+                if (stream == null)
+                    return;
+                Image image = Image.FromStream(stream);
+                System.Drawing.Imaging.ImageAttributes imageAttributes = new System.Drawing.Imaging.ImageAttributes();
+                int width = image.Width;
+                int height = image.Height;
+                System.Drawing.Imaging.ColorMap colorMap = new System.Drawing.Imaging.ColorMap();
+
+                colorMap.OldColor = Color.Black;
+                colorMap.NewColor = color;
+
+                System.Drawing.Imaging.ColorMap[] remapTable = { colorMap };
+
+                imageAttributes.SetRemapTable(remapTable, System.Drawing.Imaging.ColorAdjustType.Bitmap);
+
+                Bitmap bmp = new Bitmap(width, height);
+                using (var gr = Graphics.FromImage(bmp))
+                {
+                    gr.DrawImage(image, new Rectangle(0, 0, width, height), 0, 0, width, height, GraphicsUnit.Pixel,
+                   imageAttributes);
+                    if (pos)
+                        SetImage(PositiveImages, aa, bmp);
+                    else
+                        SetImage(NegativeImages, aa, bmp);
+                }
+            }
+            catch (Exception exc) { }
+        }
+        public static Bitmap GetAminoAcidImage(char c, bool pos)
+        {
+            if (PositiveImages == null || PositiveImages.Count == 0)
+            {
+                Settings settings = Settings.Load("default.settings");
+                settings.GenerateImageResources();
+            }
+            if (!PositiveImages.ContainsKey(c))
+                return null;
+            if (pos)
+                return PositiveImages[c];
+            else
+                return NegativeImages[c];
+        }
+
+        public void GeneratePositiveImageResources(bool enforce)
+        {
+            if (!enforce && PositiveImages != null && PositiveImages.Count != 0)
+                return;
+            PositiveImages = new Dictionary<char, Bitmap>();
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                GenerateImageResourcesOfAminoAcid(c, "Image" + c + ".png", true, GetColorOfAminoAcid(c));
+            }
+        }
+        public void GenerateNegativeImageResources()
+        {
+            if (NegativeImages != null && NegativeImages.Count != 0)
+                return;
+            NegativeImages = new Dictionary<char, Bitmap>();
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                GenerateImageResourcesOfAminoAcid(c, "Image" + c + ".png", false, Common.ColorNegative);
+            }
+        }
+        public void GenerateImageResources()
+        {
+            if (Settings.PositiveImages == null || Settings.PositiveImages.Count == 0)
+                GeneratePositiveImageResources(false);
+            if (Settings.NegativeImages == null || Settings.NegativeImages.Count == 0)
+                GenerateNegativeImageResources();
+        }
+
     }
 
 }

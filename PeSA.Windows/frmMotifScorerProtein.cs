@@ -30,7 +30,7 @@ namespace PeSA.Windows
             Proteins = FileUtil.ReadProtein(filename);
             eProtein.Text = "";
             foreach (Protein p in Proteins)
-                eProtein.Text += p.RawSequence;
+                eProtein.Text += p.RawSequence + "\r\n\r\n";
         }
 
         private void lSaveScores_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -120,12 +120,12 @@ namespace PeSA.Windows
             Scorer.StopScoringRequested = false;
             frmProgressDialog prdlg = new frmProgressDialog
             {
-                ProgressMax = (int) Proteins.Sum(p=>Math.Ceiling((double)(p.AASequence.Length/Motif.PeptideLength)))
+                ProgressMax = (int) Proteins.Sum(p=>Math.Ceiling((double)(p.AASequence.Length - Motif.PeptideLength + 1)))
             };
 
             Task maintask = Task.Run(() =>
             {
-                Scorer.ScoreProteinList(() => Invoke(new Action(() => prdlg.ProgressValue++)));
+                Scorer.ScoreProteinList(progress => Invoke(new Action(() => prdlg.ProgressValue = progress))); 
                 Thread.Sleep(200);
                 Invoke(new Action(() => prdlg.Close()));
             });

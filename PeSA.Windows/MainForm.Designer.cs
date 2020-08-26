@@ -38,6 +38,7 @@
             this.mTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mToolsSequenceGenerator = new System.Windows.Forms.ToolStripMenuItem();
             this.mToolsMotifBasedPeptideScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.mToolsMotifBasedProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
             this.mToolsMotifValidationDesigner = new System.Windows.Forms.ToolStripMenuItem();
             this.mSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mSettingsMotif = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +64,7 @@
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.btnMotifValidationDesigner = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.mToolsMotifBasedProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -147,6 +148,13 @@
             this.mToolsMotifBasedPeptideScorer.Size = new System.Drawing.Size(237, 22);
             this.mToolsMotifBasedPeptideScorer.Text = "Motif Based Peptide List Scorer";
             this.mToolsMotifBasedPeptideScorer.Click += new System.EventHandler(this.mToolsMotifBasedPeptideScorer_Click);
+            // 
+            // mToolsMotifBasedProteinScorer
+            // 
+            this.mToolsMotifBasedProteinScorer.Name = "mToolsMotifBasedProteinScorer";
+            this.mToolsMotifBasedProteinScorer.Size = new System.Drawing.Size(237, 22);
+            this.mToolsMotifBasedProteinScorer.Text = "Motif Based Protein Scorer";
+            this.mToolsMotifBasedProteinScorer.Click += new System.EventHandler(this.mToolsMotifBasedProteinScorer_Click);
             // 
             // mToolsMotifValidationDesigner
             // 
@@ -365,12 +373,9 @@
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(6, 72);
             // 
-            // mToolsMotifBasedProteinScorer
+            // openFileDialog1
             // 
-            this.mToolsMotifBasedProteinScorer.Name = "mToolsMotifBasedProteinScorer";
-            this.mToolsMotifBasedProteinScorer.Size = new System.Drawing.Size(237, 22);
-            this.mToolsMotifBasedProteinScorer.Text = "Motif Based Protein Scorer";
-            this.mToolsMotifBasedProteinScorer.Click += new System.EventHandler(this.mToolsMotifBasedProteinScorer_Click);
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // MainForm
             // 
@@ -431,6 +436,7 @@
         private System.Windows.Forms.ToolStripButton btnMotifValidationDesigner;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem mToolsMotifBasedProteinScorer;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

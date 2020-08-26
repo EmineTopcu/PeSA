@@ -96,6 +96,8 @@ namespace PeSA.Engine
 
         public Motif(Dictionary<string, double> peptideWeights, Dictionary<int, double> wildtypeWeights, string wildTypePeptide, double posThreshold, double negThreshold)
         {
+            Settings settings = Settings.Load("default.settings");
+            settings.GenerateImageResources();
             PeptideWeights = peptideWeights;
             WildtypeWeights = wildtypeWeights;
             WildTypePeptide = wildTypePeptide;
@@ -106,6 +108,8 @@ namespace PeSA.Engine
         }
         public Motif(Dictionary<string, double> _PeptideWeights, string[] _PosCaptions, double _posThreshold, double _negThreshold)
         {
+            Settings settings = Settings.Load("default.settings");
+            settings.GenerateImageResources();
             PeptideWeights = _PeptideWeights;
             WildTypePeptide = "";
             PosCaptions = _PosCaptions;
@@ -115,6 +119,8 @@ namespace PeSA.Engine
         }
         public Motif(List<string> _Peptides, int peptideLength)
         {
+            Settings settings = Settings.Load("default.settings");
+            settings.GenerateImageResources();
             PeptideWeights = new Dictionary<string, double>();
             foreach (string s in _Peptides.Distinct())
                 PeptideWeights.Add(s, 1);
@@ -369,11 +375,31 @@ namespace PeSA.Engine
         private Bitmap GetLetterImage(Char c, int width, int height, Color color)
         {
             if (width <= 0 || height <= 0) return null;
+
+            var scaledBitmap = new Bitmap(width, height);
+
+            Bitmap bmp = Settings.GetAminoAcidImage(c, color != Common.ColorNegative);
+
+            if (bmp != null)
+            {
+                try
+                {
+                    var sourceRectangle = SelectFilledPixels(bmp);
+                    RectangleF destinationRectangle = new RectangleF(0, 0, width, height);
+
+                    using (var destination = Graphics.FromImage(scaledBitmap))
+                    {
+                        destination.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        destination.DrawImage(bmp, destinationRectangle, sourceRectangle, GraphicsUnit.Pixel);
+                    }
+                    return scaledBitmap;
+                }
+                catch (Exception exc) { }
+            }
             var initialFontSize = (int)(Math.Max(width, height) / 1.5);
 
             var fullSizeBitmap = new Bitmap(initialFontSize * 2, initialFontSize * 2);
-            var scaledBitmap = new Bitmap(width, height);
-
+            
             using (var source = Graphics.FromImage(fullSizeBitmap))
             using (var destination = Graphics.FromImage(scaledBitmap))
             using (var font = new Font("Arial", initialFontSize, FontStyle.Bold))

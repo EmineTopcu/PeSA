@@ -130,14 +130,6 @@ namespace PeSA.Windows
             AddWindowMenuItem(frm);
         }
 
-        private void RunMotifScorer()
-        {
-            frmMotifScorer frm = new frmMotifScorer();
-            frm.MdiParent = this;
-            frm.Show();
-            AddWindowMenuItem(frm);
-        }
-
         private void RunMotifValidationDesigner()
         {
             frmMotifValidationDesigner frm = new frmMotifValidationDesigner();
@@ -145,8 +137,6 @@ namespace PeSA.Windows
             frm.Show();
             AddWindowMenuItem(frm);
         }
-
-
 
         private void mAnalyzePeptideList_Click(object sender, EventArgs e)
         {
@@ -208,7 +198,7 @@ namespace PeSA.Windows
 
         private void btnMotifBasedScorer_Click(object sender, EventArgs e)
         {
-            RunMotifScorer();
+            RunMotifScorer(false);
         }
         private void mToolsMotifBasedProteinScorer_Click(object sender, EventArgs e)
         {
@@ -291,13 +281,11 @@ namespace PeSA.Windows
                 ActivateButton(btnOPALArray);
             else if (type == typeof(frmSequenceGenerator))
                 ActivateButton(btnSequenceGenerator);
-            else if (type == typeof(frmMotifScorer))
+            else if (type == typeof(frmMotifScorerPeptide))
                 ActivateButton(btnMotifBasedScorer);
             else
                 DeactivateButtons();
 
         }
-
-
     }
 }

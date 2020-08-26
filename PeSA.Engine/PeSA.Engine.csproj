@@ -69,12 +69,65 @@
     <Compile Include="Helpers\MatrixUtil.cs" />
     <Compile Include="MotifValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Scorer.cs" />
     <Compile Include="SequenceGenerator.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ImageK.png" />
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImageA.png" />
+    <EmbeddedResource Include="Resources\ImageB.png" />
+    <EmbeddedResource Include="Resources\ImageC.png" />
+    <EmbeddedResource Include="Resources\ImageD.png" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ImageE.png" />
+    <EmbeddedResource Include="Resources\ImageF.png" />
+    <EmbeddedResource Include="Resources\ImageG.png" />
+    <EmbeddedResource Include="Resources\ImageH.png" />
+    <EmbeddedResource Include="Resources\ImageI.png" />
+    <EmbeddedResource Include="Resources\ImageJ.png" />
+    <EmbeddedResource Include="Resources\ImageM.png" />
+    <EmbeddedResource Include="Resources\ImageN.png" />
+    <EmbeddedResource Include="Resources\ImageO.png" />
+    <EmbeddedResource Include="Resources\ImageP.png" />
+    <EmbeddedResource Include="Resources\ImageQ.png" />
+    <EmbeddedResource Include="Resources\ImageR.png" />
+    <EmbeddedResource Include="Resources\ImageS.png" />
+    <EmbeddedResource Include="Resources\ImageT.png" />
+    <EmbeddedResource Include="Resources\ImageU.png" />
+    <EmbeddedResource Include="Resources\ImageV.png" />
+    <EmbeddedResource Include="Resources\ImageW.png" />
+    <EmbeddedResource Include="Resources\ImageX.png" />
+    <EmbeddedResource Include="Resources\ImageY.png" />
+    <EmbeddedResource Include="Resources\ImageZ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ImageL.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

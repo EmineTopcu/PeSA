@@ -23,6 +23,7 @@ namespace PeSA.Engine
 
         static public List<string> Combinations(string input) 
         {
+            input = input.Trim();
             if (!CheckTemplate(input))
                 return null;
             return GenerateCombinations(input);

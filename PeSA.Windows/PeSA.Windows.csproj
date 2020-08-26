@@ -123,12 +123,6 @@
     <Compile Include="frmMotifValidationDesigner.Designer.cs">
       <DependentUpon>frmMotifValidationDesigner.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMotifScorer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifScorer.Designer.cs">
-      <DependentUpon>frmMotifScorer.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,9 +208,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMotifValidationDesigner.resx">
       <DependentUpon>frmMotifValidationDesigner.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifScorer.resx">
-      <DependentUpon>frmMotifScorer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProgressDialog.resx">
       <DependentUpon>frmProgressDialog.cs</DependentUpon>

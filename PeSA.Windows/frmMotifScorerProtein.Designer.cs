@@ -71,28 +71,29 @@
             // 
             // eTarget
             // 
-            this.eTarget.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.eTarget.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // eScorerNegThreshold
             // 
-            this.eScorerNegThreshold.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.eScorerNegThreshold.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // eScorerPosThreshold
             // 
-            this.eScorerPosThreshold.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.eScorerPosThreshold.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // eNegCutoff
             // 
-            this.eNegCutoff.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.eNegCutoff.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // ePosCutoff
             // 
-            this.ePosCutoff.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ePosCutoff.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // splitRight
             // 
             this.splitRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitRight.Location = new System.Drawing.Point(0, 0);
+            this.splitRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitRight.Name = "splitRight";
             this.splitRight.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -106,8 +107,9 @@
             this.splitRight.Panel2.Controls.Add(this.dgScores);
             this.splitRight.Panel2.Controls.Add(this.pScoresTop);
             this.splitRight.Panel2MinSize = 65;
-            this.splitRight.Size = new System.Drawing.Size(320, 584);
-            this.splitRight.SplitterDistance = 200;
+            this.splitRight.Size = new System.Drawing.Size(586, 718);
+            this.splitRight.SplitterDistance = 245;
+            this.splitRight.SplitterWidth = 5;
             this.splitRight.TabIndex = 48;
             // 
             // pPeptides
@@ -116,17 +118,19 @@
             this.pPeptides.Controls.Add(this.pListTop);
             this.pPeptides.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPeptides.Location = new System.Drawing.Point(0, 0);
+            this.pPeptides.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pPeptides.Name = "pPeptides";
-            this.pPeptides.Size = new System.Drawing.Size(320, 200);
+            this.pPeptides.Size = new System.Drawing.Size(586, 245);
             this.pPeptides.TabIndex = 44;
             // 
             // eProtein
             // 
             this.eProtein.Dock = System.Windows.Forms.DockStyle.Fill;
             this.eProtein.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.eProtein.Location = new System.Drawing.Point(0, 41);
+            this.eProtein.Location = new System.Drawing.Point(0, 50);
+            this.eProtein.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.eProtein.Name = "eProtein";
-            this.eProtein.Size = new System.Drawing.Size(320, 159);
+            this.eProtein.Size = new System.Drawing.Size(586, 195);
             this.eProtein.TabIndex = 44;
             this.eProtein.Text = "";
             this.eProtein.Enter += new System.EventHandler(this.eProtein_Enter);
@@ -138,17 +142,19 @@
             this.pListTop.Controls.Add(this.lLoadProteinSeq);
             this.pListTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pListTop.Location = new System.Drawing.Point(0, 0);
+            this.pListTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pListTop.Name = "pListTop";
-            this.pListTop.Size = new System.Drawing.Size(320, 41);
+            this.pListTop.Size = new System.Drawing.Size(586, 50);
             this.pListTop.TabIndex = 43;
             // 
             // lProteinSeq
             // 
             this.lProteinSeq.AutoSize = true;
             this.lProteinSeq.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lProteinSeq.Location = new System.Drawing.Point(3, 13);
+            this.lProteinSeq.Location = new System.Drawing.Point(4, 16);
+            this.lProteinSeq.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lProteinSeq.Name = "lProteinSeq";
-            this.lProteinSeq.Size = new System.Drawing.Size(121, 17);
+            this.lProteinSeq.Size = new System.Drawing.Size(141, 20);
             this.lProteinSeq.TabIndex = 40;
             this.lProteinSeq.Text = "Protein Sequence";
             // 
@@ -156,10 +162,9 @@
             // 
             this.lLoadProteinSeq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lLoadProteinSeq.AutoSize = true;
-            this.lLoadProteinSeq.Location = new System.Drawing.Point(245, 15);
-            this.lLoadProteinSeq.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lLoadProteinSeq.Location = new System.Drawing.Point(486, 18);
             this.lLoadProteinSeq.Name = "lLoadProteinSeq";
-            this.lLoadProteinSeq.Size = new System.Drawing.Size(73, 13);
+            this.lLoadProteinSeq.Size = new System.Drawing.Size(98, 17);
             this.lLoadProteinSeq.TabIndex = 42;
             this.lLoadProteinSeq.TabStop = true;
             this.lLoadProteinSeq.Text = "Load from File";
@@ -181,18 +186,21 @@
             this.colWeightScore,
             this.colPriorityScore});
             this.dgScores.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgScores.Location = new System.Drawing.Point(0, 42);
+            this.dgScores.Location = new System.Drawing.Point(0, 52);
+            this.dgScores.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgScores.Name = "dgScores";
             this.dgScores.RowHeadersVisible = false;
             this.dgScores.RowHeadersWidth = 51;
-            this.dgScores.Size = new System.Drawing.Size(320, 338);
+            this.dgScores.Size = new System.Drawing.Size(586, 416);
             this.dgScores.TabIndex = 43;
             // 
             // colProtein
             // 
             this.colProtein.HeaderText = "Protein";
+            this.colProtein.MinimumWidth = 6;
             this.colProtein.Name = "colProtein";
             this.colProtein.ReadOnly = true;
+            this.colProtein.Width = 125;
             // 
             // colPosition
             // 
@@ -256,17 +264,19 @@
             this.pScoresTop.Controls.Add(this.lSaveScores);
             this.pScoresTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pScoresTop.Location = new System.Drawing.Point(0, 0);
+            this.pScoresTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pScoresTop.Name = "pScoresTop";
-            this.pScoresTop.Size = new System.Drawing.Size(320, 42);
+            this.pScoresTop.Size = new System.Drawing.Size(586, 52);
             this.pScoresTop.TabIndex = 45;
             // 
             // lScoreList
             // 
             this.lScoreList.AutoSize = true;
             this.lScoreList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lScoreList.Location = new System.Drawing.Point(3, 13);
+            this.lScoreList.Location = new System.Drawing.Point(4, 16);
+            this.lScoreList.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lScoreList.Name = "lScoreList";
-            this.lScoreList.Size = new System.Drawing.Size(71, 17);
+            this.lScoreList.Size = new System.Drawing.Size(86, 20);
             this.lScoreList.TabIndex = 40;
             this.lScoreList.Text = "Score List";
             // 
@@ -274,10 +284,9 @@
             // 
             this.lSaveScores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lSaveScores.AutoSize = true;
-            this.lSaveScores.Location = new System.Drawing.Point(237, 15);
-            this.lSaveScores.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lSaveScores.Location = new System.Drawing.Point(476, 18);
             this.lSaveScores.Name = "lSaveScores";
-            this.lSaveScores.Size = new System.Drawing.Size(78, 13);
+            this.lSaveScores.Size = new System.Drawing.Size(101, 17);
             this.lSaveScores.TabIndex = 42;
             this.lSaveScores.TabStop = true;
             this.lSaveScores.Text = "Export to Excel";
@@ -286,14 +295,14 @@
             // dlgOpenProtein
             // 
             this.dlgOpenProtein.FileName = "ProteinSeq.txt";
-            this.dlgOpenProtein.Filter = "Text Files|*.txt|Comma Delimited|*.csv";
+            this.dlgOpenProtein.Filter = "Fasta|*.fasta|Text Files|*.txt|Comma Delimited|*.csv";
             // 
             // frmMotifScorerProtein
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(800, 617);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.ClientSize = new System.Drawing.Size(1067, 759);
             this.Location = new System.Drawing.Point(0, 0);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.Name = "frmMotifScorerProtein";
             this.splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitMain)).EndInit();

@@ -49,7 +49,6 @@ namespace PeSA.Windows
                 int rowind = 1;
                 int top = 20;
                 int left = 10;
-                int bottommost = 0;
                 foreach (char c in settings.AminoAcidMotifColors.Keys.Union(AminoAcids.GetFullAminoAcidList().Select(aa=>aa.Abbrev1)))
                 {
                     Label label = new Label();
