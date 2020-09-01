@@ -27,6 +27,7 @@ namespace PeSA.Windows
         int peptidelength = 0;
         
         GridUtil dgPeptideHelper;
+        Motif MotifMain, MotifShifted;
 
         public frmAnalyzePeptideArray()
         {
@@ -138,6 +139,7 @@ namespace PeSA.Windows
 
         private void ClearMotifs()
         {
+            MotifMain = MotifShifted = null;
             mdMain.Image = null;
             mdShifted.Image = null;
         }
@@ -313,22 +315,22 @@ namespace PeSA.Windows
                     List<string> mainList = PA.ModifiedPeptides.Where(s => s[keyPos - 1] == keyAA).ToList();
 
                     List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
-                    Motif motif = new Motif(mainList, peptidelength);
-                    motif.FreqThreshold = PA.FrequencyThreshold;
-                    Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    MotifMain = new Motif(mainList, peptidelength);
+                    MotifMain.FreqThreshold = PA.FrequencyThreshold;
+                    Bitmap bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
                     mdMain.Image = bm;
 
-                    motif = new Motif(shiftedList, peptidelength);
-                    motif.FreqThreshold = PA.FrequencyThreshold;
-                    bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    MotifShifted = new Motif(shiftedList, peptidelength);
+                    MotifShifted.FreqThreshold = PA.FrequencyThreshold;
+                    bm = MotifShifted.GetFrequencyMotif(widthImage, heightImage);
                     mdShifted.Image = bm;
                     mdShifted.Visible = true;
                 }
                 else
                 {
-                    Motif motif = new Motif(PA.ModifiedPeptides, peptidelength);
-                    motif.FreqThreshold = PA.FrequencyThreshold;
-                    Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                    MotifMain = new Motif(PA.ModifiedPeptides, peptidelength);
+                    MotifMain.FreqThreshold = PA.FrequencyThreshold;
+                    Bitmap bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
                     mdMain.Image = bm;
                     mdShifted.Visible = false;
                 }
@@ -588,6 +590,40 @@ namespace PeSA.Windows
         private void linkRun_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Renormalize();
+        }
+
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (PA == null) return;
+            if (MotifMain == null) DrawMotifs();
+            if (MotifMain == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+
+            if (Motif.SaveToFile(filename, MotifMain))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
+        private void cmiPeptideScorer_Click(object sender, EventArgs e)
+        {
+            if (MotifMain == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(false, MotifMain);
+        }
+
+        private void cmiProteinScorer_Click(object sender, EventArgs e)
+        {
+            if (MotifMain == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(true, MotifMain);
+        }
+
+        private void btnRunScorer_Click(object sender, EventArgs e)
+        {
+            cmsRunScorer.Show(btnRunScorer, 0, 0);
         }
     }
 }

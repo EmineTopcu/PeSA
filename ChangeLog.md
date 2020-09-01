@@ -1,3 +1,7 @@
+__Version 1.11__
+* Save motif to Peptide Array, OPAL and Peptide list forms
+* Direct link from analysis forms to the scorer
+
 __Version 1.10__
 * Amino acid letter images are saved as resource for better resolution and optimization
 * Improve visual color matrix

@@ -30,11 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.pMotif = new System.Windows.Forms.Panel();
-            this.mdChart = new PeSA.Windows.MotifDisplay();
-            this.mdNegative = new PeSA.Windows.MotifDisplay();
-            this.mdPositive = new PeSA.Windows.MotifDisplay();
             this.splitMain = new System.Windows.Forms.SplitContainer();
             this.pMotifTop = new System.Windows.Forms.Panel();
+            this.eTargetAminoAcid = new System.Windows.Forms.TextBox();
+            this.lTargetAminoAcid = new System.Windows.Forms.Label();
             this.lCutoff = new System.Windows.Forms.Label();
             this.eNegCutoff = new System.Windows.Forms.TextBox();
             this.ePosCutoff = new System.Windows.Forms.TextBox();
@@ -46,7 +45,7 @@
             this.lPosThreshold = new System.Windows.Forms.Label();
             this.eNegativeThreshold = new System.Windows.Forms.TextBox();
             this.ePositiveThreshold = new System.Windows.Forms.TextBox();
-            this.eTarget = new System.Windows.Forms.TextBox();
+            this.eTargetPosition = new System.Windows.Forms.TextBox();
             this.eWildtype = new System.Windows.Forms.TextBox();
             this.lWildtype = new System.Windows.Forms.Label();
             this.lTarget = new System.Windows.Forms.Label();
@@ -56,6 +55,10 @@
             this.dlgOpenMotif = new System.Windows.Forms.OpenFileDialog();
             this.dlgExcelExport = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lQuestion = new System.Windows.Forms.Label();
+            this.mdChart = new PeSA.Windows.MotifDisplay();
+            this.mdNegative = new PeSA.Windows.MotifDisplay();
+            this.mdPositive = new PeSA.Windows.MotifDisplay();
             this.pMotif.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
             this.splitMain.Panel1.SuspendLayout();
@@ -73,44 +76,8 @@
             this.pMotif.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMotif.Location = new System.Drawing.Point(0, 163);
             this.pMotif.Name = "pMotif";
-            this.pMotif.Size = new System.Drawing.Size(325, 421);
+            this.pMotif.Size = new System.Drawing.Size(404, 421);
             this.pMotif.TabIndex = 1;
-            // 
-            // mdChart
-            // 
-            this.mdChart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mdChart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mdChart.Image = null;
-            this.mdChart.LabelText = "Chart";
-            this.mdChart.Location = new System.Drawing.Point(0, 234);
-            this.mdChart.Margin = new System.Windows.Forms.Padding(4);
-            this.mdChart.Name = "mdChart";
-            this.mdChart.Size = new System.Drawing.Size(325, 117);
-            this.mdChart.TabIndex = 5;
-            // 
-            // mdNegative
-            // 
-            this.mdNegative.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mdNegative.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mdNegative.Image = null;
-            this.mdNegative.LabelText = "Negative Motif";
-            this.mdNegative.Location = new System.Drawing.Point(0, 117);
-            this.mdNegative.Margin = new System.Windows.Forms.Padding(4);
-            this.mdNegative.Name = "mdNegative";
-            this.mdNegative.Size = new System.Drawing.Size(325, 117);
-            this.mdNegative.TabIndex = 4;
-            // 
-            // mdPositive
-            // 
-            this.mdPositive.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mdPositive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mdPositive.Image = null;
-            this.mdPositive.LabelText = "Positive Motif";
-            this.mdPositive.Location = new System.Drawing.Point(0, 0);
-            this.mdPositive.Margin = new System.Windows.Forms.Padding(4);
-            this.mdPositive.Name = "mdPositive";
-            this.mdPositive.Size = new System.Drawing.Size(325, 117);
-            this.mdPositive.TabIndex = 3;
             // 
             // splitMain
             // 
@@ -124,11 +91,14 @@
             this.splitMain.Panel1.Controls.Add(this.pMotifTop);
             this.splitMain.Panel1MinSize = 325;
             this.splitMain.Size = new System.Drawing.Size(800, 584);
-            this.splitMain.SplitterDistance = 325;
+            this.splitMain.SplitterDistance = 404;
             this.splitMain.TabIndex = 2;
             // 
             // pMotifTop
             // 
+            this.pMotifTop.Controls.Add(this.lQuestion);
+            this.pMotifTop.Controls.Add(this.eTargetAminoAcid);
+            this.pMotifTop.Controls.Add(this.lTargetAminoAcid);
             this.pMotifTop.Controls.Add(this.lCutoff);
             this.pMotifTop.Controls.Add(this.eNegCutoff);
             this.pMotifTop.Controls.Add(this.ePosCutoff);
@@ -140,15 +110,32 @@
             this.pMotifTop.Controls.Add(this.lPosThreshold);
             this.pMotifTop.Controls.Add(this.eNegativeThreshold);
             this.pMotifTop.Controls.Add(this.ePositiveThreshold);
-            this.pMotifTop.Controls.Add(this.eTarget);
+            this.pMotifTop.Controls.Add(this.eTargetPosition);
             this.pMotifTop.Controls.Add(this.eWildtype);
             this.pMotifTop.Controls.Add(this.lWildtype);
             this.pMotifTop.Controls.Add(this.lTarget);
             this.pMotifTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pMotifTop.Location = new System.Drawing.Point(0, 0);
             this.pMotifTop.Name = "pMotifTop";
-            this.pMotifTop.Size = new System.Drawing.Size(325, 163);
+            this.pMotifTop.Size = new System.Drawing.Size(404, 163);
             this.pMotifTop.TabIndex = 2;
+            // 
+            // eTargetAminoAcid
+            // 
+            this.eTargetAminoAcid.Location = new System.Drawing.Point(286, 32);
+            this.eTargetAminoAcid.Name = "eTargetAminoAcid";
+            this.eTargetAminoAcid.ReadOnly = true;
+            this.eTargetAminoAcid.Size = new System.Drawing.Size(47, 20);
+            this.eTargetAminoAcid.TabIndex = 26;
+            // 
+            // lTargetAminoAcid
+            // 
+            this.lTargetAminoAcid.AutoSize = true;
+            this.lTargetAminoAcid.Location = new System.Drawing.Point(177, 35);
+            this.lTargetAminoAcid.Name = "lTargetAminoAcid";
+            this.lTargetAminoAcid.Size = new System.Drawing.Size(103, 15);
+            this.lTargetAminoAcid.TabIndex = 25;
+            this.lTargetAminoAcid.Text = "Target Aminoacid";
             // 
             // lCutoff
             // 
@@ -211,7 +198,7 @@
             this.lNegativeThreshold.AutoSize = true;
             this.lNegativeThreshold.Location = new System.Drawing.Point(11, 127);
             this.lNegativeThreshold.Name = "lNegativeThreshold";
-            this.lNegativeThreshold.Size = new System.Drawing.Size(50, 13);
+            this.lNegativeThreshold.Size = new System.Drawing.Size(55, 15);
             this.lNegativeThreshold.TabIndex = 13;
             this.lNegativeThreshold.Text = "Negative";
             // 
@@ -220,7 +207,7 @@
             this.lPosThreshold.AutoSize = true;
             this.lPosThreshold.Location = new System.Drawing.Point(11, 105);
             this.lPosThreshold.Name = "lPosThreshold";
-            this.lPosThreshold.Size = new System.Drawing.Size(44, 13);
+            this.lPosThreshold.Size = new System.Drawing.Size(49, 15);
             this.lPosThreshold.TabIndex = 12;
             this.lPosThreshold.Text = "Positive";
             // 
@@ -240,12 +227,13 @@
             this.ePositiveThreshold.Size = new System.Drawing.Size(47, 20);
             this.ePositiveThreshold.TabIndex = 10;
             // 
-            // eTarget
+            // eTargetPosition
             // 
-            this.eTarget.Location = new System.Drawing.Point(115, 32);
-            this.eTarget.Name = "eTarget";
-            this.eTarget.Size = new System.Drawing.Size(47, 20);
-            this.eTarget.TabIndex = 9;
+            this.eTargetPosition.Location = new System.Drawing.Point(115, 32);
+            this.eTargetPosition.Name = "eTargetPosition";
+            this.eTargetPosition.Size = new System.Drawing.Size(47, 20);
+            this.eTargetPosition.TabIndex = 9;
+            this.eTargetPosition.Leave += new System.EventHandler(this.eTargetPosition_Leave);
             // 
             // eWildtype
             // 
@@ -254,7 +242,7 @@
             this.eWildtype.Location = new System.Drawing.Point(115, 6);
             this.eWildtype.Name = "eWildtype";
             this.eWildtype.ReadOnly = true;
-            this.eWildtype.Size = new System.Drawing.Size(207, 20);
+            this.eWildtype.Size = new System.Drawing.Size(286, 20);
             this.eWildtype.TabIndex = 8;
             // 
             // lWildtype
@@ -262,7 +250,7 @@
             this.lWildtype.AutoSize = true;
             this.lWildtype.Location = new System.Drawing.Point(11, 8);
             this.lWildtype.Name = "lWildtype";
-            this.lWildtype.Size = new System.Drawing.Size(48, 13);
+            this.lWildtype.Size = new System.Drawing.Size(53, 15);
             this.lWildtype.TabIndex = 7;
             this.lWildtype.Text = "Wildtype";
             // 
@@ -271,9 +259,9 @@
             this.lTarget.AutoSize = true;
             this.lTarget.Location = new System.Drawing.Point(11, 35);
             this.lTarget.Name = "lTarget";
-            this.lTarget.Size = new System.Drawing.Size(104, 13);
+            this.lTarget.Size = new System.Drawing.Size(99, 15);
             this.lTarget.TabIndex = 6;
-            this.lTarget.Text = "Motif Target Position";
+            this.lTarget.Text = "Motif Target Pos.";
             // 
             // pBottom
             // 
@@ -315,6 +303,52 @@
             // 
             this.dlgExcelExport.Filter = "Excel Files|*.xlsx;*.xlsm";
             this.dlgExcelExport.Title = "Export to Excel";
+            // 
+            // lQuestion
+            // 
+            this.lQuestion.AutoSize = true;
+            this.lQuestion.Location = new System.Drawing.Point(339, 35);
+            this.lQuestion.Name = "lQuestion";
+            this.lQuestion.Size = new System.Drawing.Size(14, 15);
+            this.lQuestion.TabIndex = 38;
+            this.lQuestion.Text = "?";
+            this.lQuestion.Click += new System.EventHandler(this.lQuestion_Click);
+            // 
+            // mdChart
+            // 
+            this.mdChart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mdChart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mdChart.Image = null;
+            this.mdChart.LabelText = "Chart";
+            this.mdChart.Location = new System.Drawing.Point(0, 470);
+            this.mdChart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mdChart.Name = "mdChart";
+            this.mdChart.Size = new System.Drawing.Size(383, 188);
+            this.mdChart.TabIndex = 5;
+            // 
+            // mdNegative
+            // 
+            this.mdNegative.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mdNegative.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mdNegative.Image = null;
+            this.mdNegative.LabelText = "Negative Motif";
+            this.mdNegative.Location = new System.Drawing.Point(0, 235);
+            this.mdNegative.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mdNegative.Name = "mdNegative";
+            this.mdNegative.Size = new System.Drawing.Size(383, 188);
+            this.mdNegative.TabIndex = 4;
+            // 
+            // mdPositive
+            // 
+            this.mdPositive.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mdPositive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mdPositive.Image = null;
+            this.mdPositive.LabelText = "Positive Motif";
+            this.mdPositive.Location = new System.Drawing.Point(0, 0);
+            this.mdPositive.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mdPositive.Name = "mdPositive";
+            this.mdPositive.Size = new System.Drawing.Size(383, 188);
+            this.mdPositive.TabIndex = 3;
             // 
             // frmMotifScorerBase
             // 
@@ -361,10 +395,13 @@
         private System.Windows.Forms.Label lCutoff;
         private System.Windows.Forms.ToolTip toolTip1;
         protected System.Windows.Forms.SplitContainer splitMain;
-        protected System.Windows.Forms.TextBox eTarget;
+        protected System.Windows.Forms.TextBox eTargetPosition;
         protected System.Windows.Forms.TextBox eScorerNegThreshold;
         protected System.Windows.Forms.TextBox eScorerPosThreshold;
         protected System.Windows.Forms.TextBox eNegCutoff;
         protected System.Windows.Forms.TextBox ePosCutoff;
+        protected System.Windows.Forms.TextBox eTargetAminoAcid;
+        private System.Windows.Forms.Label lTargetAminoAcid;
+        private System.Windows.Forms.Label lQuestion;
     }
 }

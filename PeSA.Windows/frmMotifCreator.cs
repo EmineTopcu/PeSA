@@ -22,20 +22,12 @@ namespace PeSA.Windows
         char keyAA = ' ';
         int keyPos;
         double threshold;
-
+        string ProjectName = "";
+        string Title = "Create Motif from Peptide List";
+        Motif MainMotif, ShiftedMotif;
         public frmMotifCreator()
         {
             InitializeComponent();
-        }
-
-        private void btnLoadPeptideList_Click(object sender, EventArgs e)
-        {
-            DialogResult dlg = dlgOpenPeptides.ShowDialog();
-            if (dlg != DialogResult.OK) return;
-
-            string filename = dlgOpenPeptides.FileName;
-            Peptides = FileUtil.ReadPeptideList(filename);
-            ePeptides.Text = String.Join("\r\n", Peptides);
         }
 
         private void LoadSettings()
@@ -101,6 +93,20 @@ namespace PeSA.Windows
             return true;
         }
 
+        private void Run(bool loadpeptides = false)
+        {
+            if (loadpeptides)
+                if (!LoadAndCheckPeptides())
+                    return;
+
+            LoadSettings();
+            DrawMotifs();
+        }
+        private void linkRun_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Run(true);
+        }
+
         private void lQuestion_Click(object sender, EventArgs e)
         {
             MessageBox.Show("If not blank, only peptides with the target amino acid at the key position will be used to create the motif.\r\n" +
@@ -109,48 +115,43 @@ namespace PeSA.Windows
 
         private void ePeptides_TextChanged(object sender, EventArgs e)
         {
-            LoadAndCheckPeptides();
-            LoadSettings();
-            DrawMotifs();
+            Run(true);
         }
 
         private void ePeptideLength_Leave(object sender, EventArgs e)
         {
             if (ePeptideLength.Text != peptidelength.ToString())
-            {
-                LoadSettings();
-                DrawMotifs();
-            }
+                Run();
         }
         private void eAminoAcid_Leave(object sender, EventArgs e)
         {
             if (eAminoAcid.Text != keyAA.ToString())
-            {
-                LoadSettings();
-                DrawMotifs();
-            }
+                Run();
         }
 
         private void eKeyPosition_Leave(object sender, EventArgs e)
         {
             if (eKeyPosition.Text != keyPos.ToString())
             {
-                LoadSettings();
-                DrawMotifs();
+                Run();
             }
         }
 
         private void eFreqThreshold_Leave(object sender, EventArgs e)
         {
             if (eFreqThreshold.Text != threshold.ToString())
-            {
-                LoadSettings();
-                DrawMotifs();
-            }
+                Run();
+        }
+
+        private void ClearMotifs()
+        {
+            MainMotif = ShiftedMotif = null; 
+            mdMain.Image = mdShifted.Image = null;
         }
 
         private void DrawMotifs()
         {
+            ClearMotifs();
             Settings settings = Settings.Load("default.settings");
             int heightImage = 200;
             int widthImage = 800;
@@ -182,14 +183,14 @@ namespace PeSA.Windows
                 List<string> mainList = Peptides.Where(s => s[keyPos - 1] == keyAA).ToList();
 
                 List<string> shiftedList = Analyzer.ShiftPeptides(Peptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
-                Motif motif = new Motif(mainList, peptidelength);
-                motif.FreqThreshold = threshold;
-                Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                MainMotif = new Motif(mainList, peptidelength);
+                MainMotif.FreqThreshold = threshold;
+                Bitmap bm = MainMotif.GetFrequencyMotif(widthImage, heightImage);
                 mdMain.Image = bm;
 
-                motif = new Motif(shiftedList, peptidelength);
-                motif.FreqThreshold = threshold;
-                bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                ShiftedMotif = new Motif(shiftedList, peptidelength);
+                ShiftedMotif.FreqThreshold = threshold;
+                bm = ShiftedMotif.GetFrequencyMotif(widthImage, heightImage);
                 mdShifted.Image = bm;
                 mdShifted.Visible = true;
                 eOutput.Text += String.Join("\r\nInfo: ", replacements) + "\r\n";
@@ -197,9 +198,9 @@ namespace PeSA.Windows
             }
             else
             {
-                Motif motif = new Motif(Peptides, peptidelength);
-                motif.FreqThreshold = threshold;
-                Bitmap bm = motif.GetFrequencyMotif(widthImage, heightImage);
+                MainMotif = new Motif(Peptides, peptidelength);
+                MainMotif.FreqThreshold = threshold;
+                Bitmap bm = MainMotif.GetFrequencyMotif(widthImage, heightImage);
                 mdMain.Image = bm;
                 mdShifted.Visible = false;
                 eOutput.Text += "Motif is created succesfully.\r\n";
@@ -210,12 +211,17 @@ namespace PeSA.Windows
         {
             DialogResult dlg = dlgOpenPeptides.ShowDialog();
             if (dlg != DialogResult.OK) return;
-
+            ClearMotifs();
+            SetText(dlgOpenPeptides);
             string filename = dlgOpenPeptides.FileName;
             Peptides = FileUtil.ReadPeptideList(filename);
             ePeptides.Text = String.Join("\r\n", Peptides);
         }
 
+        private void SetText(FileDialog dlg)
+        {
+            ProjectName = FormUtil.SetText(this, dlg, Title);
+        }
         private void ePeptides_FontChanged(object sender, EventArgs e)
         {
             try
@@ -225,6 +231,55 @@ namespace PeSA.Windows
             catch 
             {
             }
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (Peptides == null || Peptides.Count() == 0) return;
+            dlgExcelExport.FileName = "";
+            DialogResult dlg = dlgExcelExport.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgExcelExport.FileName;
+           /*TODO
+                if (FileUtil.Export___(filename, PA, true, out string errormsg))
+                MessageBox.Show("Project is exported as an excel file:" + filename, Analyzer.ProgramName);
+            else if (errormsg != "")
+                MessageBox.Show(errormsg, Analyzer.ProgramName);
+           */
+        }
+
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (MainMotif == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+
+            if (Motif.SaveToFile(filename, MainMotif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
+
+        private void cmiPeptideScorer_Click(object sender, EventArgs e)
+        {
+            if (MainMotif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(false, MainMotif);
+        }
+
+        private void cmiProteinScorer_Click(object sender, EventArgs e)
+        {
+            if (MainMotif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(true, MainMotif);
+        }
+
+        private void btnRunScorer_Click(object sender, EventArgs e)
+        {
+            cmsRunScorer.Show(btnRunScorer, 0, 0);
         }
     }
 }

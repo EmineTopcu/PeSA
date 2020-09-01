@@ -24,7 +24,7 @@ namespace PeSA.Windows
         int rowCount;
 
         GridUtil dgPeptideHelper;
-
+        Motif Motif = null;
         public frmAnalyzePermutationArray()
         {
             InitializeComponent();
@@ -259,6 +259,7 @@ namespace PeSA.Windows
 
         private void ClearMotifs()
         {
+            Motif = null;
             mdPositive.Image = mdNegative.Image = mdChart.Image = null;
         }
 
@@ -276,13 +277,13 @@ namespace PeSA.Windows
                     heightImage = settings.MotifHeight;
                     widthImage = settings.MotifWidth;
                 }
-                Motif motif = new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
+                Motif = new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
 
-                mdPositive.Image = motif.GetPositiveMotif(widthImage, heightImage);
+                mdPositive.Image = Motif.GetPositiveMotif(widthImage, heightImage);
 
-                mdNegative.Image = motif.GetNegativeMotif(widthImage, heightImage);
+                mdNegative.Image = Motif.GetNegativeMotif(widthImage, heightImage);
 
-                mdChart.Image = motif.GetBarChart(pMotif.Width - 6);
+                mdChart.Image = Motif.GetBarChart(pMotif.Width - 6);
                 return true;
             }
             catch { return false; }
@@ -406,24 +407,8 @@ namespace PeSA.Windows
             catch { }
         }
 
-        //TODO can we keep the motif?
-        private void btnSaveMotif_Click(object sender, EventArgs e)
-        {
-            if (PA == null) return;
-            dlgSaveMotif.FileName = ProjectName;
-            DialogResult dlg = dlgSaveMotif.ShowDialog();
-            if (dlg != DialogResult.OK) return;
-
-            string filename = dlgSaveMotif.FileName;
-
-            Motif motif = new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
-            
-            if (Motif.SaveToFile(filename, motif))
-                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
-        }
-
         /// <summary>
-        /// may be reguuiared if an old project is loaded
+        /// may be required if an old project is loaded
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -493,5 +478,39 @@ namespace PeSA.Windows
             }
         }
 
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (PA == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+            if (Motif == null)
+                Motif = new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
+
+            if (Motif.SaveToFile(filename, Motif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
+
+        private void cmiPeptideScorer_Click(object sender, EventArgs e)
+        {
+            if (Motif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(false, Motif);
+        }
+
+        private void cmiProteinScorer_Click(object sender, EventArgs e)
+        {
+            if (Motif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(true, Motif);
+        }
+
+        private void btnRunScorer_Click(object sender, EventArgs e)
+        {
+            cmsRunScorer.Show(btnRunScorer, 0, 0);
+        }
     }
 }

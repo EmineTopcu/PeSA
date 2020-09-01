@@ -71,7 +71,7 @@
             // 
             // eTarget
             // 
-            this.eTarget.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.eTargetPosition.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             // 
             // eScorerNegThreshold
             // 

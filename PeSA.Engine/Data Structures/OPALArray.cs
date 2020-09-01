@@ -27,6 +27,7 @@ namespace PeSA.Engine
         /// </summary>
         public string WildTypePeptide { get; set; }
 
+        public Motif Motif { get; set; }
         override protected void Upgrade(string mode)
         {
             base.Upgrade(mode);

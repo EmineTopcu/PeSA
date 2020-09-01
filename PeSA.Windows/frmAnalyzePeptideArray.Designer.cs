@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAnalyzePeptideArray));
             this.cmsLoadPeptide = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmiLoadPeptideList = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,6 +97,11 @@
             this.colWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDecision = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dlgOpenImage = new System.Windows.Forms.OpenFileDialog();
+            this.btnSaveMotif = new System.Windows.Forms.Button();
+            this.btnRunScorer = new System.Windows.Forms.Button();
+            this.cmsRunScorer = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmiPeptideScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmiProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsLoadPeptide.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitLeftTop)).BeginInit();
             this.splitLeftTop.Panel1.SuspendLayout();
@@ -128,6 +133,7 @@
             this.flowpanelReference.SuspendLayout();
             this.tDecisionList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).BeginInit();
+            this.cmsRunScorer.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmsLoadPeptide
@@ -182,8 +188,8 @@
             this.splitLeftTop.Panel2.Controls.Add(this.dgQuantification);
             this.splitLeftTop.Panel2.Controls.Add(this.panel2);
             this.splitLeftTop.Panel2MinSize = 32;
-            this.splitLeftTop.Size = new System.Drawing.Size(580, 537);
-            this.splitLeftTop.SplitterDistance = 182;
+            this.splitLeftTop.Size = new System.Drawing.Size(580, 513);
+            this.splitLeftTop.SplitterDistance = 173;
             this.splitLeftTop.SplitterWidth = 3;
             this.splitLeftTop.TabIndex = 4;
             // 
@@ -199,7 +205,7 @@
             this.dgPeptides.Name = "dgPeptides";
             this.dgPeptides.ReadOnly = true;
             this.dgPeptides.RowTemplate.Height = 28;
-            this.dgPeptides.Size = new System.Drawing.Size(580, 152);
+            this.dgPeptides.Size = new System.Drawing.Size(580, 143);
             this.dgPeptides.TabIndex = 2;
             // 
             // cmsPeptide
@@ -308,7 +314,7 @@
             this.dgQuantification.Name = "dgQuantification";
             this.dgQuantification.ReadOnly = true;
             this.dgQuantification.RowTemplate.Height = 28;
-            this.dgQuantification.Size = new System.Drawing.Size(580, 322);
+            this.dgQuantification.Size = new System.Drawing.Size(580, 307);
             this.dgQuantification.TabIndex = 0;
             // 
             // cmsQuantification
@@ -392,11 +398,10 @@
             // splitLeft.Panel2
             // 
             this.splitLeft.Panel2.Controls.Add(this.dgNormalized);
-            this.splitLeft.Panel2.Controls.Add(this.pBottom);
             this.splitLeft.Panel2.Controls.Add(this.panel1);
             this.splitLeft.Panel2MinSize = 115;
-            this.splitLeft.Size = new System.Drawing.Size(580, 830);
-            this.splitLeft.SplitterDistance = 537;
+            this.splitLeft.Size = new System.Drawing.Size(580, 794);
+            this.splitLeft.SplitterDistance = 513;
             this.splitLeft.TabIndex = 5;
             // 
             // dgNormalized
@@ -404,32 +409,34 @@
             this.dgNormalized.AllowUserToAddRows = false;
             this.dgNormalized.AllowUserToDeleteRows = false;
             this.dgNormalized.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.Format = "N3";
-            dataGridViewCellStyle2.NullValue = null;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgNormalized.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.Format = "N3";
+            dataGridViewCellStyle3.NullValue = null;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgNormalized.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgNormalized.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgNormalized.Location = new System.Drawing.Point(0, 74);
             this.dgNormalized.Name = "dgNormalized";
             this.dgNormalized.ReadOnly = true;
-            this.dgNormalized.Size = new System.Drawing.Size(580, 179);
+            this.dgNormalized.Size = new System.Drawing.Size(580, 203);
             this.dgNormalized.TabIndex = 3;
             // 
             // pBottom
             // 
+            this.pBottom.Controls.Add(this.btnRunScorer);
+            this.pBottom.Controls.Add(this.btnSaveMotif);
             this.pBottom.Controls.Add(this.btnExport);
             this.pBottom.Controls.Add(this.btnLoad);
             this.pBottom.Controls.Add(this.btnSave);
             this.pBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pBottom.Location = new System.Drawing.Point(0, 253);
+            this.pBottom.Location = new System.Drawing.Point(0, 794);
             this.pBottom.Name = "pBottom";
-            this.pBottom.Size = new System.Drawing.Size(580, 36);
+            this.pBottom.Size = new System.Drawing.Size(1197, 36);
             this.pBottom.TabIndex = 4;
             // 
             // btnExport
@@ -555,7 +562,7 @@
             // 
             this.splitMain.Panel2.Controls.Add(this.tabImages);
             this.splitMain.Panel2MinSize = 315;
-            this.splitMain.Size = new System.Drawing.Size(1197, 830);
+            this.splitMain.Size = new System.Drawing.Size(1197, 794);
             this.splitMain.SplitterDistance = 580;
             this.splitMain.TabIndex = 6;
             // 
@@ -569,7 +576,7 @@
             this.tabImages.Location = new System.Drawing.Point(0, 0);
             this.tabImages.Name = "tabImages";
             this.tabImages.SelectedIndex = 0;
-            this.tabImages.Size = new System.Drawing.Size(613, 830);
+            this.tabImages.Size = new System.Drawing.Size(613, 794);
             this.tabImages.TabIndex = 6;
             // 
             // tMotif
@@ -578,7 +585,7 @@
             this.tMotif.Location = new System.Drawing.Point(4, 25);
             this.tMotif.Name = "tMotif";
             this.tMotif.Padding = new System.Windows.Forms.Padding(3);
-            this.tMotif.Size = new System.Drawing.Size(605, 801);
+            this.tMotif.Size = new System.Drawing.Size(605, 765);
             this.tMotif.TabIndex = 0;
             this.tMotif.Text = "Motif";
             this.tMotif.UseVisualStyleBackColor = true;
@@ -592,7 +599,7 @@
             this.pMotif.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMotif.Location = new System.Drawing.Point(3, 3);
             this.pMotif.Name = "pMotif";
-            this.pMotif.Size = new System.Drawing.Size(599, 795);
+            this.pMotif.Size = new System.Drawing.Size(599, 759);
             this.pMotif.TabIndex = 0;
             // 
             // mdShifted
@@ -714,7 +721,7 @@
             this.tInfo.Location = new System.Drawing.Point(4, 25);
             this.tInfo.Name = "tInfo";
             this.tInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.tInfo.Size = new System.Drawing.Size(492, 801);
+            this.tInfo.Size = new System.Drawing.Size(605, 801);
             this.tInfo.TabIndex = 1;
             this.tInfo.Text = "Info";
             this.tInfo.UseVisualStyleBackColor = true;
@@ -730,7 +737,7 @@
             this.flowpanelReference.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowpanelReference.Location = new System.Drawing.Point(3, 3);
             this.flowpanelReference.Name = "flowpanelReference";
-            this.flowpanelReference.Size = new System.Drawing.Size(486, 795);
+            this.flowpanelReference.Size = new System.Drawing.Size(599, 795);
             this.flowpanelReference.TabIndex = 1;
             this.flowpanelReference.WrapContents = false;
             this.flowpanelReference.ClientSizeChanged += new System.EventHandler(this.flowpanelReference_ClientSizeChanged);
@@ -769,7 +776,7 @@
             this.tDecisionList.Location = new System.Drawing.Point(4, 25);
             this.tDecisionList.Name = "tDecisionList";
             this.tDecisionList.Padding = new System.Windows.Forms.Padding(3);
-            this.tDecisionList.Size = new System.Drawing.Size(492, 801);
+            this.tDecisionList.Size = new System.Drawing.Size(605, 801);
             this.tDecisionList.TabIndex = 2;
             this.tDecisionList.Text = "Decision List";
             this.tDecisionList.UseVisualStyleBackColor = true;
@@ -787,7 +794,7 @@
             this.dgDecision.Location = new System.Drawing.Point(3, 3);
             this.dgDecision.Name = "dgDecision";
             this.dgDecision.RowHeadersVisible = false;
-            this.dgDecision.Size = new System.Drawing.Size(486, 795);
+            this.dgDecision.Size = new System.Drawing.Size(599, 795);
             this.dgDecision.TabIndex = 1;
             // 
             // colPeptide
@@ -814,12 +821,57 @@
             this.dlgOpenImage.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif;" +
     " *.png\"";
             // 
+            // btnSaveMotif
+            // 
+            this.btnSaveMotif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveMotif.Location = new System.Drawing.Point(1080, 6);
+            this.btnSaveMotif.Name = "btnSaveMotif";
+            this.btnSaveMotif.Size = new System.Drawing.Size(105, 23);
+            this.btnSaveMotif.TabIndex = 4;
+            this.btnSaveMotif.Text = "Save Motif";
+            this.btnSaveMotif.UseVisualStyleBackColor = true;
+            this.btnSaveMotif.Click += new System.EventHandler(this.btnSaveMotif_Click);
+            // 
+            // btnRunScorer
+            // 
+            this.btnRunScorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRunScorer.Location = new System.Drawing.Point(969, 6);
+            this.btnRunScorer.Name = "btnRunScorer";
+            this.btnRunScorer.Size = new System.Drawing.Size(105, 23);
+            this.btnRunScorer.TabIndex = 5;
+            this.btnRunScorer.Text = "Run Scorer";
+            this.btnRunScorer.UseVisualStyleBackColor = true;
+            this.btnRunScorer.Click += new System.EventHandler(this.btnRunScorer_Click);
+            // 
+            // cmsRunScorer
+            // 
+            this.cmsRunScorer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmiPeptideScorer,
+            this.cmiProteinScorer});
+            this.cmsRunScorer.Name = "cmsRunScorer";
+            this.cmsRunScorer.Size = new System.Drawing.Size(181, 70);
+            // 
+            // cmiPeptideScorer
+            // 
+            this.cmiPeptideScorer.Name = "cmiPeptideScorer";
+            this.cmiPeptideScorer.Size = new System.Drawing.Size(180, 22);
+            this.cmiPeptideScorer.Text = "Peptide Scorer";
+            this.cmiPeptideScorer.Click += new System.EventHandler(this.cmiPeptideScorer_Click);
+            // 
+            // cmiProteinScorer
+            // 
+            this.cmiProteinScorer.Name = "cmiProteinScorer";
+            this.cmiProteinScorer.Size = new System.Drawing.Size(180, 22);
+            this.cmiProteinScorer.Text = "Protein Scorer";
+            this.cmiProteinScorer.Click += new System.EventHandler(this.cmiProteinScorer_Click);
+            // 
             // frmAnalyzePeptideArray
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1197, 830);
             this.Controls.Add(this.splitMain);
+            this.Controls.Add(this.pBottom);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MinimumSize = new System.Drawing.Size(506, 291);
             this.Name = "frmAnalyzePeptideArray";
@@ -861,6 +913,7 @@
             this.flowpanelReference.PerformLayout();
             this.tDecisionList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).EndInit();
+            this.cmsRunScorer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -932,5 +985,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colDecision;
         private Controls.ThresholdEntry thresholdEntry;
         private System.Windows.Forms.LinkLabel linkRun;
+        private System.Windows.Forms.Button btnSaveMotif;
+        private System.Windows.Forms.Button btnRunScorer;
+        private System.Windows.Forms.ContextMenuStrip cmsRunScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiPeptideScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiProteinScorer;
     }
 }

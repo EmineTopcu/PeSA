@@ -570,8 +570,8 @@ namespace PeSA.Engine
         {
             int pepsize = 0;
             if (string.IsNullOrEmpty(WildTypePeptide))
-                pepsize = PosCaptions?.Count() ?? 0;
-            else
+                pepsize = PosCaptions?.Count() ?? PeptideLength;
+            else //if (!string.IsNullOrEmpty(WildTypePeptide))
                 pepsize = WildTypePeptide.Length;
 
             //Calculate size for each position
@@ -661,5 +661,31 @@ namespace PeSA.Engine
             return bmp;
         }
 
+        /// <summary>
+        /// returns the key AA based on the key position
+        /// if WildTYpePeptide is set, it returns the aa of wildtype corresponding to that position
+        /// Otherwise it brings the most frequenet amino acid in the positive columns or frequencies
+        /// </summary>
+        /// <param name="keyPosition"></param>
+        /// 0-indexed
+        /// <returns></returns>
+        public char GetKeyChar(int keyPosition)
+        {
+            char keyAA = ' ';
+            if (keyPosition >= 0)
+            {
+                if (string.IsNullOrEmpty(WildTypePeptide))
+                {
+                    if (PositiveColumns != null && keyPosition < PositiveColumns.Count())//OPAL - wieght based motif with no wildtypepeptide
+                        keyAA = PositiveColumns[keyPosition].
+                            OrderByDescending(kv => kv.Value).Select(kv => kv.Key).FirstOrDefault();
+                    else if (Frequencies != null && keyPosition < Frequencies.Count())//frequency based peptide array, peptide list
+                        keyAA = Frequencies[keyPosition].OrderByDescending(kv => kv.Value).Select(kv => kv.Key).FirstOrDefault();
+                }
+                else if (keyPosition < WildTypePeptide.Length)
+                    keyAA = WildTypePeptide[keyPosition];
+            }
+            return keyAA;
+        }
     }
 }

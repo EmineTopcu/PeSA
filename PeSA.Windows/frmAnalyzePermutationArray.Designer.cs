@@ -36,6 +36,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.pBottom = new System.Windows.Forms.Panel();
             this.btnSaveMotif = new System.Windows.Forms.Button();
+            this.btnRunScorer = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -65,6 +66,9 @@
             this.colWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDecision = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.cmsRunScorer = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmiPeptideScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmiProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitGrids)).BeginInit();
             this.splitGrids.Panel1.SuspendLayout();
             this.splitGrids.Panel2.SuspendLayout();
@@ -94,6 +98,7 @@
             this.tVisualMatrix.SuspendLayout();
             this.tDecisionList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).BeginInit();
+            this.cmsRunScorer.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlgOpenQuantification
@@ -403,6 +408,7 @@
             // pBottom
             // 
             this.pBottom.Controls.Add(this.btnSaveMotif);
+            this.pBottom.Controls.Add(this.btnRunScorer);
             this.pBottom.Controls.Add(this.btnExport);
             this.pBottom.Controls.Add(this.btnLoad);
             this.pBottom.Controls.Add(this.btnSave);
@@ -422,6 +428,17 @@
             this.btnSaveMotif.Text = "Save Motif";
             this.btnSaveMotif.UseVisualStyleBackColor = true;
             this.btnSaveMotif.Click += new System.EventHandler(this.btnSaveMotif_Click);
+            // 
+            // btnRunScorer
+            // 
+            this.btnRunScorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRunScorer.Location = new System.Drawing.Point(927, 6);
+            this.btnRunScorer.Name = "btnRunScorer";
+            this.btnRunScorer.Size = new System.Drawing.Size(105, 23);
+            this.btnRunScorer.TabIndex = 9;
+            this.btnRunScorer.Text = "Run Scorer";
+            this.btnRunScorer.UseVisualStyleBackColor = true;
+            this.btnRunScorer.Click += new System.EventHandler(this.btnRunScorer_Click);
             // 
             // btnExport
             // 
@@ -694,6 +711,28 @@
             this.colDecision.Name = "colDecision";
             this.colDecision.ReadOnly = true;
             // 
+            // cmsRunScorer
+            // 
+            this.cmsRunScorer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmiPeptideScorer,
+            this.cmiProteinScorer});
+            this.cmsRunScorer.Name = "cmsRunScorer";
+            this.cmsRunScorer.Size = new System.Drawing.Size(151, 48);
+            // 
+            // cmiPeptideScorer
+            // 
+            this.cmiPeptideScorer.Name = "cmiPeptideScorer";
+            this.cmiPeptideScorer.Size = new System.Drawing.Size(150, 22);
+            this.cmiPeptideScorer.Text = "Peptide Scorer";
+            this.cmiPeptideScorer.Click += new System.EventHandler(this.cmiPeptideScorer_Click);
+            // 
+            // cmiProteinScorer
+            // 
+            this.cmiProteinScorer.Name = "cmiProteinScorer";
+            this.cmiProteinScorer.Size = new System.Drawing.Size(150, 22);
+            this.cmiProteinScorer.Text = "Protein Scorer";
+            this.cmiProteinScorer.Click += new System.EventHandler(this.cmiProteinScorer_Click);
+            // 
             // frmAnalyzePermutationArray
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -739,6 +778,7 @@
             this.tVisualMatrix.ResumeLayout(false);
             this.tDecisionList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).EndInit();
+            this.cmsRunScorer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -800,5 +840,9 @@
         private System.Windows.Forms.DataGridView dgNormalized;
         private System.Windows.Forms.RadioButton rbPerRowColumn;
         private System.Windows.Forms.RadioButton rbMeanValue;
+        private System.Windows.Forms.Button btnRunScorer;
+        private System.Windows.Forms.ContextMenuStrip cmsRunScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiPeptideScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiProteinScorer;
     }
 }

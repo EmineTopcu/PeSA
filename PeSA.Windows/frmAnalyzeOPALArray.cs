@@ -22,6 +22,7 @@ namespace PeSA.Windows
 
         bool quantificationLoaded = false;
         bool PermutationXAxis = false;
+        Motif Motif;
 
         public frmAnalyzeOPALArray()
         {
@@ -46,6 +47,12 @@ namespace PeSA.Windows
             mdPositive.Image = mdNegative.Image = mdChart.Image = null;
         }
 
+        private bool CreateMotif()
+        {
+            if (OA == null) return false;
+            Motif = new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
+            return (Motif != null);
+        }
         private bool DrawMotifs()
         {
             try
@@ -60,13 +67,13 @@ namespace PeSA.Windows
                     heightImage = settings.MotifHeight;
                     widthImage = settings.MotifWidth;
                 }
-                Motif motif = new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
+                if (!CreateMotif()) return false;
 
-                mdPositive.Image = motif.GetPositiveMotif(widthImage, heightImage);
+                mdPositive.Image = Motif.GetPositiveMotif(widthImage, heightImage);
 
-                mdNegative.Image = motif.GetNegativeMotif(widthImage, heightImage);
+                mdNegative.Image = Motif.GetNegativeMotif(widthImage, heightImage);
 
-                mdChart.Image = motif.GetBarChart(pMotif.Width - 6);
+                mdChart.Image = Motif.GetBarChart(pMotif.Width - 6);
                 return true;
             }
             catch { return false; }
@@ -86,7 +93,7 @@ namespace PeSA.Windows
             }
         }*/
 
-        private bool ColorGrids()
+        private bool ColorGridsandDrawMotifs()
         {
             try
             {
@@ -202,7 +209,7 @@ namespace PeSA.Windows
                 GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
                 FillGridHeaders(dgNormalized);
                 
-                bool gridOK = ColorGrids();
+                bool gridOK = ColorGridsandDrawMotifs();//also creates/draws the motif
 
                 eNotes.Text = OA.Notes;
                 imageReference.Image = null;
@@ -305,7 +312,7 @@ namespace PeSA.Windows
             }
             GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
             FillGridHeaders(dgNormalized);
-            ColorGrids();
+            ColorGridsandDrawMotifs();
             DrawColorMatrix();
         }
 
@@ -351,28 +358,13 @@ namespace PeSA.Windows
                 Run();
         }
 
-        private void btnSaveMotif_Click(object sender, EventArgs e)
-        {
-            if (OA == null) return;
-            dlgSaveMotif.FileName = ProjectName;
-            DialogResult dlg = dlgSaveMotif.ShowDialog();
-            if (dlg != DialogResult.OK) return;
-
-            string filename = dlgSaveMotif.FileName;
-            Motif motif = new Motif(OA);
-
-            if (Motif.SaveToFile(filename, motif))
-                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
-        }
-
-
         private void thresholdEntry_ThresholdChanged(object sender, EventArgs e)
         {
             if (OA == null)
                 return;
             OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
             OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
-            ColorGrids();
+            ColorGridsandDrawMotifs();
             mdMatrix.SetThreshold(OA.PositiveThreshold, OA.NegativeThreshold);
         }
 
@@ -403,7 +395,7 @@ namespace PeSA.Windows
                     GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
                     FillGridHeaders(dgNormalized);
                     Run();
-                    ColorGrids();
+                    ColorGridsandDrawMotifs();
                 }
             }
             catch
@@ -434,7 +426,7 @@ namespace PeSA.Windows
                 OA.NormMode = NormalizationMode.Max;
                 OA.Renormalize();
                 GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
-                ColorGrids();
+                ColorGridsandDrawMotifs();
                 DrawColorMatrix();
             }
         }
@@ -447,9 +439,45 @@ namespace PeSA.Windows
                 OA.NormMode = NormalizationMode.PerRowColumn;
                 OA.Renormalize();
                 GridUtil.LoadNumericMatrixToGrid(dgNormalized, OA.NormalizedMatrix, 1, 1);
-                ColorGrids();
+                ColorGridsandDrawMotifs();
                 DrawColorMatrix();
             }
         }
+
+        private void btnSaveMotif_Click(object sender, EventArgs e)
+        {
+            if (OA == null) return;
+            dlgSaveMotif.FileName = ProjectName;
+            DialogResult dlg = dlgSaveMotif.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+
+            string filename = dlgSaveMotif.FileName;
+            if (Motif == null)
+                Motif = new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
+
+            if (Motif.SaveToFile(filename, Motif))
+                MessageBox.Show(filename + " is saved", Analyzer.ProgramName);
+        }
+
+
+        private void cmiPeptideScorer_Click(object sender, EventArgs e)
+        {
+            if (Motif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(false, Motif);
+        }
+
+        private void cmiProteinScorer_Click(object sender, EventArgs e)
+        {
+            if (Motif == null) return;
+            MainForm frm = (MainForm)MainForm.MainFormPointer;
+            frm.RunMotifScorer(true, Motif);
+        }
+
+        private void btnRunScorer_Click(object sender, EventArgs e)
+        {
+            cmsRunScorer.Show(btnRunScorer, 0, 0);
+        }
+
     }
 }

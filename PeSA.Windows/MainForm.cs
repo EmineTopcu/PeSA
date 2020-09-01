@@ -25,7 +25,7 @@ namespace PeSA.Windows
         }
 
         private int sepIndex = -1;
-        public void AddWindowMenuItem(Form frm)
+        private void AddWindowMenuItem(Form frm)
         {
             frm.FormClosed += MdiChildClosed;
             if (sepIndex == -1)
@@ -118,13 +118,24 @@ namespace PeSA.Windows
             AddWindowMenuItem(frm);
         }
 
-        private void RunMotifScorer(bool protein)
+        public void RunMotifScorer(bool protein)
         {
             frmMotifScorerBase frm;
             if (!protein)
                 frm = new frmMotifScorerPeptide();
             else
                 frm = new frmMotifScorerProtein();
+            frm.MdiParent = this;
+            frm.Show();
+            AddWindowMenuItem(frm);
+        }
+        public void RunMotifScorer(bool protein, Motif motif)
+        {
+            frmMotifScorerBase frm;
+            if (!protein)
+                frm = new frmMotifScorerPeptide(motif);
+            else
+                frm = new frmMotifScorerProtein(motif);
             frm.MdiParent = this;
             frm.Show();
             AddWindowMenuItem(frm);
@@ -184,8 +195,7 @@ namespace PeSA.Windows
         {
             AnalyzePermutationArray();
         }
-
-
+        
         private void btnOPALArray_Click(object sender, EventArgs e)
         {
             AnalyzeOPALArray();
@@ -196,9 +206,14 @@ namespace PeSA.Windows
             RunSequenceGenerator();
         }
 
-        private void btnMotifBasedScorer_Click(object sender, EventArgs e)
+        private void btnMotifBasedPeptideScorer_Click(object sender, EventArgs e)
         {
             RunMotifScorer(false);
+        }
+
+        private void btnMotifBasedProteinScorer_Click(object sender, EventArgs e)
+        {
+            RunMotifScorer(true);
         }
         private void mToolsMotifBasedProteinScorer_Click(object sender, EventArgs e)
         {
@@ -248,12 +263,16 @@ namespace PeSA.Windows
         private void DeactivateButtons()
         {
             try {
-                btnMotifBasedScorer.BackColor =
+                btnMotifBasedPeptideScorer.BackColor =
                     btnOPALArray.BackColor =
                     btnPeptideArray.BackColor =
                     btnPeptideList.BackColor =
                     btnPermutationArray.BackColor =
-                    btnSequenceGenerator.BackColor = Color.White;
+                    btnSequenceGenerator.BackColor =
+                    btnMotifBasedPeptideScorer.BackColor =
+                    btnMotifBasedProteinScorer.BackColor =
+                    btnMotifValidationDesigner.BackColor =
+                    Color.White;
             }
             catch { }
         }
@@ -282,10 +301,15 @@ namespace PeSA.Windows
             else if (type == typeof(frmSequenceGenerator))
                 ActivateButton(btnSequenceGenerator);
             else if (type == typeof(frmMotifScorerPeptide))
-                ActivateButton(btnMotifBasedScorer);
+                ActivateButton(btnMotifBasedPeptideScorer);
+            else if (type == typeof(frmMotifScorerProtein))
+                ActivateButton(btnMotifBasedProteinScorer);
+            else if (type == typeof(frmMotifValidationDesigner))
+                ActivateButton(btnMotifValidationDesigner);
             else
                 DeactivateButtons();
 
         }
+
     }
 }

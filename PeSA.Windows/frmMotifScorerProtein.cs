@@ -20,6 +20,10 @@ namespace PeSA.Windows
         {
             InitializeComponent();
         }
+        public frmMotifScorerProtein(Motif motif) : base(motif)
+        {
+            InitializeComponent();
+        }
 
         private void lLoadProteinSeq_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -104,7 +108,7 @@ namespace PeSA.Windows
             if (int.TryParse(eNegCutoff.Text, out int negcutoff))
                 Scorer.NegMatchCutoff = negcutoff;
 
-            if (!Int32.TryParse(eTarget.Text, out int keyPosition))
+            if (!Int32.TryParse(eTargetPosition.Text, out int keyPosition))
                 keyPosition = 0;
             Scorer.KeyPosition = keyPosition - 1;
             if (Scorer.KeyPosition < 0)
@@ -112,11 +116,12 @@ namespace PeSA.Windows
                 if (MessageBox.Show("It is recommended to have a key position. Do you want to continue?",
                     "Warning", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
-                    eTarget.Focus();
+                    eTargetPosition.Focus();
                     return;
                 }
             }
-            dgScores.Rows.Clear();
+            ClearResults();
+
             Scorer.StopScoringRequested = false;
             frmProgressDialog prdlg = new frmProgressDialog
             {
@@ -137,7 +142,11 @@ namespace PeSA.Windows
             maintask.Wait();
             AddScoresToGrid(Scorer.ScoreList);
         }
-
+        protected override void ClearResults()
+        {
+            base.ClearResults();
+            dgScores.Rows.Clear();
+        }
     }
 }
 

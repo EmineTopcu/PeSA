@@ -73,6 +73,12 @@
             this.tVisualMatrix = new System.Windows.Forms.TabPage();
             this.mdMatrix = new PeSA.Windows.Controls.ColorMatrixDisplay();
             this.dlgOpenImage = new System.Windows.Forms.OpenFileDialog();
+            this.btnSaveMotif = new System.Windows.Forms.Button();
+            this.btnRunScorer = new System.Windows.Forms.Button();
+            this.cmsRunScorer = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmiPeptideScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmiProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dgQuantification)).BeginInit();
             this.cmsClipBoard.SuspendLayout();
             this.pQuantificationTop.SuspendLayout();
@@ -93,6 +99,7 @@
             this.tInfo.SuspendLayout();
             this.flowpanelReference.SuspendLayout();
             this.tVisualMatrix.SuspendLayout();
+            this.cmsRunScorer.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlgOpenQuantification
@@ -194,7 +201,6 @@
             this.cbPermutationXAxis.Size = new System.Drawing.Size(117, 17);
             this.cbPermutationXAxis.TabIndex = 2;
             this.cbPermutationXAxis.Text = "X Axis: Permutation";
-            this.cbPermutationXAxis.ThreeState = true;
             this.cbPermutationXAxis.UseVisualStyleBackColor = true;
             this.cbPermutationXAxis.CheckedChanged += new System.EventHandler(this.cbPermutationXAxis_CheckedChanged);
             // 
@@ -210,6 +216,8 @@
             // 
             // pBottom
             // 
+            this.pBottom.Controls.Add(this.btnSaveMotif);
+            this.pBottom.Controls.Add(this.btnRunScorer);
             this.pBottom.Controls.Add(this.btnExport);
             this.pBottom.Controls.Add(this.btnLoad);
             this.pBottom.Controls.Add(this.btnSave);
@@ -553,6 +561,55 @@
             this.dlgOpenImage.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif;" +
     " *.png\"";
             // 
+            // btnSaveMotif
+            // 
+            this.btnSaveMotif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveMotif.Location = new System.Drawing.Point(1093, 6);
+            this.btnSaveMotif.Name = "btnSaveMotif";
+            this.btnSaveMotif.Size = new System.Drawing.Size(105, 23);
+            this.btnSaveMotif.TabIndex = 10;
+            this.btnSaveMotif.Text = "Save Motif";
+            this.btnSaveMotif.UseVisualStyleBackColor = true;
+            this.btnSaveMotif.Click += new System.EventHandler(this.btnSaveMotif_Click);
+            // 
+            // btnRunScorer
+            // 
+            this.btnRunScorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRunScorer.Location = new System.Drawing.Point(982, 6);
+            this.btnRunScorer.Name = "btnRunScorer";
+            this.btnRunScorer.Size = new System.Drawing.Size(105, 23);
+            this.btnRunScorer.TabIndex = 11;
+            this.btnRunScorer.Text = "Run Scorer";
+            this.btnRunScorer.UseVisualStyleBackColor = true;
+            this.btnRunScorer.Click += new System.EventHandler(this.btnRunScorer_Click);
+            // 
+            // cmsRunScorer
+            // 
+            this.cmsRunScorer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmiPeptideScorer,
+            this.cmiProteinScorer});
+            this.cmsRunScorer.Name = "cmsRunScorer";
+            this.cmsRunScorer.Size = new System.Drawing.Size(181, 70);
+            // 
+            // cmiPeptideScorer
+            // 
+            this.cmiPeptideScorer.Name = "cmiPeptideScorer";
+            this.cmiPeptideScorer.Size = new System.Drawing.Size(180, 22);
+            this.cmiPeptideScorer.Text = "Peptide Scorer";
+            this.cmiPeptideScorer.Click += new System.EventHandler(this.cmiPeptideScorer_Click);
+            // 
+            // cmiProteinScorer
+            // 
+            this.cmiProteinScorer.Name = "cmiProteinScorer";
+            this.cmiProteinScorer.Size = new System.Drawing.Size(180, 22);
+            this.cmiProteinScorer.Text = "Protein Scorer";
+            this.cmiProteinScorer.Click += new System.EventHandler(this.cmiProteinScorer_Click);
+            // 
+            // saveFileDialog2
+            // 
+            this.saveFileDialog2.Filter = "PeSA Motif File|*.pmtf";
+            this.saveFileDialog2.Title = "Save Motif File";
+            // 
             // frmAnalyzeOPALArray
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -587,6 +644,7 @@
             this.flowpanelReference.ResumeLayout(false);
             this.flowpanelReference.PerformLayout();
             this.tVisualMatrix.ResumeLayout(false);
+            this.cmsRunScorer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -634,5 +692,11 @@
         private System.Windows.Forms.LinkLabel linkRun;
         private System.Windows.Forms.RadioButton rbPerRowColumn;
         private System.Windows.Forms.RadioButton rbMaxValue;
+        private System.Windows.Forms.Button btnSaveMotif;
+        private System.Windows.Forms.Button btnRunScorer;
+        private System.Windows.Forms.ContextMenuStrip cmsRunScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiPeptideScorer;
+        private System.Windows.Forms.ToolStripMenuItem cmiProteinScorer;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog2;
     }
 }

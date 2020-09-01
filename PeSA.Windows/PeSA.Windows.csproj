@@ -264,7 +264,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\BtnMotifBasedScorer.png" />
+    <Content Include="Images\BtnMotifBasedPeptideScorer.png" />
+    <Content Include="Images\BtnMotifBasedProteinScorer.png" />
+    <Content Include="Images\BtnMotifValidationDesigner.png" />
     <Content Include="Images\BtnOPALArray.png" />
     <Content Include="Images\BtnPeptideArray.png" />
     <Content Include="Images\BtnPeptideList.png" />

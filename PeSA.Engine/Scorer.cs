@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace PeSA.Engine
 {
     public class Scorer
-    {
-        public Motif Motif { get; set; }
+    {        public Motif Motif { get; set; }
         public List<Protein> ProteinList { get; set; }
         public List<string> PeptideList { get; set; }
         public List<Score> ScoreList { get; set; }
@@ -24,16 +23,17 @@ namespace PeSA.Engine
         private int keyPosition = -1;
         /// <summary>
         /// Key position and character used in scoring
+        /// O-indexed
         /// </summary>
         public int KeyPosition
         {
             get { return keyPosition; }
             set
             {
-                if (value >= 0 && value < Motif.WildTypePeptide.Length)
+                if (value >= 0 && value < Motif.PeptideLength)
                 {
                     keyPosition = value;
-                    KeyChar = Motif.WildTypePeptide[keyPosition];
+                    KeyChar = Motif.GetKeyChar(keyPosition);
                 }
                 else
                 {
@@ -54,8 +54,8 @@ namespace PeSA.Engine
                 {
                     char aa = inputSegment[pos - startpos];
                     if (aa == 'x' || aa == 'X') continue;
-                    Dictionary<char, double> posWeights = Motif.PositiveColumns[pos];
-                    Dictionary<char, double> negWeights = Motif.NegativeColumns[pos];
+                    Dictionary<char, double> posWeights = Motif.PositiveColumns?[pos]?? Motif.Frequencies[pos];
+                    Dictionary<char, double> negWeights = Motif.NegativeColumns?[pos];
                     if (posWeights.ContainsKey(aa))
                     {
                         if (UserEnteredPosThreshold != null && posWeights[aa] < UserEnteredPosThreshold)
@@ -64,7 +64,7 @@ namespace PeSA.Engine
                         s.weightedMatch += posWeights[aa];
                         s.priorityMatch += posWeights[aa] / posWeights.Count;
                     }
-                    else if (negWeights.ContainsKey(aa))
+                    else if (negWeights!=null && negWeights.ContainsKey(aa))
                     {
                         if (UserEnteredNegThreshold != null && negWeights[aa] < UserEnteredNegThreshold)
                             continue;
