@@ -1,282 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B76C4666-0D52-41D9-B7D7-C666D2FE54A1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PeSA.Windows</RootNamespace>
-    <AssemblyName>PeSA</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.5.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.5.3\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="System.Windows.Forms.DataVisualization" Version="1.0.0-prerelease.20110.1" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Controls\ColorMatrixDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorMatrixDisplay.Designer.cs">
-      <DependentUpon>ColorMatrixDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ImageDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ImageDisplay.Designer.cs">
-      <DependentUpon>ImageDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ThresholdEntry.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ThresholdEntry.Designer.cs">
-      <DependentUpon>ThresholdEntry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAbout.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAbout.Designer.cs">
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAminoAcids.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAminoAcids.Designer.cs">
-      <DependentUpon>frmAminoAcids.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAnalyzeOPALArray.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAnalyzeOPALArray.Designer.cs">
-      <DependentUpon>frmAnalyzeOPALArray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAnalyzePermutationArray.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAnalyzePermutationArray.Designer.cs">
-      <DependentUpon>frmAnalyzePermutationArray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifScorerBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifScorerBase.Designer.cs">
-      <DependentUpon>frmMotifScorerBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifScorerPeptide.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifScorerPeptide.Designer.cs">
-      <DependentUpon>frmMotifScorerPeptide.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifScorerProtein.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifScorerProtein.Designer.cs">
-      <DependentUpon>frmMotifScorerProtein.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifValidationDesigner.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifValidationDesigner.Designer.cs">
-      <DependentUpon>frmMotifValidationDesigner.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmProgressDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmProgressDialog.Designer.cs">
-      <DependentUpon>frmProgressDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmSequenceGenerator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSequenceGenerator.Designer.cs">
-      <DependentUpon>frmSequenceGenerator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSettings.Designer.cs">
-      <DependentUpon>frmSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAnalyzePeptideArray.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAnalyzePeptideArray.Designer.cs">
-      <DependentUpon>frmAnalyzePeptideArray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifCreator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifCreator.Designer.cs">
-      <DependentUpon>frmMotifCreator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Helpers\GridUtil.cs" />
-    <Compile Include="Helpers\FormUtil.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMotifImage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMotifImage.Designer.cs">
-      <DependentUpon>frmMotifImage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MotifDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\MotifDisplay.Designer.cs">
-      <DependentUpon>MotifDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Thinfinity.VirtualUI.cs" />
-    <EmbeddedResource Include="Controls\ColorMatrixDisplay.resx">
-      <DependentUpon>ColorMatrixDisplay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ImageDisplay.resx">
-      <DependentUpon>ImageDisplay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ThresholdEntry.resx">
-      <DependentUpon>ThresholdEntry.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAbout.resx">
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAminoAcids.resx">
-      <DependentUpon>frmAminoAcids.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAnalyzeOPALArray.resx">
-      <DependentUpon>frmAnalyzeOPALArray.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAnalyzePermutationArray.resx">
-      <DependentUpon>frmAnalyzePermutationArray.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifScorerBase.resx">
-      <DependentUpon>frmMotifScorerBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifScorerPeptide.resx">
-      <DependentUpon>frmMotifScorerPeptide.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifScorerProtein.resx">
-      <DependentUpon>frmMotifScorerProtein.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifValidationDesigner.resx">
-      <DependentUpon>frmMotifValidationDesigner.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmProgressDialog.resx">
-      <DependentUpon>frmProgressDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSequenceGenerator.resx">
-      <DependentUpon>frmSequenceGenerator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSettings.resx">
-      <DependentUpon>frmSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAnalyzePeptideArray.resx">
-      <DependentUpon>frmAnalyzePeptideArray.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifCreator.resx">
-      <DependentUpon>frmMotifCreator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMotifImage.resx">
-      <DependentUpon>frmMotifImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\MotifDisplay.resx">
-      <DependentUpon>MotifDisplay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
+    <ProjectReference Include="..\PeSA.Engine\PeSA.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PeSA.Engine\PeSA.Engine.csproj">
-      <Project>{D01A9E35-80AF-4BA3-85CA-BD470227DF1D}</Project>
-      <Name>PeSA.Engine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\BtnMotifBasedPeptideScorer.png" />
-    <Content Include="Images\BtnMotifBasedProteinScorer.png" />
-    <Content Include="Images\BtnMotifValidationDesigner.png" />
-    <Content Include="Images\BtnOPALArray.png" />
-    <Content Include="Images\BtnPeptideArray.png" />
-    <Content Include="Images\BtnPeptideList.png" />
-    <Content Include="Images\BtnPermutation.png" />
-    <Content Include="Images\BtnSequenceGenerator.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>CD $(SolutionDir)
 
-$(SolutionDir)zip.bat</PostBuildEvent>
-  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

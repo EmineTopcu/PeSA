@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms.DataVisualization.Charting;
 
 namespace PeSA.Engine
 {
@@ -139,6 +134,8 @@ namespace PeSA.Engine
 
         public Dictionary<int, Dictionary<char, double>> GetScaledColumns(Dictionary<int, Dictionary<char, double>> _Columns)
         {
+            if (_Columns == null || !_Columns.Any())
+                return null;
             Dictionary<int, Dictionary<char, double>> scaled = new Dictionary<int, Dictionary<char, double>>();
             Dictionary<int, double> totalWeightsPerPos = new Dictionary<int, double>();
             foreach (int pos in _Columns.Keys)
@@ -433,6 +430,8 @@ namespace PeSA.Engine
             int width, int height, int positionSpacing = 10, int letterSpacing = 3, 
             Color? defColor = null)
         {
+            if (Columns == null || !Columns.Any())
+                return null;
             Settings settings = Settings.Load("default.settings");
 
             int maxAAperCol = settings.MotifMaxAAPerColumn;
@@ -568,7 +567,9 @@ namespace PeSA.Engine
 
         public Bitmap GetBarChart(int width)
         {
-            int pepsize = 0;
+            if (PositiveColumns == null || NegativeColumns == null)
+                return null;
+            int pepsize;
             if (string.IsNullOrEmpty(WildTypePeptide))
                 pepsize = PosCaptions?.Count() ?? PeptideLength;
             else //if (!string.IsNullOrEmpty(WildTypePeptide))

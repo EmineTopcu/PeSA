@@ -1,12 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms.DataVisualization.Charting;
-
-namespace PeSA.Engine
+﻿namespace PeSA.Engine
 {
     public class Score
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Text;
 using System.Xml.Linq;
 
 namespace PeSA.Engine
@@ -83,13 +77,12 @@ namespace PeSA.Engine
             return maxval;
         }
 
-        public static string[,] ClipboardToMatrix()
+        public static string[,] ClipboardToMatrix(MemoryStream stream)
         {
             try
             {
-                var dataObject = Clipboard.GetDataObject();
                 string[,] matrix = null;
-                using (var stream = (MemoryStream)dataObject.GetData("XML Spreadsheet"))
+                using (stream)
                 {
                     var xml = Encoding.UTF8.GetString(stream.ToArray());
                     xml = xml.Substring(0, xml.Length - 1);

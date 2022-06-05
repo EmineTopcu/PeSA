@@ -82,8 +82,8 @@
             this.mHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(984, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1148, 24);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -95,34 +95,34 @@
             this.mAnalyzePermutationArray,
             this.mAnalyzeOPALArray});
             this.mAnalyze.Name = "mAnalyze";
-            this.mAnalyze.Size = new System.Drawing.Size(75, 24);
+            this.mAnalyze.Size = new System.Drawing.Size(60, 20);
             this.mAnalyze.Text = "Analyze";
             // 
             // mAnalyzePeptideList
             // 
             this.mAnalyzePeptideList.Name = "mAnalyzePeptideList";
-            this.mAnalyzePeptideList.Size = new System.Drawing.Size(291, 26);
+            this.mAnalyzePeptideList.Size = new System.Drawing.Size(233, 22);
             this.mAnalyzePeptideList.Text = "Create Motif from Peptide List";
             this.mAnalyzePeptideList.Click += new System.EventHandler(this.mAnalyzePeptideList_Click);
             // 
             // mAnalyzePeptideArray
             // 
             this.mAnalyzePeptideArray.Name = "mAnalyzePeptideArray";
-            this.mAnalyzePeptideArray.Size = new System.Drawing.Size(291, 26);
+            this.mAnalyzePeptideArray.Size = new System.Drawing.Size(233, 22);
             this.mAnalyzePeptideArray.Text = "Analyze Peptide Array";
             this.mAnalyzePeptideArray.Click += new System.EventHandler(this.mAnalyzePeptideArray_Click);
             // 
             // mAnalyzePermutationArray
             // 
             this.mAnalyzePermutationArray.Name = "mAnalyzePermutationArray";
-            this.mAnalyzePermutationArray.Size = new System.Drawing.Size(291, 26);
+            this.mAnalyzePermutationArray.Size = new System.Drawing.Size(233, 22);
             this.mAnalyzePermutationArray.Text = "Analyze Permutation Array";
             this.mAnalyzePermutationArray.Click += new System.EventHandler(this.mAnalyzePermutationArray_Click);
             // 
             // mAnalyzeOPALArray
             // 
             this.mAnalyzeOPALArray.Name = "mAnalyzeOPALArray";
-            this.mAnalyzeOPALArray.Size = new System.Drawing.Size(291, 26);
+            this.mAnalyzeOPALArray.Size = new System.Drawing.Size(233, 22);
             this.mAnalyzeOPALArray.Text = "Analyze OPAL Array";
             this.mAnalyzeOPALArray.Click += new System.EventHandler(this.mAnalyzeOPALArray_Click);
             // 
@@ -134,34 +134,34 @@
             this.mToolsMotifBasedProteinScorer,
             this.mToolsMotifValidationDesigner});
             this.mTools.Name = "mTools";
-            this.mTools.Size = new System.Drawing.Size(58, 24);
+            this.mTools.Size = new System.Drawing.Size(46, 20);
             this.mTools.Text = "Tools";
             // 
             // mToolsSequenceGenerator
             // 
             this.mToolsSequenceGenerator.Name = "mToolsSequenceGenerator";
-            this.mToolsSequenceGenerator.Size = new System.Drawing.Size(298, 26);
+            this.mToolsSequenceGenerator.Size = new System.Drawing.Size(237, 22);
             this.mToolsSequenceGenerator.Text = "Sequence Generator";
             this.mToolsSequenceGenerator.Click += new System.EventHandler(this.mToolsSequenceGenerator_Click);
             // 
             // mToolsMotifBasedPeptideScorer
             // 
             this.mToolsMotifBasedPeptideScorer.Name = "mToolsMotifBasedPeptideScorer";
-            this.mToolsMotifBasedPeptideScorer.Size = new System.Drawing.Size(298, 26);
+            this.mToolsMotifBasedPeptideScorer.Size = new System.Drawing.Size(237, 22);
             this.mToolsMotifBasedPeptideScorer.Text = "Motif Based Peptide List Scorer";
             this.mToolsMotifBasedPeptideScorer.Click += new System.EventHandler(this.mToolsMotifBasedPeptideScorer_Click);
             // 
             // mToolsMotifBasedProteinScorer
             // 
             this.mToolsMotifBasedProteinScorer.Name = "mToolsMotifBasedProteinScorer";
-            this.mToolsMotifBasedProteinScorer.Size = new System.Drawing.Size(298, 26);
+            this.mToolsMotifBasedProteinScorer.Size = new System.Drawing.Size(237, 22);
             this.mToolsMotifBasedProteinScorer.Text = "Motif Based Protein Scorer";
             this.mToolsMotifBasedProteinScorer.Click += new System.EventHandler(this.mToolsMotifBasedProteinScorer_Click);
             // 
             // mToolsMotifValidationDesigner
             // 
             this.mToolsMotifValidationDesigner.Name = "mToolsMotifValidationDesigner";
-            this.mToolsMotifValidationDesigner.Size = new System.Drawing.Size(298, 26);
+            this.mToolsMotifValidationDesigner.Size = new System.Drawing.Size(237, 22);
             this.mToolsMotifValidationDesigner.Text = "Motif Validation Designer";
             this.mToolsMotifValidationDesigner.Click += new System.EventHandler(this.mToolsMotifValidationDesigner_Click);
             // 
@@ -171,20 +171,20 @@
             this.mSettingsMotif,
             this.mSettingsAminoAcidList});
             this.mSettings.Name = "mSettings";
-            this.mSettings.Size = new System.Drawing.Size(76, 24);
+            this.mSettings.Size = new System.Drawing.Size(61, 20);
             this.mSettings.Text = "Settings";
             // 
             // mSettingsMotif
             // 
             this.mSettingsMotif.Name = "mSettingsMotif";
-            this.mSettingsMotif.Size = new System.Drawing.Size(226, 26);
+            this.mSettingsMotif.Size = new System.Drawing.Size(181, 22);
             this.mSettingsMotif.Text = "Array/Motif Settings";
             this.mSettingsMotif.Click += new System.EventHandler(this.mSettingsMotif_Click);
             // 
             // mSettingsAminoAcidList
             // 
             this.mSettingsAminoAcidList.Name = "mSettingsAminoAcidList";
-            this.mSettingsAminoAcidList.Size = new System.Drawing.Size(226, 26);
+            this.mSettingsAminoAcidList.Size = new System.Drawing.Size(181, 22);
             this.mSettingsAminoAcidList.Text = "Amino Acid List";
             this.mSettingsAminoAcidList.Click += new System.EventHandler(this.mSettingsAminoAcidList_Click);
             // 
@@ -195,27 +195,27 @@
             this.mWindowTileAll,
             this.mWindowCloseAll});
             this.mWindow.Name = "mWindow";
-            this.mWindow.Size = new System.Drawing.Size(78, 24);
+            this.mWindow.Size = new System.Drawing.Size(63, 20);
             this.mWindow.Text = "Window";
             // 
             // mWindowCascadeAll
             // 
             this.mWindowCascadeAll.Name = "mWindowCascadeAll";
-            this.mWindowCascadeAll.Size = new System.Drawing.Size(169, 26);
+            this.mWindowCascadeAll.Size = new System.Drawing.Size(135, 22);
             this.mWindowCascadeAll.Text = "Cascade All";
             this.mWindowCascadeAll.Click += new System.EventHandler(this.mWindowCascadeAll_Click);
             // 
             // mWindowTileAll
             // 
             this.mWindowTileAll.Name = "mWindowTileAll";
-            this.mWindowTileAll.Size = new System.Drawing.Size(169, 26);
+            this.mWindowTileAll.Size = new System.Drawing.Size(135, 22);
             this.mWindowTileAll.Text = "Tile";
             this.mWindowTileAll.Click += new System.EventHandler(this.mWindowTileAll_Click);
             // 
             // mWindowCloseAll
             // 
             this.mWindowCloseAll.Name = "mWindowCloseAll";
-            this.mWindowCloseAll.Size = new System.Drawing.Size(169, 26);
+            this.mWindowCloseAll.Size = new System.Drawing.Size(135, 22);
             this.mWindowCloseAll.Text = "Close All";
             this.mWindowCloseAll.Click += new System.EventHandler(this.mWindowCloseAll_Click);
             // 
@@ -224,13 +224,13 @@
             this.mHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mAbout});
             this.mHelp.Name = "mHelp";
-            this.mHelp.Size = new System.Drawing.Size(55, 24);
+            this.mHelp.Size = new System.Drawing.Size(44, 20);
             this.mHelp.Text = "Help";
             // 
             // mAbout
             // 
             this.mAbout.Name = "mAbout";
-            this.mAbout.Size = new System.Drawing.Size(133, 26);
+            this.mAbout.Size = new System.Drawing.Size(107, 22);
             this.mAbout.Text = "About";
             this.mAbout.Click += new System.EventHandler(this.mAbout_Click);
             // 
@@ -257,10 +257,10 @@
             this.btnMotifValidationDesigner,
             this.toolStripSeparator7});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(984, 72);
+            this.toolStrip1.Size = new System.Drawing.Size(1148, 83);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -272,14 +272,14 @@
             this.btnPeptideList.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPeptideList.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPeptideList.Name = "btnPeptideList";
-            this.btnPeptideList.Size = new System.Drawing.Size(68, 69);
+            this.btnPeptideList.Size = new System.Drawing.Size(68, 80);
             this.btnPeptideList.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnPeptideList.Click += new System.EventHandler(this.btnPeptideList_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 83);
             // 
             // btnPeptideArray
             // 
@@ -289,13 +289,13 @@
             this.btnPeptideArray.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPeptideArray.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPeptideArray.Name = "btnPeptideArray";
-            this.btnPeptideArray.Size = new System.Drawing.Size(68, 69);
+            this.btnPeptideArray.Size = new System.Drawing.Size(68, 80);
             this.btnPeptideArray.Click += new System.EventHandler(this.btnPeptideArray_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 83);
             // 
             // btnPermutationArray
             // 
@@ -305,13 +305,13 @@
             this.btnPermutationArray.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPermutationArray.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPermutationArray.Name = "btnPermutationArray";
-            this.btnPermutationArray.Size = new System.Drawing.Size(68, 69);
+            this.btnPermutationArray.Size = new System.Drawing.Size(68, 80);
             this.btnPermutationArray.Click += new System.EventHandler(this.btnPermutationArray_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 83);
             // 
             // btnOPALArray
             // 
@@ -321,13 +321,13 @@
             this.btnOPALArray.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnOPALArray.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOPALArray.Name = "btnOPALArray";
-            this.btnOPALArray.Size = new System.Drawing.Size(68, 69);
+            this.btnOPALArray.Size = new System.Drawing.Size(68, 80);
             this.btnOPALArray.Click += new System.EventHandler(this.btnOPALArray_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 83);
             // 
             // btnSequenceGenerator
             // 
@@ -337,13 +337,13 @@
             this.btnSequenceGenerator.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSequenceGenerator.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSequenceGenerator.Name = "btnSequenceGenerator";
-            this.btnSequenceGenerator.Size = new System.Drawing.Size(68, 69);
+            this.btnSequenceGenerator.Size = new System.Drawing.Size(68, 80);
             this.btnSequenceGenerator.Click += new System.EventHandler(this.btnSequenceGenerator_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 83);
             // 
             // btnMotifBasedPeptideScorer
             // 
@@ -353,13 +353,13 @@
             this.btnMotifBasedPeptideScorer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnMotifBasedPeptideScorer.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnMotifBasedPeptideScorer.Name = "btnMotifBasedPeptideScorer";
-            this.btnMotifBasedPeptideScorer.Size = new System.Drawing.Size(68, 69);
+            this.btnMotifBasedPeptideScorer.Size = new System.Drawing.Size(68, 80);
             this.btnMotifBasedPeptideScorer.Click += new System.EventHandler(this.btnMotifBasedPeptideScorer_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 83);
             // 
             // btnMotifBasedProteinScorer
             // 
@@ -369,13 +369,13 @@
             this.btnMotifBasedProteinScorer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnMotifBasedProteinScorer.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnMotifBasedProteinScorer.Name = "btnMotifBasedProteinScorer";
-            this.btnMotifBasedProteinScorer.Size = new System.Drawing.Size(68, 69);
+            this.btnMotifBasedProteinScorer.Size = new System.Drawing.Size(68, 80);
             this.btnMotifBasedProteinScorer.Click += new System.EventHandler(this.btnMotifBasedProteinScorer_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 83);
             // 
             // btnMotifValidationDesigner
             // 
@@ -385,13 +385,13 @@
             this.btnMotifValidationDesigner.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnMotifValidationDesigner.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnMotifValidationDesigner.Name = "btnMotifValidationDesigner";
-            this.btnMotifValidationDesigner.Size = new System.Drawing.Size(68, 69);
+            this.btnMotifValidationDesigner.Size = new System.Drawing.Size(68, 80);
             this.btnMotifValidationDesigner.Click += new System.EventHandler(this.btnMotifValidationDesigner_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 72);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 83);
             // 
             // openFileDialog1
             // 
@@ -399,16 +399,17 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 682);
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.ClientSize = new System.Drawing.Size(1148, 787);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
-            this.Text = "Peptide Specificity Analyst - PeSA";
+            this.Text = "Peptide Specificity Analyst - PeSA 2.0";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MdiChildActivate += new System.EventHandler(this.MainForm_MdiChildActivate);
             this.menuStrip1.ResumeLayout(false);

@@ -229,12 +229,13 @@ namespace PeSA.Engine
             for (int iRow = 1; iRow <= rowCount; iRow++)
             {
                 string s = values[iRow, 0].Trim();
-                if (aaList.Contains(s[0]))
+                char aa = s.Length > 0 ? s[0] : ' ';
+                if (aaList.Contains(aa))
                 {
                     yPossible = false;
                     break;
                 }
-                aaList.Add(s[0]);
+                aaList.Add(aa);
             }
         }
 

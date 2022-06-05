@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using PeSA.Engine;
-using System.Windows.Input;
 
 namespace PeSA.Windows
 {
@@ -377,7 +368,8 @@ namespace PeSA.Windows
         {
             try
             {
-                string[,] matrix = MatrixUtil.ClipboardToMatrix();
+                MemoryStream ms = Clipboard.GetDataObject().GetData("XML Spreadsheet") as MemoryStream;
+                string[,] matrix = MatrixUtil.ClipboardToMatrix(ms);
                 matrix = MatrixUtil.StripHeaderRowColumns(matrix, false);
                 rowCount = matrix.GetLength(0);
                 colCount = matrix.GetLength(1);
@@ -408,7 +400,8 @@ namespace PeSA.Windows
                     MessageBox.Show("The peptide array needs to be loaded before the quantification array.", Analyzer.ProgramName);
                     return;
                 }
-                string[,] matrix = MatrixUtil.ClipboardToMatrix();
+                MemoryStream ms = Clipboard.GetDataObject().GetData("XML Spreadsheet") as MemoryStream;
+                string[,] matrix = MatrixUtil.ClipboardToMatrix(ms);
                 matrix = MatrixUtil.StripHeaderRowColumns(matrix, true);
                 if (matrix == null || rowCount != matrix.GetLength(0) || colCount != matrix.GetLength(1))
                 {

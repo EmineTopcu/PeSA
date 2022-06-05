@@ -22,6 +22,11 @@ namespace PeSA.Windows
             InitializeComponent();
             MainFormPointer = this;
             DefaultSettings = Settings.Load("default.settings");
+            foreach (Control control in this.Controls)
+            {
+                if (control is MdiClient mdiClient)
+                    mdiClient.BackColor = Color.GhostWhite;
+            }
         }
 
         private int sepIndex = -1;
@@ -310,6 +315,5 @@ namespace PeSA.Windows
                 DeactivateButtons();
 
         }
-
     }
 }

@@ -1,3 +1,6 @@
+__Version 2.0__
+* Migration to .NET Core
+
 __Version 1.11__
 * Save motif to Peptide Array, OPAL and Peptide list forms
 * Direct link from analysis forms to the scorer
