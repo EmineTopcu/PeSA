@@ -91,4 +91,6 @@ PeSA-generated positive and negative motifs can be used to score a peptide list 
 
 ### Motif Based Protein Scorer:
 
+
 ### Motif Validation Designer:
+![](Screenshots/MotifValidation.png)
