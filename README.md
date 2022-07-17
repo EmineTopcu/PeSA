@@ -17,7 +17,7 @@ PeSA offers multiple analysis types, including motif generation, validation and 
 ### Peptide List:
 In this module, PeSA generates a sequence motif using the frequency of each amino acid residue at each position in the given peptide list. In the case of a key position and target amino acid supplied, an alternative 'shifted' motif is generated for the peptides in the list but does not match the target key and position rule.
 
-![[ScreenShots/PeptideList.png]]
+![[ScreenShots//PeptideList.png]]
 
 - **Peptide List:** The list of peptides can be loaded by using the **Load from File**, or it can be directly copied to the list from the clipboard. As in all PeSA modules, the peptides read are handled in a case-sensitive manner.
 - **Peptide Length:** By default, the length of the first peptide in the peptide list is considered the motif length. This value can be overridden by the user if there are extra characters at the end of the peptides that need to be excluded from the analysis. If any peptide has a length larger than this set peptide length, the extra characters at the end will be ignored.
