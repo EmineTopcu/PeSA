@@ -17,7 +17,7 @@ PeSA offers multiple analysis types, including motif generation, validation and 
 ### Peptide List:
 In this module, PeSA generates a sequence motif using the frequency of each amino acid residue at each position in the given peptide list. In the case of a key position and target amino acid supplied, an alternative 'shifted' motif is generated for the peptides in the list but does not match the target key and position rule.
 
-![[PeptideList.png]]
+![](./Screenshots/PeptideList.png)
 
 - **Peptide List:** The list of peptides can be loaded by using the **Load from File**, or it can be directly copied to the list from the clipboard. As in all PeSA modules, the peptides read are handled in a case-sensitive manner.
 - **Peptide Length:** By default, the length of the first peptide in the peptide list is considered the motif length. This value can be overridden by the user if there are extra characters at the end of the peptides that need to be excluded from the analysis. If any peptide has a length larger than this set peptide length, the extra characters at the end will be ignored.
@@ -32,7 +32,7 @@ In this module, PeSA generates a sequence motif using the frequency of each amin
 ### Peptide Array:
 Peptide array analysis is similar to peptide list analysis in that it creates a frequency-based motif. However, the provided input is not only made up of peptides that go through positive interaction but the full data set of a study.
 
-![[PeptideArray.png]]
+![](./Screenshots/PeptideArray.png)
 
 - **Peptides:** The peptide array can be fed to PeSA as a list of peptides or in an array format, using the **Load from File** link. If a list is used as the input, a matrix is generated using the default number of rows and columns set in the settings menu. The user also sets whether the matrix will be generated as rows first or columns first in the settings menu.
 - **Quantification (Background Normalized):** The background normalized quantification values must be loaded to PeSA for analysis. Direct copying from the clipboard is possible, as well as importing from an Excel file using the **Load from File** link.
@@ -50,7 +50,7 @@ Peptide array analysis is similar to peptide list analysis in that it creates a 
 ### Permutation Array:
 PeSA can generate weight-based positive and negative motifs using numeric values of a permutation array.
 
-![[PermutationArray.png]]
+![](./Screenshots/PermutationArray.png)
 
 - **Quantification:** Background normalized quantification values need to be fed to PeSA for analysis. The wildtype sequence, as well as the order of the permutation sequence, should be included in the input array as row and column headers.
 - **X-Axis Wildtype:** PeSA automatically determines whether the column or row header represents the wild type or the permutation sequence with the simple logic that the permutation sequence should not have any repeating amino acids. In the case of the wildtype sequence consisting of non-repeating characters and the decision is not straightforward, the user can define whether the X-axis (i.e., column headers) contains the wild type or not. If unchecked, the wildtype sequence is represented in the y axis of the array (i.e., row headers).
@@ -69,12 +69,12 @@ PeSA can generate weight-based positive and negative motifs using numeric values
 ### OPAL Array:
 OPAL array analysis is similar to permutation array analysis. Even though there is no wildtype sequence, each position in the array has only one single amino acid expressed more than others. By contributing the study results of a position to the amino acid with weight change in that position, PeSA creates positive and negative motifs using the positive and negative thresholds defined by the user.
 
-![[OpalArray.png]]
+![](./Screenshots/OpalArray.png)
 
 ### Sequence Generator:
 The sequence generator is an automated tool to generate all combinations of peptide sequences within a certain template. It accepts a template sequence and outputs the peptide sequences with the information on how many peptides are generated.
 
-![[SequenceGenerator.png]]
+![](./Screenshots/SequenceGenerator.png)
 
 **Template:** The template syntax is provided as a string of characters or a group of characters. For example, a template with the syntax of R[FH]RK[-FH][{YF}{LV}D][X] will generate all peptide sequences with (1) R as the first position, (2) F or H as the second position, (3) RK as the third and fourth positions, (4) any amino acid residue except F or H as the fifth position, (5) following with YF or LV or D (which will result in different lengths of peptides), and (6) any of the standard amino acid residues at the last position. PeSA has a default list of proteinogenic amino acids defined, and this list is used when the template refers to the full standard amino acid list.
 
