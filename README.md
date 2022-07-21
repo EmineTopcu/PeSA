@@ -14,11 +14,11 @@ PeSA consists of a single executable that can be downloaded from the Releases se
 
 PeSA offers multiple analysis types, including motif generation, validation and prediction, which are explained below.
 
-[Peptide List Motif Generator](./User Guides/Peptide List Motif Generator.md)
-[[Peptide Array Motif Generator]]
-[[Permutation Array Motif Generator]]
-[[OPAL Array Motif Generator]]
-[[Sequence Generator]]
-[[Motif Based Peptide Scorer]] (WIP)
-[[Motif Based Protein Scorer]] (WIP)
-[[Motif Validation Designer]] (WIP)
+- [Peptide List Motif Generator](./UserGuides/PeptideListMotifGenerator.md)
+- [Peptide Array Motif Generator](./UserGuides/.md)
+- [Permutation Array Motif Generator](./UserGuides/.md)
+- [OPAL Array Motif Generator](./UserGuides/.md)
+- [Sequence Generator](./UserGuides/SequenceGenerator.md)
+- [Motif Based Peptide Scorer](./UserGuides/MotifBasedPeptideScorer.md)
+- [Motif Based Protein Scorer](./UserGuides/MotifBasedProteinScorer.md)
+- [Motif Validation Designer](./UserGuides/MotifValidationDesigner.md)
