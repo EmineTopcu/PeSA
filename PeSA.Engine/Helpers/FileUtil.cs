@@ -61,7 +61,7 @@ namespace PeSA.Engine
                 using (ExcelPackage package = new ExcelPackage(existingFile))
                 {
                     //get the first worksheet in the workbook
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                     int colCount = worksheet.Dimension.End.Column;  //get Column Count
                     int rowCount = worksheet.Dimension.End.Row;     //get row count
                     data = new string[rowCount, colCount];

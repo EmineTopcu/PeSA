@@ -18,7 +18,7 @@ namespace PeSA.Engine
                 for (int i = 0; i < colcount; i++)
                 {
                     string s = data[0, i]?.Trim();
-                    if (!string.IsNullOrWhiteSpace(s) && !s.StartsWith("C") && !s.StartsWith("c") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
+                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("Col") && !s.StartsWith("C") && !s.StartsWith("c") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
                     {
                         colheader = 0;
                         break;
@@ -27,7 +27,7 @@ namespace PeSA.Engine
                 for (int i = 0; i < rowcount; i++)
                 {
                     string s = data[i, 0]?.Trim();
-                    if (!string.IsNullOrWhiteSpace(s) && !s.StartsWith("R") && !s.StartsWith("r") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
+                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("Col") && !s.StartsWith("R") && !s.StartsWith("r") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
                     {
                         rowheader = 0;
                         break;
