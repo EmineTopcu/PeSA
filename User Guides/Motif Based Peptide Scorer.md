@@ -1,6 +1,6 @@
 ### Motif-Based Peptide Scorer:
 PeSA-generated positive and negative motifs can be used to score a peptide list in terms of similarity to the motifs.
-![](MotifBasedPeptideScorer.png)
+![](./ScreenShots/MotifBasedPeptideScorer.png)
 #### User Input:
 - **Load Motif**: A PeSA-generated motif must be loaded by using the Load Motif button on the bottom left.
 - **Wildtype (Display only)**: If the motif file contains a wildtype sequence, it will be displayed. It is used only if the motif target position is set.
