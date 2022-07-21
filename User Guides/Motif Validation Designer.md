@@ -1,5 +1,5 @@
 ### Motif Validation Designer:
-![](MotifValidation.png)
+![](./ScreenShots/MotifValidation.png)
 
 
 #### User Input:
