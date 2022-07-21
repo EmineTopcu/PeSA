@@ -1,7 +1,7 @@
 ### Motif-Based Protein Scorer:
 PeSA-generated positive and negative motifs can be used to score peptides in one or more protein sequences in terms of similarity to the motifs.
 
-![[./ScreenShots/MotifBasedProteinScorer.png]]
+![](./ScreenShots/MotifBasedProteinScorer.png)
 
 #### User Input:
 - **Load Motif**: A PeSA-generated motif must be loaded by using the Load Motif button on the bottom left.
