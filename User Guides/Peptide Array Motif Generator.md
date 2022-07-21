@@ -1,7 +1,7 @@
 ### Peptide Array:
 Peptide array analysis is similar to peptide list analysis in that it creates a frequency-based motif. However, the provided input is not only made up of peptides that go through positive interaction but the full data set of a study.
 
-![](PeptideArray.png)
+![](./ScreenShots/PeptideArray.png)
 
 #### User Input:
 - **Peptides:** The peptide array can be fed to PeSA as a list of peptides or in an array format, using the **Load from File** link. If a list is used as the input, a matrix is generated using the default number of rows and columns set in the settings menu. The user also sets whether the matrix will be generated as rows first or columns first in the settings menu.
