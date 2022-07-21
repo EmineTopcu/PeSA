@@ -1,7 +1,7 @@
 ### OPAL Array:
 OPAL array analysis is similar to permutation array analysis. Even though there is no wildtype sequence, each position in the array has only one single amino acid expressed more than others. By contributing the study results of a position to the amino acid with weight change in that position, PeSA creates positive and negative motifs using the positive and negative thresholds defined by the user.
 
-![](OpalArray.png)
+![](./ScreenShots/OpalArray.png)
 
 #### User Input:
 **Quantification:** Background normalized quantification values of the OPAL array are required as the input for analysis. The order of the permutation sequence should be included in the input array as a row or column header.
