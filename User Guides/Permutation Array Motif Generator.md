@@ -1,7 +1,7 @@
 ### Permutation Array:
 PeSA can generate weight-based positive and negative motifs using numeric values of a permutation array.
 
-![](PermutationArray.png)
+![](./ScreenShots/PermutationArray.png)
 
 #### User Input:
 - **Quantification:** Background normalized quantification values need to be fed to PeSA for analysis by using the **Load from File** link or by directly pasting from the clipboard.  The wildtype sequence, as well as the order of the permutation sequence, should be included in the input array as row and column headers.
