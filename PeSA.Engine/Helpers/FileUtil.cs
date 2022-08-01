@@ -32,7 +32,7 @@ namespace PeSA.Engine
             return image;
         }
 
-        private static string[,] ReadArrayFromFile(string fileName)
+        private static string[,] ReadArrayFromFile(string fileName, out bool wtStripped)
         {
             try
             {
@@ -46,10 +46,12 @@ namespace PeSA.Engine
                 {
                     data = ReadArrayFromCSV(existingFile);
                 }
+                data = MatrixUtil.StripWildTypeRowColumns(data, out wtStripped);
                 return data;
             }
             catch
             {
+                wtStripped = false;
                 return null;
             }
         }
@@ -161,7 +163,7 @@ namespace PeSA.Engine
                 data = ReadArrayFromCSV(existingFile);
             }
             if (data != null)
-                data = MatrixUtil.StripHeaderRowColumns(data, false);
+                data = MatrixUtil.StripHeaderRowColumns(data, true);
 
             return data;
         }
@@ -384,27 +386,29 @@ namespace PeSA.Engine
             }
 
             rowind++;
-            worksheet.Cells[rowind, 1, rowind, 7].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
-            worksheet.Cells[rowind, 1].Value = "Peptide";
-            worksheet.Cells[rowind, 2].Value = "Segment";
-            worksheet.Cells[rowind, 3].Value = "Pos Match";
-            worksheet.Cells[rowind, 4].Value = "Neg Match";
-            worksheet.Cells[rowind, 5].Value = "Match";
-            worksheet.Cells[rowind, 6].Value = "Weight Score";
-            worksheet.Cells[rowind++, 7].Value = "Priority Score";
+            worksheet.Cells[rowind, 1, rowind, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
+            worksheet.Cells[rowind, 1].Value = "Protein/Peptide";
+            worksheet.Cells[rowind, 2].Value = "Start Position";
+            worksheet.Cells[rowind, 3].Value = "Segment";
+            worksheet.Cells[rowind, 4].Value = "Pos Match";
+            worksheet.Cells[rowind, 5].Value = "Neg Match";
+            worksheet.Cells[rowind, 6].Value = "Match";
+            worksheet.Cells[rowind, 7].Value = "Weight Score";
+            worksheet.Cells[rowind++, 8].Value = "Priority Score";
 
             foreach (Score s in scorer.ScoreList)
             {
                 worksheet.Cells[rowind, 1].Value = s.Peptide;
-                worksheet.Cells[rowind, 2].Value = s.Segment;
-                worksheet.Cells[rowind, 3].Value = s.posMatch;
-                worksheet.Cells[rowind, 4].Value = s.negMatch;
-                worksheet.Cells[rowind, 5].Value = s.posMatch - s.negMatch;
-                worksheet.Cells[rowind, 6].Value = s.weightedMatch;
-                worksheet.Cells[rowind++, 7].Value = s.priorityMatch;
+                worksheet.Cells[rowind, 2].Value = s.StartPos;
+                worksheet.Cells[rowind, 3].Value = s.Segment;
+                worksheet.Cells[rowind, 4].Value = s.posMatch;
+                worksheet.Cells[rowind, 5].Value = s.negMatch;
+                worksheet.Cells[rowind, 6].Value = s.posMatch - s.negMatch;
+                worksheet.Cells[rowind, 7].Value = s.weightedMatch;
+                worksheet.Cells[rowind++, 8].Value = s.priorityMatch;
             }
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 1; i <= 8; i++)
                 worksheet.Column(i).AutoFit();
         }
 
@@ -688,30 +692,39 @@ namespace PeSA.Engine
             }
         }
 
-        public static PermutationArray ReadPermutationArrayQuantificationData(string fileName)
+        public static PermutationArray ReadPermutationArrayQuantificationData(string fileName, out List<string> warnings, out string error)
         {
-            string[,] data = ReadArrayFromFile(fileName);
+            warnings = new();
+            error = "";
+
+            string[,] data = ReadArrayFromFile(fileName, out bool wtStripped);
 
             bool permX = false, permY = false;
             PermutationArray.CheckPermutationAxis(data, ref permX, ref permY);
             if (!permX && !permY)
                 return null;
             Settings settings = Settings.Load("default.settings");
-            PermutationArray PA = new PermutationArray(data, permX, settings.WildTypeYAxisTopToBottom, out List<string> warnings, out string error);
+            if (wtStripped)
+                warnings.Add("Wildtype row/column is currently not handled in PeSA and is removed from the array.");
+            PermutationArray PA = new(data, permX, settings.WildTypeYAxisTopToBottom, ref warnings, out error);
             return PA;
         }
 
-        public static OPALArray ReadOPALArrayQuantificationData(string fileName)
+        public static OPALArray ReadOPALArrayQuantificationData(string fileName, out List<string> warnings, out string error)
         {
+            warnings = new();
+            error = "";
 
-            string[,] data = ReadArrayFromFile(fileName);
+            string[,] data = ReadArrayFromFile(fileName, out bool wtStripped);
 
             bool permX = false, permY = false;
             OPALArray.CheckPermutationAxis(data, ref permX, ref permY);
             if (!permX && !permY)
                 return null;
             Settings settings = Settings.Load("default.settings");
-            OPALArray OA = new OPALArray(data, permX, settings.WildTypeYAxisTopToBottom, out string error);
+            if (wtStripped)
+                warnings.Add("Wildtype row/column is currently not handled in PeSA and is removed from the array.");
+            OPALArray OA = new(data, permX, settings.WildTypeYAxisTopToBottom, out error);
             return OA;
         }
 

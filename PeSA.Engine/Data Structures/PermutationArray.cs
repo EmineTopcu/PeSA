@@ -254,10 +254,9 @@ namespace PeSA.Engine
             GenerateNormalizedPeptideWeights();
         }
 
-        public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, out List<string> warnings, out string error)
+        public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, ref List<string> warnings, out string error)
         {
             error = "";
-            warnings = new List<string>();
             try
             {
                 NormalizedPeptideWeights = new Dictionary<string, double>();
@@ -281,7 +280,7 @@ namespace PeSA.Engine
             xPossible = yPossible = true;
             int rowCount = values.GetLength(0) - 1;
             int colCount = values.GetLength(1) - 1;
-            List<char> aaList = new List<char>();
+            List<char> aaList = new();
             for (int iCol = 1; iCol <= colCount; iCol++)
             {
                 string s = values[0, iCol]?.Trim() ?? "";

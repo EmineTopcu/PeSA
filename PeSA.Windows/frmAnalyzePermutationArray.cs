@@ -113,11 +113,21 @@ namespace PeSA.Windows
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename))
                 {
-                    PA = FileUtil.ReadPermutationArrayQuantificationData(filename);
+                    PA = FileUtil.ReadPermutationArrayQuantificationData(filename, out List<string> warnings, out string error);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        MessageBox.Show(error, Analyzer.ProgramName);
+                        return;
+                    }
                     LoadQuantificationFromPermutationArrayToGrid();
                     dgPeptides.RowCount = dgPeptides.ColumnCount = 0;
                     thresholdEntry.SetInitialValues(PA.GetPositiveThreshold(), PA.GetNegativeThreshold());
                     Run();
+                    if (warnings?.Count > 0)
+                    {
+                        warnings.Insert(0, "Warning:");
+                        MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+                    }
                 }
             }
             catch
@@ -324,7 +334,8 @@ namespace PeSA.Windows
                 MessageBox.Show("Please make sure one the axes have permutation array (each amino acid has to exist at most once)", Analyzer.ProgramName);
                 return;
             };
-            PA = new PermutationArray(values, !cbWildTypeXAxis.Checked, cbYAxisTopToBottom.Checked, out List<string> warnings, out string error);
+            List<string> warnings = new();
+            PA = new PermutationArray(values, !cbWildTypeXAxis.Checked, cbYAxisTopToBottom.Checked, ref warnings, out string error);
             if (error != "")
             {
                 MessageBox.Show(error, Analyzer.ProgramName);

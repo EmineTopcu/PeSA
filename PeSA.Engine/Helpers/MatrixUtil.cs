@@ -5,6 +5,59 @@ namespace PeSA.Engine
 {
     public class MatrixUtil
     {
+        //If there is a row or column with wildtype information, it needs to be removed for proper analysis
+        //TODO: Add an option to normalize based on wildtype row/column
+        public static string[,] StripWildTypeRowColumns(string[,] data, out bool wtStripped)
+        {
+            wtStripped = false;
+            if (data == null) return null;
+            int rowCount = data.GetLength(0);
+            int colCount = data.GetLength(1);
+            int skipRow = -1;
+            int skipCol = -1;
+            for (int iCol = 1; iCol < colCount; iCol++)
+            {
+                string s = data[0, iCol]?.Trim() ?? "";
+                if (s.ToLower().StartsWith("wt") || s.ToLower().StartsWith("wild"))
+                {
+                    skipCol = iCol;
+                    break;
+                }
+            }
+            for (int iRow = 1; iRow < rowCount; iRow++)
+            {
+                string s = data[iRow, 0]?.Trim() ?? "";
+                if (s.ToLower().StartsWith("wt") || s.ToLower().StartsWith("wild"))
+                {
+                    skipRow = iRow;
+                    break;
+                }
+            }
+            if (skipRow >= 0 || skipCol >= 0)
+            {
+                string[,] data2 = new string[skipRow >= 0 ? rowCount - 1 : rowCount, skipCol >= 0 ? colCount - 1 : colCount];
+                int rowIter = 0;
+                int colIter = 0;
+                for (int rowind = 0; rowind < rowCount; rowind++)
+                {
+                    if (rowind == skipRow)
+                        continue;
+                    colIter = 0;
+                    for (int colind = 0; colind < colCount; colind++)
+                    {
+                        if (colind == skipCol)
+                            continue;
+                        data2[rowIter, colIter++] = data[rowind, colind];
+                    }
+                    rowIter++;
+                }
+                wtStripped = true;
+                return data2;
+            }
+
+            return data;
+        }
+
         public static string[,] StripHeaderRowColumns(string[,] data, bool checkNumeric)
         {
             if (data == null) return null;
@@ -17,8 +70,8 @@ namespace PeSA.Engine
                 int colheader = 1;
                 for (int i = 0; i < colcount; i++)
                 {
-                    string s = data[0, i]?.Trim();
-                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("Col") && !s.StartsWith("C") && !s.StartsWith("c") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
+                    string s = data[0, i]?.Trim().ToLower();
+                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("col") && !s.StartsWith("c") && (!checkNumeric || !Int32.TryParse(s,out int _)))
                     {
                         colheader = 0;
                         break;
@@ -26,8 +79,8 @@ namespace PeSA.Engine
                 }
                 for (int i = 0; i < rowcount; i++)
                 {
-                    string s = data[i, 0]?.Trim();
-                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("Col") && !s.StartsWith("R") && !s.StartsWith("r") && (!checkNumeric || Int32.TryParse(s,out int dummy)))
+                    string s = data[i, 0]?.Trim().ToLower();
+                    if (!string.IsNullOrWhiteSpace(s) && !s.Contains("row") && !s.Contains("lin") && !s.StartsWith("l") && !s.StartsWith("r") && (!checkNumeric || !Int32.TryParse(s,out int _)))
                     {
                         rowheader = 0;
                         break;

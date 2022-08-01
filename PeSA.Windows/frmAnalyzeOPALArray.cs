@@ -304,26 +304,6 @@ namespace PeSA.Windows
             DrawColorMatrix();
         }
 
-        private void btnLoadQuantification_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DialogResult dlg = dlgOpenQuantification.ShowDialog();
-                if (dlg != DialogResult.OK) return;
-                SetText(dlgOpenQuantification);
-                string filename = dlgOpenQuantification.FileName;
-                if (System.IO.File.Exists(filename))
-                {
-                    OA = FileUtil.ReadOPALArrayQuantificationData(filename);
-                    LoadQuantificationFromOPALArrayToGrid();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("There is a problem with loading the quantification file.\r\nPlease make sure the quantification data is the only data in the loaded file.\r\n", Application.ProductName);
-            }
-        }
-
         private void btnExport_Click(object sender, EventArgs e)
         {
             if (OA == null) return;
@@ -372,7 +352,13 @@ namespace PeSA.Windows
 
                 if (System.IO.File.Exists(filename))
                 {
-                    OA = FileUtil.ReadOPALArrayQuantificationData(filename);
+                    OA = FileUtil.ReadOPALArrayQuantificationData(filename, out List<string> warnings, out string error);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        MessageBox.Show(error, Analyzer.ProgramName);
+                        return;
+                    }
+
                     thresholdEntry.SetInitialValues(OA.GetPositiveThreshold(), OA.GetNegativeThreshold());
                     
                     cbPermutationXAxis.Checked = PermutationXAxis;
@@ -384,6 +370,11 @@ namespace PeSA.Windows
                     FillGridHeaders(dgNormalized);
                     Run();
                     ColorGridsandDrawMotifs();
+                    if (warnings?.Count > 0)
+                    {
+                        warnings.Insert(0, "Warning:");
+                        MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+                    }
                 }
             }
             catch
