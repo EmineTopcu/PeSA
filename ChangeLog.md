@@ -1,5 +1,6 @@
 __Version 2.2__
 * Migration to .NET 7
+* Target system: Windows 10 with support of Windows 7
 * Using System.Json rather the Nuget package Newtonsoft.Json
 
 __Version 2.0__
