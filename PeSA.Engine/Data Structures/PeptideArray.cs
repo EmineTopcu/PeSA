@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PeSA.Engine.Helpers;
+using System.Text.Json;
 
 namespace PeSA.Engine
 {
@@ -187,7 +182,7 @@ namespace PeSA.Engine
                 PeptideArray PA = null;
                 if (File.Exists(filename))
                 {
-                    PA = JsonConvert.DeserializeObject<PeptideArray>(File.ReadAllText(filename));
+                    PA = (PeptideArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(PeptideArray));
                     if (PA.Version == "")
                     {
                         PA.Version = "Old version";
@@ -204,7 +199,7 @@ namespace PeSA.Engine
             try
             {
                 PA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
-                string json = JsonConvert.SerializeObject(PA);
+                string json = JsonUtil.ToJson(PA);
                 File.WriteAllText(filename, json);
                 return true;
             }

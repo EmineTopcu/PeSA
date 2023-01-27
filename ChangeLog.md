@@ -1,3 +1,7 @@
+__Version 2.2__
+* Migration to .NET 7
+* Using System.Json rather the Nuget package Newtonsoft.Json
+
 __Version 2.0__
 * Migration to .NET Core
 

@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PeSA.Engine.Helpers;
+using System.Text.Json;
 
 namespace PeSA.Engine
 {
@@ -153,8 +148,7 @@ namespace PeSA.Engine
                 for (int iRow = 0; iRow < RowCount; iRow++)
                     for (int iCol = 0; iCol < ColCount; iCol++)
                     {
-                        double d = 0;
-                        if (double.TryParse(values[iRow + 1, iCol + 1], out d))
+                        if (double.TryParse(values[iRow + 1, iCol + 1], out double d))
                             QuantificationMatrix[iRow, iCol] = d;
                         else if (string.IsNullOrEmpty(values[iRow + 1, iCol + 1]))
                             d = 0;
@@ -246,7 +240,7 @@ namespace PeSA.Engine
                 OPALArray OA = null;
                 if (File.Exists(filename))
                 {
-                    OA = JsonConvert.DeserializeObject<OPALArray>(File.ReadAllText(filename));
+                    OA = (OPALArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(OPALArray));
                     if (OA.Version == "")
                     {
                         OA.Version = "Old version";
@@ -264,7 +258,7 @@ namespace PeSA.Engine
             try
             {
                 OA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
-                string json = JsonConvert.SerializeObject(OA);
+                string json = JsonUtil.ToJson(OA);
                 File.WriteAllText(filename, json);
                 return true;
             }
@@ -277,9 +271,9 @@ namespace PeSA.Engine
                 return;
             string s = "", e = "";
             if (pos > 0)
-                s = WildTypePeptide.Substring(0, pos);
+                s = WildTypePeptide[..pos];
             if (pos < WildTypePeptide.Length - 1)
-                e = WildTypePeptide.Substring(pos + 1);
+                e = WildTypePeptide[(pos + 1)..];
             string peptide = s + replaceBy + e;
             if (/*peptide == WildTypePeptide && */NormalizedPeptideWeights.ContainsKey(peptide))
                 return;

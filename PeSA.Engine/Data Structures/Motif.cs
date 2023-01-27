@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using PeSA.Engine.Helpers;
 using System.Drawing;
+using System.Text.Json;
+
 
 namespace PeSA.Engine
 {
@@ -136,15 +138,14 @@ namespace PeSA.Engine
         {
             if (_Columns == null || !_Columns.Any())
                 return null;
-            Dictionary<int, Dictionary<char, double>> scaled = new Dictionary<int, Dictionary<char, double>>();
-            Dictionary<int, double> totalWeightsPerPos = new Dictionary<int, double>();
+            Dictionary<int, Dictionary<char, double>> scaled = new();
+            Dictionary<int, double> totalWeightsPerPos = new();
             foreach (int pos in _Columns.Keys)
             {
                 totalWeightsPerPos.Add(pos, 0);
                 Dictionary<char, double> perpos = _Columns[pos];
                 foreach (char c in perpos.Keys)
                 {
-                    double avr = perpos[c];
                     totalWeightsPerPos[pos] += perpos[c];
                 }
             }
@@ -175,8 +176,8 @@ namespace PeSA.Engine
                 PeptideLength = string.IsNullOrEmpty(WildTypePeptide) ? PeptideWeights.Keys.Select(p => p.Length).Max() : WildTypePeptide.Length;
 
                 //Initialize
-                Dictionary<int, Dictionary<char, List<double>>> _PositiveColumns = new Dictionary<int, Dictionary<char, List<double>>>();
-                Dictionary<int, Dictionary<char, List<double>>> _NegativeColumns = new Dictionary<int, Dictionary<char, List<double>>>();
+                Dictionary<int, Dictionary<char, List<double>>> _PositiveColumns = new();
+                Dictionary<int, Dictionary<char, List<double>>> _NegativeColumns = new();
                 PositiveColumns = new Dictionary<int, Dictionary<char, double>>();
                 NegativeColumns = new Dictionary<int, Dictionary<char, double>>();
                 AminoAcidsUsed = new List<char>();
@@ -279,7 +280,7 @@ namespace PeSA.Engine
                 Dictionary<int, Dictionary<char, int>> frequencies;
                 if (PeptideLength == 0)
                     PeptideLength = peptides[0].Length;
-                int setsize = peptides.Count();
+                int setsize = peptides.Count;
                 frequencies = new Dictionary<int, Dictionary<char, int>>();
                 Frequencies = new Dictionary<int, Dictionary<char, double>>();
                 for (int i = 0; i < PeptideLength; i++)
@@ -382,7 +383,7 @@ namespace PeSA.Engine
                 try
                 {
                     var sourceRectangle = SelectFilledPixels(bmp);
-                    RectangleF destinationRectangle = new RectangleF(0, 0, width, height);
+                    RectangleF destinationRectangle = new(0, 0, width, height);
 
                     using (var destination = Graphics.FromImage(scaledBitmap))
                     {
@@ -437,7 +438,7 @@ namespace PeSA.Engine
             int maxAAperCol = settings.MotifMaxAAPerColumn;
             int letterWidth = (width - positionSpacing * (Columns.Count - 1)) / Columns.Count;
 
-            Bitmap bitmap = new Bitmap(width, height);
+            Bitmap bitmap = new(width, height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.FillRectangle(Brushes.White, 0, 0, width, height);
@@ -450,10 +451,10 @@ namespace PeSA.Engine
                     if (lettercount > maxAAperCol)
                     {
                         var letterHeight = height;
-                        Color color = defColor ?? settings.AminoAcidMotifColors['X'];
+                        Color? color = defColor ?? settings.AminoAcidMotifColors['X'];
                         if (color == null)
                             color = Color.Black;
-                        var letterImage = GetLetterImage('X', letterWidth, letterHeight, color);
+                        var letterImage = GetLetterImage('X', letterWidth, letterHeight, (Color)color);
                         if (letterImage != null)
                         {
                             g.DrawImage(letterImage, x, 0);
@@ -471,7 +472,7 @@ namespace PeSA.Engine
                         }
                         else
                         {
-                            if (lettercount < Columns[i].Count()) lettercount++;
+                            if (lettercount < Columns[i].Count) lettercount++;
                             int usableHeight = height - letterSpacing * (lettercount - 1);
                             var y = 0;
                             bool drawX = false;
@@ -528,7 +529,7 @@ namespace PeSA.Engine
                 Motif motif = null;
                 if (File.Exists(filename))
                 {
-                    motif = JsonConvert.DeserializeObject<Motif>(File.ReadAllText(filename));
+                    motif = (Motif)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(Motif));
                     if (motif.Version == "")
                         motif.Version = "Old version";
                 }
@@ -542,7 +543,7 @@ namespace PeSA.Engine
             try
             {
                 motif.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
-                string json = JsonConvert.SerializeObject(motif);
+                string json = JsonUtil.ToJson(motif);
                 File.WriteAllText(filename, json);
                 return true;
             }
@@ -560,7 +561,7 @@ namespace PeSA.Engine
 
         public Bitmap GetFrequencyMotif(int widthImage, int heightImage)
         {
-            if (Frequencies == null || Frequencies.Count() == 0)
+            if (Frequencies == null || Frequencies.Count == 0)
                 return null;
             return Render(Frequencies, widthImage, heightImage, defColor: null);
         }
@@ -571,7 +572,7 @@ namespace PeSA.Engine
                 return null;
             int pepsize;
             if (string.IsNullOrEmpty(WildTypePeptide))
-                pepsize = PosCaptions?.Count() ?? PeptideLength;
+                pepsize = PosCaptions?.Length ?? PeptideLength;
             else //if (!string.IsNullOrEmpty(WildTypePeptide))
                 pepsize = WildTypePeptide.Length;
 
@@ -581,8 +582,8 @@ namespace PeSA.Engine
             {
                 Dictionary<char, double> positive = PositiveColumns[pos];
                 Dictionary<char, double> negative = NegativeColumns[pos];
-                float posrange = positive != null && positive.Count() > 0 ? (float)positive.Values.Max() : 0;
-                float negrange = negative != null && negative.Count() > 0 ? (float)negative.Values.Max() : 0;
+                float posrange = positive != null && positive.Count > 0 ? (float)positive.Values.Max() : 0;
+                float negrange = negative != null && negative.Count > 0 ? (float)negative.Values.Max() : 0;
                 float rangeperpos = (float)Math.Max(posrange, negrange);
                 if (rangeperpos > maxRange)
                     maxRange = rangeperpos;
@@ -602,20 +603,20 @@ namespace PeSA.Engine
 
             Settings settings = Settings.Load("default.settings");
 
-            Bitmap bmp = new Bitmap(width, height);
-            Dictionary<char, Pen> aaPens = new Dictionary<char, Pen>();
+            Bitmap bmp = new(width, height);
+            Dictionary<char, Pen> aaPens = new();
             Brush brush = new SolidBrush(Common.ColorNegative);
-            Pen negPen = new Pen(brush);
+            Pen negPen = new(brush);
             foreach (char aachar in AminoAcidsUsed)
             {
                 Color col = settings.AminoAcidMotifColors.ContainsKey(aachar) ?
                     settings.AminoAcidMotifColors[aachar] : Color.Black;
                 brush = new SolidBrush(col);
-                Pen p = new Pen(brush);
+                Pen p = new(brush);
                 aaPens.Add(aachar, p);
             }
 
-            Font font = new Font("Microsoft Sans Serif", fontsize, FontStyle.Regular);
+            Font font = new("Microsoft Sans Serif", fontsize, FontStyle.Regular);
             float xcoor = 5, ycoor = 5;
             using (var g = Graphics.FromImage(bmp))
             {
@@ -638,9 +639,9 @@ namespace PeSA.Engine
                         Dictionary<char, double> positive = PositiveColumns[pos];
                         Dictionary<char, double> negative = NegativeColumns[pos];
                         double? val = null;
-                        if (positive.Keys.Contains(aachar))
+                        if (positive.ContainsKey(aachar))
                             val = positive[aachar];
-                        if (negative.Keys.Contains(aachar))
+                        if (negative.ContainsKey(aachar))
                             val = negative[aachar] * -1;
                         if (val != null)
                         {
@@ -677,10 +678,10 @@ namespace PeSA.Engine
             {
                 if (string.IsNullOrEmpty(WildTypePeptide))
                 {
-                    if (PositiveColumns != null && keyPosition < PositiveColumns.Count())//OPAL - wieght based motif with no wildtypepeptide
+                    if (PositiveColumns != null && keyPosition < PositiveColumns.Count)//OPAL - wieght based motif with no wildtypepeptide
                         keyAA = PositiveColumns[keyPosition].
                             OrderByDescending(kv => kv.Value).Select(kv => kv.Key).FirstOrDefault();
-                    else if (Frequencies != null && keyPosition < Frequencies.Count())//frequency based peptide array, peptide list
+                    else if (Frequencies != null && keyPosition < Frequencies.Count)//frequency based peptide array, peptide list
                         keyAA = Frequencies[keyPosition].OrderByDescending(kv => kv.Value).Select(kv => kv.Key).FirstOrDefault();
                 }
                 else if (keyPosition < WildTypePeptide.Length)

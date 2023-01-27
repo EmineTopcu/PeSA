@@ -1,35 +1,32 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using PeSA.Engine.Helpers;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace PeSA.Engine
 {
     public class Settings
     {
-        //MotifSettings
-        public Dictionary<char, Color> AminoAcidMotifColors;
-        private static Dictionary<char, Color> DefaultAminoAcidMotifColors;
-        public int MotifWidth, MotifHeight;
-        public int MotifMaxAAPerColumn = 10;
-        public double MotifThreshold = 0.1;
         static private Dictionary<char, Bitmap> PositiveImages;
         static private Dictionary<char, Bitmap> NegativeImages;
-
-        //PeptideArraySettings
-        public int PeptideArrayColumns, PeptideArrayRows;
-        public bool PeptideArrayRowsFirst;
-
-        //PermutationArraySettings
-        public bool WildTypeYAxisTopToBottom = true;
-
+        private static Dictionary<char, Color> DefaultAminoAcidMotifColors;
         //ColorMatrixSettings - set as private for now; not editable
         private Dictionary<string, ColorMatrixTheme> ColorMatrixThemes;
+
+        //MotifSettings
+        public Dictionary<char, Color> AminoAcidMotifColors { get; set; }
+        public int MotifWidth { get; set; }
+        public int MotifHeight { get; set; }
+        public int MotifMaxAAPerColumn { get; set; } = 10;
+        public double MotifThreshold { get; set; } = 0.1;
+
+        //PeptideArraySettings
+        public int PeptideArrayColumns { get; set; } 
+        public int PeptideArrayRows { get; set; }
+        public bool PeptideArrayRowsFirst { get; set; }
+
+        //PermutationArraySettings
+        public bool WildTypeYAxisTopToBottom { get; set; } = true;
 
         public Settings()
         {
@@ -79,32 +76,38 @@ namespace PeSA.Engine
         {
             ColorMatrixThemes = new Dictionary<string, ColorMatrixTheme>();
 
-            ColorMatrixTheme theme = new ColorMatrixTheme();
-            theme.ThemeName = "Grayscale";
+            ColorMatrixTheme theme = new()
+            {
+                ThemeName = "Grayscale"
+            };
             theme.BackgroundColor = theme.StartColor = Color.White;
             theme.FontColor = theme.EndColor = Color.Black;
             theme.Dia = 20;
             theme.Flip = false;
             ColorMatrixThemes.Add(theme.ThemeName, theme);
 
-            theme = new ColorMatrixTheme();
-            theme.ThemeName = "Blue-Red scale";
-            theme.BackgroundColor = Color.Black;
-            theme.StartColor = Color.Blue;
-            theme.EndColor = Color.Red;
-            theme.FontColor = Color.White;
-            theme.Dia = 20;
-            theme.Flip = true;
+            theme = new ColorMatrixTheme
+            {
+                ThemeName = "Blue-Red scale",
+                BackgroundColor = Color.Black,
+                StartColor = Color.Blue,
+                EndColor = Color.Red,
+                FontColor = Color.White,
+                Dia = 20,
+                Flip = true
+            };
             ColorMatrixThemes.Add(theme.ThemeName, theme);
 
-            theme = new ColorMatrixTheme();
-            theme.ThemeName = "Custom";
-            theme.BackgroundColor = Color.Black;
-            theme.StartColor = Color.LightGreen;
-            theme.EndColor = Color.Red;
-            theme.FontColor = Color.White;
-            theme.Dia = 20;
-            theme.Flip = false;
+            theme = new ColorMatrixTheme
+            {
+                ThemeName = "Custom",
+                BackgroundColor = Color.Black,
+                StartColor = Color.LightGreen,
+                EndColor = Color.Red,
+                FontColor = Color.White,
+                Dia = 20,
+                Flip = false
+            };
             ColorMatrixThemes.Add(theme.ThemeName, theme);
         }
         public ColorMatrixTheme GetMatrixTheme(bool color)
@@ -122,22 +125,32 @@ namespace PeSA.Engine
                 string folder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/PeSA";
                 if (Directory.Exists(folder) && File.Exists(folder + "/" + name))
                 {
-                    settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(folder + "/" + name));
+                    settings = (Settings)JsonUtil.ReadFromJson(File.ReadAllText(folder + "/" + name), typeof(Settings));
                     if (settings.ColorMatrixThemes == null)
                         settings.SetDefaultColorMatrixThemes();
+                    if (settings.MotifWidth <= 0)
+                        settings.MotifWidth = 200;
+                    if (settings.MotifHeight <= 0)
+                        settings.MotifHeight = 800;
+                    if (settings.PeptideArrayColumns <= 0)
+                        settings.PeptideArrayColumns = 30;
+                    if (settings.PeptideArrayRows <= 0)
+                        settings.PeptideArrayRows = 20;
                 }
                 else
                 {
-                    settings = new Settings();
-                    settings.MotifHeight = 200;
-                    settings.MotifWidth = 800;
+                    settings = new Settings
+                    {
+                        MotifHeight = 200,
+                        MotifWidth = 800
+                    };
                     settings.SetDefaultColors();
                     settings.SetDefaultColorMatrixThemes();
                     settings.PeptideArrayColumns = 30;
                     settings.PeptideArrayRows = 20;
                     settings.PeptideArrayRowsFirst = true;
 
-                    string json = JsonConvert.SerializeObject(settings);
+                    string json = JsonUtil.ToJson(settings);
 
                     Directory.CreateDirectory(folder);
                     File.WriteAllText(folder + "/" + name, json);
@@ -148,9 +161,11 @@ namespace PeSA.Engine
             {
                 if (settings == null)
                 {
-                    settings = new Settings();
-                    settings.MotifHeight = 200;
-                    settings.MotifWidth = 800;
+                    settings = new Settings
+                    {
+                        MotifHeight = 200,
+                        MotifWidth = 800
+                    };
                     settings.SetDefaultColors();
                     settings.SetDefaultColorMatrixThemes();
                     settings.PeptideArrayColumns = 30;
@@ -169,7 +184,7 @@ namespace PeSA.Engine
                 string folder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/PeSA";
                 if (Directory.Exists(folder) && File.Exists(folder + "/" + name))
                 {
-                    string json = JsonConvert.SerializeObject(this);
+                    string json = JsonUtil.ToJson(this);
                     File.WriteAllText(folder + "/" + name, json);
                 }
                 return true;
@@ -194,28 +209,27 @@ namespace PeSA.Engine
                 if (stream == null)
                     return;
                 Image image = Image.FromStream(stream);
-                System.Drawing.Imaging.ImageAttributes imageAttributes = new System.Drawing.Imaging.ImageAttributes();
+                System.Drawing.Imaging.ImageAttributes imageAttributes = new();
                 int width = image.Width;
                 int height = image.Height;
-                System.Drawing.Imaging.ColorMap colorMap = new System.Drawing.Imaging.ColorMap();
-
-                colorMap.OldColor = Color.Black;
-                colorMap.NewColor = color;
+                System.Drawing.Imaging.ColorMap colorMap = new()
+                {
+                    OldColor = Color.Black,
+                    NewColor = color
+                };
 
                 System.Drawing.Imaging.ColorMap[] remapTable = { colorMap };
 
                 imageAttributes.SetRemapTable(remapTable, System.Drawing.Imaging.ColorAdjustType.Bitmap);
 
-                Bitmap bmp = new Bitmap(width, height);
-                using (var gr = Graphics.FromImage(bmp))
-                {
-                    gr.DrawImage(image, new Rectangle(0, 0, width, height), 0, 0, width, height, GraphicsUnit.Pixel,
-                   imageAttributes);
-                    if (pos)
-                        SetImage(PositiveImages, aa, bmp);
-                    else
-                        SetImage(NegativeImages, aa, bmp);
-                }
+                Bitmap bmp = new(width, height);
+                using var gr = Graphics.FromImage(bmp);
+                gr.DrawImage(image, new Rectangle(0, 0, width, height), 0, 0, width, height, GraphicsUnit.Pixel,
+               imageAttributes);
+                if (pos)
+                    SetImage(PositiveImages, aa, bmp);
+                else
+                    SetImage(NegativeImages, aa, bmp);
             }
             catch (Exception exc) { }
         }

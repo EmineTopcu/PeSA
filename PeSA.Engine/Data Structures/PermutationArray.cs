@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using PeSA.Engine.Helpers;
+using System.Text.Json;
 
 namespace PeSA.Engine
 {
@@ -212,12 +208,12 @@ namespace PeSA.Engine
                         if (PermutationXAxis) //wildTypeYAxis
                         {
                             if (WildTypeYAxisTopToBottom)
-                                PeptideMatrix[iRow, iCol] = (iRow >= 1 ? WildTypePeptide.Substring(0, iRow) : "") + Permutation[iCol] + (iRow < WildTypePeptide.Length - 1 ? WildTypePeptide.Substring(iRow + 1) : "");
+                                PeptideMatrix[iRow, iCol] = (iRow >= 1 ? WildTypePeptide[..iRow] : "") + Permutation[iCol] + (iRow < WildTypePeptide.Length - 1 ? WildTypePeptide[(iRow + 1)..] : "");
                             else  //from bottom to top
-                                PeptideMatrix[iRow, iCol] = (iRow < wtl - 1 ? WildTypePeptide.Substring(0, wtl - iRow - 1) : "") + Permutation[iCol] + (iRow > 0 ? WildTypePeptide.Substring(wtl - iRow) : "");
+                                PeptideMatrix[iRow, iCol] = (iRow < wtl - 1 ? WildTypePeptide[..(wtl - iRow - 1)] : "") + Permutation[iCol] + (iRow > 0 ? WildTypePeptide[(wtl - iRow)..] : "");
                            }
                         else
-                            PeptideMatrix[iRow, iCol] = (iCol >= 1 ? WildTypePeptide.Substring(0, iCol) : "") + Permutation[iRow] + (iCol < WildTypePeptide.Length - 1 ? WildTypePeptide.Substring(iCol + 1) : "");
+                            PeptideMatrix[iRow, iCol] = (iCol >= 1 ? WildTypePeptide[..iCol] : "") + Permutation[iRow] + (iCol < WildTypePeptide.Length - 1 ? WildTypePeptide[(iCol + 1)..] : "");
        
                         if (PeptideMatrix[iRow, iCol] == WildTypePeptide)
                         {
@@ -324,7 +320,7 @@ namespace PeSA.Engine
                 PermutationArray PA = null;
                 if (File.Exists(filename))
                 {
-                    PA = JsonConvert.DeserializeObject<PermutationArray>(File.ReadAllText(filename));
+                    PA = (PermutationArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(PermutationArray));
                     if (PA.Version == "")
                     {
                         PA.Version = "Old version";
@@ -345,7 +341,7 @@ namespace PeSA.Engine
             try
             {
                 PA.Version = typeof(Analyzer).Assembly.GetName().Version.ToString();
-                string json = JsonConvert.SerializeObject(PA);
+                string json = JsonUtil.ToJson(PA);
                 File.WriteAllText(filename, json);
                 return true;
             }
