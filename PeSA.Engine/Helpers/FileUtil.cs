@@ -15,18 +15,16 @@ namespace PeSA.Engine
     {
         public static string ImageToBase64(System.Drawing.Image image)
         {
-            using (MemoryStream m = new MemoryStream())
-            {
-                image.Save(m, image.RawFormat);
-                byte[] imageBytes = m.ToArray();
-                string base64String = Convert.ToBase64String(imageBytes);
-                return base64String;
-            }
+            using MemoryStream m = new();
+            image.Save(m, image.RawFormat);
+            byte[] imageBytes = m.ToArray();
+            string base64String = Convert.ToBase64String(imageBytes);
+            return base64String;
         }
         public static System.Drawing.Image Base64ToImage(string base64String)
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
-            MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+            MemoryStream ms = new(imageBytes, 0, imageBytes.Length);
             ms.Write(imageBytes, 0, imageBytes.Length);
             System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);
             return image;
@@ -36,7 +34,7 @@ namespace PeSA.Engine
         {
             try
             {
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 string[,] data = null;
                 if (existingFile.Extension.StartsWith(".xls"))
                 {
@@ -60,7 +58,7 @@ namespace PeSA.Engine
             try
             {
                 string[,] data;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using (ExcelPackage package = new(existingFile))
                 {
                     //get the first worksheet in the workbook
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
@@ -86,11 +84,10 @@ namespace PeSA.Engine
         private static string[,] ReadArrayFromCSV(FileInfo existingFile)
         {
             string[,] data;
-            List<string> lines = null;
-            lines = System.IO.File.ReadAllLines(existingFile.FullName).ToList();
+            List<string> lines = File.ReadAllLines(existingFile.FullName).ToList();
             string[] values = lines[0].Split(',');
-            int colCount = values.Count();
-            int rowCount = lines.Count();
+            int colCount = values.Length;
+            int rowCount = lines.Count;
             data = new string[rowCount, colCount];
             int row = 0;
             foreach (string line in lines)
@@ -115,7 +112,7 @@ namespace PeSA.Engine
 
         public static List<string> ReadPeptideList(string fileName)
         {
-            FileInfo existingFile = new FileInfo(fileName);
+            FileInfo existingFile = new(fileName);
 
             if (existingFile.Extension.StartsWith(".txt"))
             {
@@ -132,7 +129,7 @@ namespace PeSA.Engine
                 data = ReadArrayFromCSV(existingFile);
             }
 
-            List<string> peptideList = new List<string>();
+            List<string> peptideList = new();
             int colind = 0;
             for (int rowind = 0; rowind < data.GetLength(0); rowind++)
                 //Read only the first column for (int colind = 0; colind < data.GetLength(1); colind++)
@@ -142,7 +139,7 @@ namespace PeSA.Engine
 
         public static List<Protein> ReadProtein(string fileName)
         {            
-            FileInfo existingFile = new FileInfo(fileName);
+            FileInfo existingFile = new(fileName);
 
             List<Protein> proteins = Protein.GenerateProteins(string.Join("\r\n", System.IO.File.ReadAllLines(existingFile.FullName)));
 
@@ -151,7 +148,7 @@ namespace PeSA.Engine
 
         public static string[,] ReadPeptideMatrix(string fileName)
         {
-            FileInfo existingFile = new FileInfo(fileName);
+            FileInfo existingFile = new(fileName);
 
             string[,] data = null;
             if (existingFile.Extension.StartsWith(".xls"))
@@ -172,7 +169,7 @@ namespace PeSA.Engine
         {
             try
             {
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 string[,] data = null;
                 if (existingFile.Extension.StartsWith(".xls"))
                 {
@@ -311,8 +308,7 @@ namespace PeSA.Engine
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[sheetname];
 
-                if (worksheet == null)
-                    worksheet = package.Workbook.Worksheets.Add(sheetname);
+                worksheet ??= package.Workbook.Worksheets.Add(sheetname);
                 return worksheet;
             }
             catch
@@ -340,14 +336,14 @@ namespace PeSA.Engine
             int startrow = rowind;
             worksheet.Cells[rowind++, 1].Value = "Positive Motif only";
             worksheet.Cells[rowind, 1].Value = "Count:";
-            worksheet.Cells[rowind++, 2].Value = validator.PositiveSequenceList.Count();
+            worksheet.Cells[rowind++, 2].Value = validator.PositiveSequenceList.Count;
             rowind = ListToExcelColumn(worksheet, rowind, 2, "Sequence", validator.PositiveSequenceList);
 
-            rowind = startrow;
+            //rowind = startrow;
             worksheet.Cells[rowind++, 4].Value = "Including Negative Motif";
             worksheet.Cells[rowind, 4].Value = "Count:";
-            worksheet.Cells[rowind++, 5].Value = validator.NegativeSequenceList.Count();
-            rowind = ListToExcelColumn(worksheet, rowind, 5, "Sequence", validator.NegativeSequenceList);
+            worksheet.Cells[rowind++, 5].Value = validator.NegativeSequenceList.Count;
+            _ = ListToExcelColumn(worksheet, rowind, 5, "Sequence", validator.NegativeSequenceList);
 
             worksheet.Column(2).AutoFit();
             worksheet.Column(5).AutoFit();
@@ -619,10 +615,10 @@ namespace PeSA.Engine
             try
             {
                 errormsg = "";
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 if (existingFile.Exists && !overwrite)
                     return false;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using (ExcelPackage package = new(existingFile))
                 {
                     if (existingFile.Exists)
                     {
@@ -650,20 +646,26 @@ namespace PeSA.Engine
                         List<string> mainList = PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] == PA.KeyAA).ToList();
                         List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] != PA.KeyAA).ToList(), PA.KeyAA, PA.PeptideLength, (int)PA.KeyPosition - 1,
                             out List<string> replacements);
-                        Motif motif = new Motif(mainList, PA.PeptideLength);
-                        motif.FreqThreshold = PA.FrequencyThreshold;
+                        Motif motif = new(mainList, PA.PeptideLength)
+                        {
+                            FreqThreshold = PA.FrequencyThreshold
+                        };
 
                         WriteToSheetFrequencyMotif(package, motif, "Motif", ref rowind);
                         rowind++;
 
-                        motif = new Motif(shiftedList, PA.PeptideLength);
-                        motif.FreqThreshold = PA.FrequencyThreshold;
+                        motif = new Motif(shiftedList, PA.PeptideLength)
+                        {
+                            FreqThreshold = PA.FrequencyThreshold
+                        };
                         WriteToSheetFrequencyMotif(package, motif, "Shifted Motif", ref rowind, false);
                     }
                     else
                     {
-                        Motif motif = new Motif(PA.ModifiedPeptides, PA.PeptideLength);
-                        motif.FreqThreshold = PA.FrequencyThreshold;
+                        Motif motif = new(PA.ModifiedPeptides, PA.PeptideLength)
+                        {
+                            FreqThreshold = PA.FrequencyThreshold
+                        };
 
                         int rowind = 1;
                         WriteToSheetFrequencyMotif(package, motif, "Motif", ref rowind);
@@ -733,10 +735,10 @@ namespace PeSA.Engine
             try
             {
                 errormsg = "";
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 if (existingFile.Exists && !overwrite)
                     return false;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using (ExcelPackage package = new(existingFile))
                 {
                     if (existingFile.Exists)
                     {
@@ -745,8 +747,8 @@ namespace PeSA.Engine
                     }
                     ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
-                    List<string> headerrow = new List<string>();
-                    List<string> headercolumn = new List<string>();
+                    List<string> headerrow = new();
+                    List<string> headercolumn = new();
                     if (PA.PermutationXAxis)
                     {
                         headercolumn = PA.WildTypePeptide.ToCharArray().ToList().ConvertAll(c => c.ToString());
@@ -823,10 +825,10 @@ namespace PeSA.Engine
             try
             {
                 errormsg = "";
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 if (existingFile.Exists && !overwrite)
                     return false;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using (ExcelPackage package = new(existingFile))
                 {
                     if (existingFile.Exists)
                     {
@@ -835,8 +837,8 @@ namespace PeSA.Engine
                     }
                     ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
-                    List<string> headerrow = new List<string>();
-                    List<string> headercolumn = new List<string>();
+                    List<string> headerrow = new();
+                    List<string> headercolumn = new();
                     if (OA.PermutationXAxis)
                     {
                         headercolumn = OA.PositionCaptions.ToList().ConvertAll(c => c.ToString());
@@ -899,28 +901,26 @@ namespace PeSA.Engine
             try
             {
                 errormsg = "";
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 if (existingFile.Exists && !overwrite)
                     return false;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using ExcelPackage package = new(existingFile);
+                if (existingFile.Exists)
                 {
-                    if (existingFile.Exists)
-                    {
-                        while (package.Workbook.Worksheets.Count > 0)
-                            package.Workbook.Worksheets.Delete(1);
-                    }
-                    WriteToSheetScoreList(package, scorer);
-                    WriteToSheetMotif(package, scorer.Motif);
+                    while (package.Workbook.Worksheets.Count > 0)
+                        package.Workbook.Worksheets.Delete(1);
+                }
+                WriteToSheetScoreList(package, scorer);
+                WriteToSheetMotif(package, scorer.Motif);
 
-                    try
-                    {
-                        package.Save();
-                    }
-                    catch
-                    {
-                        errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
-                        return false;
-                    }
+                try
+                {
+                    package.Save();
+                }
+                catch
+                {
+                    errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
+                    return false;
                 }
             }
             catch
@@ -936,28 +936,26 @@ namespace PeSA.Engine
             try
             {
                 errormsg = "";
-                FileInfo existingFile = new FileInfo(fileName);
+                FileInfo existingFile = new(fileName);
                 if (existingFile.Exists && !overwrite)
                     return false;
-                using (ExcelPackage package = new ExcelPackage(existingFile))
+                using ExcelPackage package = new(existingFile);
+                if (existingFile.Exists)
                 {
-                    if (existingFile.Exists)
-                    {
-                        while (package.Workbook.Worksheets.Count > 0)
-                            package.Workbook.Worksheets.Delete(1);
-                    }
-                    WriteToSheetValidator(package, validator);
-                    WriteToSheetMotif(package, validator.Motif);
+                    while (package.Workbook.Worksheets.Count > 0)
+                        package.Workbook.Worksheets.Delete(1);
+                }
+                WriteToSheetValidator(package, validator);
+                WriteToSheetMotif(package, validator.Motif);
 
-                    try
-                    {
-                        package.Save();
-                    }
-                    catch
-                    {
-                        errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
-                        return false;
-                    }
+                try
+                {
+                    package.Save();
+                }
+                catch
+                {
+                    errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
+                    return false;
                 }
             }
             catch

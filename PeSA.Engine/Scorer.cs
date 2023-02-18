@@ -48,7 +48,7 @@ namespace PeSA.Engine
         {
             try
             {
-                Score s = new Score(peptide, inputSegment, startpos);
+                Score s = new(peptide, inputSegment, startpos);
                 int endpos = Math.Min(inputSegment.Length + startpos - 1, Motif.PeptideLength - 1);
                 for (int pos = startpos; pos <= endpos; pos++)
                 {
@@ -56,20 +56,19 @@ namespace PeSA.Engine
                     if (aa == 'x' || aa == 'X') continue;
                     Dictionary<char, double> posWeights = Motif.PositiveColumns?[pos]?? Motif.Frequencies[pos];
                     Dictionary<char, double> negWeights = Motif.NegativeColumns?[pos];
-                    if (posWeights.ContainsKey(aa))
+                    if (posWeights.TryGetValue(aa, out double posWeight))
                     {
-                        if (UserEnteredPosThreshold != null && posWeights[aa] < UserEnteredPosThreshold)
+                        if (UserEnteredPosThreshold != null && posWeight < UserEnteredPosThreshold)
                             continue;
                         s.posMatch++;
-                        s.weightedMatch += posWeights[aa];
-                        s.priorityMatch += posWeights[aa] / posWeights.Count;
+                        s.weightedMatch += posWeight;
+                        s.priorityMatch += posWeight / posWeights.Count;
                     }
-                    else if (negWeights!=null && negWeights.ContainsKey(aa))
+                    else if (negWeights!=null && negWeights.TryGetValue(aa, out double negWeight))
                     {
-                        if (UserEnteredNegThreshold != null && negWeights[aa] < UserEnteredNegThreshold)
+                        if (UserEnteredNegThreshold != null && negWeight < UserEnteredNegThreshold)
                             continue;
                         s.negMatch++;
-                        double negWeight = negWeights[aa];
                         if (UserEnteredNegThreshold != null && UserEnteredNegThreshold < Motif.NegativeThreshold)
                             negWeight -= (Motif.NegativeThreshold - (double)UserEnteredNegThreshold);
                         s.weightedMatch -= negWeight;
@@ -86,7 +85,7 @@ namespace PeSA.Engine
 
         public List<Score> ScoreSequence(string inputSeq, Action<int> progressCallback, string proteinName=null)
         {
-            List<Score> scores = new List<Score>();
+            List<Score> scores = new();
             int startInd = 0;
             if (KeyChar == ' ' || KeyPosition < 0) //check for all segments, no target position check
             {
@@ -100,10 +99,7 @@ namespace PeSA.Engine
                     s.StartPos = startInd + 1;
                     startInd++;
                     fullPos++;
-                    if (progressCallback != null)//protein scoring
-                    {
-                        progressCallback(fullPos);
-                    }
+                    progressCallback?.Invoke(fullPos);//protein scoring
                 }
             }
             else
@@ -121,7 +117,7 @@ namespace PeSA.Engine
                     string segment;
                     int relPos = startInd + 1;
                     if (ind + Motif.PeptideLength - keyPosition <= inputSeq.Length)
-                        segment = inputSeq.Substring(0, ind + Motif.PeptideLength - keyPosition);
+                        segment = inputSeq[..(ind + Motif.PeptideLength - keyPosition)];
                     else
                         segment = inputSeq;
                     if (ind < keyPosition)
@@ -129,7 +125,7 @@ namespace PeSA.Engine
                     else if (ind > keyPosition)
                     {
                         relPos = ind - keyPosition;
-                        segment = segment.Substring(ind - keyPosition);
+                        segment = segment[(ind - keyPosition)..];
                     }
                     Score s = GetScore(proteinName ?? inputSeq, segment, startPos);
                     if (s != null && s.posMatch >= PosMatchCutoff && s.negMatch <= NegMatchCutoff)

@@ -1,3 +1,6 @@
+__Version 2.2.1__
+* Buf fixes related to backward compatibility with the new Json library
+
 __Version 2.2__
 * Migration to .NET 7
 * Target system: Windows 10 with support of Windows 7

@@ -113,6 +113,7 @@ namespace PeSA.Windows
                 string filename = dlgOpenQuantification.FileName;
                 if (System.IO.File.Exists(filename))
                 {
+                    quantificationLoaded = false;
                     PA = FileUtil.ReadPermutationArrayQuantificationData(filename, out List<string> warnings, out string error);
                     if (!string.IsNullOrEmpty(error))
                     {
@@ -142,6 +143,7 @@ namespace PeSA.Windows
             {
                 DialogResult dlg = dlgOpenProject.ShowDialog();
                 if (dlg != DialogResult.OK) return;
+                quantificationLoaded = false;
                 SetText(dlgOpenProject);
                 string filename = dlgOpenProject.FileName;
                 PA = PermutationArray.ReadFromFile(filename);
@@ -167,7 +169,7 @@ namespace PeSA.Windows
                 imageReference.Image = null;
                 try
                 {
-                    Image img = FileUtil.Base64ToImage(PA.ImageStr);
+                    Image img = PA.ImageStr != null ? FileUtil.Base64ToImage(PA.ImageStr) : null;
                     imageReference.Image = img;
                 }
                 catch { }
@@ -194,12 +196,10 @@ namespace PeSA.Windows
         }
         private void LoadQuantificationFromPermutationArrayToGrid()
         {
-
             GridUtil.LoadNumericMatrixToGrid(dgQuantification, PA.QuantificationMatrix, 1, 1);
             cbWildTypeXAxis.Checked = !PA.PermutationXAxis;
             FillGridHeaders(dgQuantification);
             quantificationLoaded = true;
-
         }
         private void LoadNormalizedMatrixFromPeptideArrayToGrid()
         {

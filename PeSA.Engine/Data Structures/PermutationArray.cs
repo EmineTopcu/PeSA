@@ -1,27 +1,41 @@
 ﻿
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using PeSA.Engine.Helpers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PeSA.Engine
 {
     public enum NormalizationMode { Mean, PerRowColumn, Max}
     public class PermutationArray: BaseArray
     {
+        
         public string WildTypePeptide { get; set; }
         /// <summary>
         /// Multiple wildtype values may exist with different values per position
         /// </summary>
+        
         public Dictionary<int, double> NormalizedWildtypeWeights { get; set; }
+        
         public bool WildTypeAxisExists { get; set; }
+        
         public bool PermutationXAxis { get; set; }
+        
         public bool WildTypeYAxisTopToBottom { get; set; }
+        
+        [JsonConverter(typeof(MatrixJsonConverter<string>))]
         public string[,] PeptideMatrix { get; set; }
+        
         public double NormalizedMatrixMax { get; set; }
+        
         public double NormalizedMatrixMin { get; set; }
 
-        public double[] NormBy;
-        public char[] Permutation;
-        public NormalizationMode NormMode = NormalizationMode.Mean;
+        
+        public double[] NormBy { get; set; }
+        
+        public char[] Permutation { get; set; }
+        
+        public NormalizationMode NormMode { get; set; } = NormalizationMode.Mean;
 
         override public void SetPositiveThreshold(double value, out bool negChanged)
         {
@@ -40,7 +54,11 @@ namespace PeSA.Engine
             {
                 GenerateNormalizedPeptideWeights();
             }
-            if (mode == "NormalizedMatrixRange")
+            else if (mode == "NormalizedWildTypeWeights")
+            {
+                GenerateNormalizedWildTypeWeights();
+            }
+            else if (mode == "NormalizedMatrixRange")
             {
                 NormalizedMatrixMin = double.MaxValue;
                 NormalizedMatrixMax = double.MinValue;
@@ -55,8 +73,28 @@ namespace PeSA.Engine
             }
         }
 
+        private void GenerateNormalizedWildTypeWeights()
+        {
+            if (!NormalizedPeptideWeights.Any())
+            {
+                GenerateNormalizedPeptideWeights();
+                return;
+            }
+            NormalizedWildtypeWeights ??= new();
+            NormalizedWildtypeWeights.Clear();
+
+            for (int iRow = 0; iRow < RowCount; iRow++)
+                for (int iCol = 0; iCol < ColCount; iCol++)
+                {
+                    int pos = PermutationXAxis ? iRow : iCol;
+                    if (PeptideMatrix[iRow, iCol] == WildTypePeptide)
+                        NormalizedWildtypeWeights.Add(pos, NormalizedMatrix[iRow, iCol]);
+                }
+        }
         private void GenerateNormalizedPeptideWeights()
         {
+            NormalizedPeptideWeights ??= new();
+            NormalizedWildtypeWeights ??= new();
             NormalizedPeptideWeights.Clear();
             NormalizedWildtypeWeights.Clear();
 
@@ -250,6 +288,8 @@ namespace PeSA.Engine
             GenerateNormalizedPeptideWeights();
         }
 
+        public PermutationArray()
+        { }
         public PermutationArray(string[,] values, bool permutationXAxisIn, bool wildtypeYAxisTopToBottom, ref List<string> warnings, out string error)
         {
             error = "";
@@ -327,6 +367,8 @@ namespace PeSA.Engine
                         PA.Upgrade("NormalizedPeptideWeights");
                         PA.Upgrade("PositiveThreshold");
                     }
+                    if (PA.NormalizedWildtypeWeights == null || PA.NormalizedWildtypeWeights.Count == 0)
+                        PA.Upgrade("NormalizedWildTypeWeights");
                     if (PA.NormalizedMatrixMin == PA.NormalizedMatrixMax)
                         PA.Upgrade("NormalizedMatrixRange");
                 }

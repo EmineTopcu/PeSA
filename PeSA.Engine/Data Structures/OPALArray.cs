@@ -1,5 +1,6 @@
 ﻿using PeSA.Engine.Helpers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PeSA.Engine
 {
@@ -10,11 +11,13 @@ namespace PeSA.Engine
         public double NormalizedMatrixMax { get; set; }
         public double NormalizedMatrixMin { get; set; }
 
-        public double[] NormBy;
-        public NormalizationMode NormMode = NormalizationMode.Max;
+        public double[] NormBy { get; set; }
 
-        public char[] Permutation;
-        public string[] PositionCaptions;
+        [JsonIgnore]
+        public NormalizationMode NormMode { get; set; } = NormalizationMode.Max;
+
+        public char[] Permutation { get; set; }
+        public string[] PositionCaptions { get; set; }
         public bool PositionYAxisTopToBottom { get; set; }
 
         /// <summary>
@@ -22,30 +25,8 @@ namespace PeSA.Engine
         /// </summary>
         public string WildTypePeptide { get; set; }
 
-        public Motif Motif { get; set; }
-        override protected void Upgrade(string mode)
-        {
-            base.Upgrade(mode);
-            if (mode == "NormalizedMatrixRange")
-            {
-                if (NormalizedPeptideWeights == null || NormalizedPeptideWeights.Count == 0)
-                    GenerateNormalizedPeptideWeights();
-                else
-                {
-                    NormalizedMatrixMin = double.MaxValue;
-                    NormalizedMatrixMax = double.MinValue;
-                    for (int iRow = 0; iRow < RowCount; iRow++)
-                        for (int iCol = 0; iCol < ColCount; iCol++)
-                        {
-                            if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
-                                NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
-                            if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
-                                NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
-                        }
-                }
-            }
-        }
-
+        #region Private methods
+ 
         private void GenerateNormalizedPeptideWeights()
         {
             NormalizedPeptideWeights.Clear();
@@ -178,30 +159,25 @@ namespace PeSA.Engine
             {
                 error = "Unhandled exception: " + exc.Message;
             }
-        }
-
-        public void Renormalize()
+        }       
+         private void AddNormalizedPeptideWeight(double weight, int pos, char replaceBy)
         {
-            GenerateNormalizedPeptideWeights();
+            if (string.IsNullOrEmpty(WildTypePeptide))
+                return;
+            string s = "", e = "";
+            if (pos > 0)
+                s = WildTypePeptide[..pos];
+            if (pos < WildTypePeptide.Length - 1)
+                e = WildTypePeptide[(pos + 1)..];
+            string peptide = s + replaceBy + e;
+            if (/*peptide == WildTypePeptide && */NormalizedPeptideWeights.ContainsKey(peptide))
+                return;
+            NormalizedPeptideWeights.Add(peptide, weight);
         }
 
-        public OPALArray(string[,] values, bool permutationXAxisIn, bool positionYAxisTopToBottom, out string error)
-        {
-            error = "";
-            try
-            {
-                PermutationXAxis = permutationXAxisIn;
-                PositionYAxisTopToBottom = positionYAxisTopToBottom;
-                NormalizedPeptideWeights = new Dictionary<string, double>();
-                GenerateMatrices(values, out error);
-                if (error != "") return;
-            }
-            catch (Exception exc)
-            {
-                error = "Unhandled exception: " + exc.Message;
-            }
-        }
+        #endregion
 
+        #region Static methods
         public static void CheckPermutationAxis(string[,] values, ref bool xPossible, ref bool yPossible)
         {
             xPossible = yPossible = true;
@@ -240,7 +216,8 @@ namespace PeSA.Engine
                 OPALArray OA = null;
                 if (File.Exists(filename))
                 {
-                    OA = (OPALArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(OPALArray));
+                    string json = File.ReadAllText(filename);
+                    OA = (OPALArray)JsonUtil.ReadFromJson(json, typeof(OPALArray));
                     if (OA.Version == "")
                     {
                         OA.Version = "Old version";
@@ -265,21 +242,53 @@ namespace PeSA.Engine
             catch { return false; }
         }
 
-        private void AddNormalizedPeptideWeight(double weight, int pos, char replaceBy)
+        #endregion
+        public OPALArray()
+        { }
+        public OPALArray(string[,] values, bool permutationXAxisIn, bool positionYAxisTopToBottom, out string error)
         {
-            if (string.IsNullOrEmpty(WildTypePeptide))
-                return;
-            string s = "", e = "";
-            if (pos > 0)
-                s = WildTypePeptide[..pos];
-            if (pos < WildTypePeptide.Length - 1)
-                e = WildTypePeptide[(pos + 1)..];
-            string peptide = s + replaceBy + e;
-            if (/*peptide == WildTypePeptide && */NormalizedPeptideWeights.ContainsKey(peptide))
-                return;
-            NormalizedPeptideWeights.Add(peptide, weight);
+            error = "";
+            try
+            {
+                PermutationXAxis = permutationXAxisIn;
+                PositionYAxisTopToBottom = positionYAxisTopToBottom;
+                NormalizedPeptideWeights = new Dictionary<string, double>();
+                GenerateMatrices(values, out error);
+                if (error != "") return;
+            }
+            catch (Exception exc)
+            {
+                error = "Unhandled exception: " + exc.Message;
+            }
         }
-               
+
+        override protected void Upgrade(string mode)
+        {
+            base.Upgrade(mode);
+            if (mode == "NormalizedMatrixRange")
+            {
+                if (NormalizedPeptideWeights == null || NormalizedPeptideWeights.Count == 0)
+                    GenerateNormalizedPeptideWeights();
+                else
+                {
+                    NormalizedMatrixMin = double.MaxValue;
+                    NormalizedMatrixMax = double.MinValue;
+                    for (int iRow = 0; iRow < RowCount; iRow++)
+                        for (int iCol = 0; iCol < ColCount; iCol++)
+                        {
+                            if (NormalizedMatrix[iRow, iCol] < NormalizedMatrixMin)
+                                NormalizedMatrixMin = NormalizedMatrix[iRow, iCol];
+                            if (NormalizedMatrix[iRow, iCol] > NormalizedMatrixMax)
+                                NormalizedMatrixMax = NormalizedMatrix[iRow, iCol];
+                        }
+                }
+            }
+        }
+        public void Renormalize()
+        {
+            GenerateNormalizedPeptideWeights();
+        }
+
         /// <summary>
         /// Dictionary of weight for each char at every position
         /// </summary>

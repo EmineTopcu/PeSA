@@ -1,15 +1,33 @@
 ﻿using PeSA.Engine.Helpers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PeSA.Engine
 {
-    public class PeptideArray: BaseArray
+    public class PeptideArray : BaseArray
     {
         public int PeptideLength { get; set; }
         public bool RowsFirst { get; set; }
         public List<string> PeptideList { get; set; }
+
+        [JsonConverter(typeof(MatrixJsonConverter<string>))]
         public string[,] PeptideMatrix { get; set; }
 
+        [JsonIgnore,
+        JsonConverter(typeof(MatrixJsonConverter<int>))]
+        public int[,] BinaryMatrix
+        {
+            get
+            {
+                int[,] _BinaryMatrix = new int[RowCount, ColCount];
+                for (int i = 0; i < RowCount; i++)
+                    for (int j = 0; j < ColCount; j++)
+                    {
+                        _BinaryMatrix[i, j] = NormalizedMatrix[i, j] <= PositiveThreshold ? 0 : 1;
+                    }
+                return _BinaryMatrix;
+            }
+        }
         public double MaxValue { get; private set; }
 
         public double FrequencyThreshold { get; set; }
@@ -17,7 +35,51 @@ namespace PeSA.Engine
         public char KeyAA { get; set; }
 
         public List<string> ModifiedPeptides { get; set; }
-        
+        #region Private methods
+        private void GenerateModifiedPeptideList()
+        {
+            ModifiedPeptides.Clear();
+            foreach (string s in NormalizedPeptideWeights.Keys)
+            {
+                if (NormalizedPeptideWeights[s] >= PositiveThreshold)
+                    AddModifiedPeptide(s);
+            }
+        }
+        private void AddModifiedPeptide(string s)
+        {
+            if (!ModifiedPeptides.Contains(s))
+                ModifiedPeptides.Add(s);
+        }
+
+        private void AddNormalizedPeptideWeight(string peptide, double weight)
+        {
+            if (string.IsNullOrEmpty(peptide))
+                return;
+            if (NormalizedPeptideWeights.ContainsKey(peptide))
+                return;
+            NormalizedPeptideWeights.Add(peptide, weight);
+        }
+        #endregion
+        public static PeptideArray ReadFromFile(string filename)
+        {
+            try
+            {
+                PeptideArray PA = null;
+                if (File.Exists(filename))
+                {
+                    PA = (PeptideArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(PeptideArray));
+                    if (PA.Version == "")
+                    {
+                        PA.Version = "Old version";
+                        PA.Upgrade("PositiveThreshold");
+                    }
+                }
+                return PA;
+            }
+            catch { return null; }
+        }
+        public PeptideArray()
+        { }
         public PeptideArray(int nRow, int nCol, bool rowsFirst)
         {
             RowCount = nRow;
@@ -119,35 +181,11 @@ namespace PeSA.Engine
             NormalizationValue = MaxValue;
         }
 
-        private void AddModifiedPeptide(string s)
-        {
-            if (!ModifiedPeptides.Contains(s))
-                ModifiedPeptides.Add(s);
-        }
-
-        private void AddNormalizedPeptideWeight(string peptide, double weight)
-        {
-            if (string.IsNullOrEmpty(peptide))
-                return;
-            if (NormalizedPeptideWeights.ContainsKey(peptide))
-                return;
-            NormalizedPeptideWeights.Add(peptide, weight);
-        }
 
         override public void SetPositiveThreshold(double value, out bool negChanged)
         {
             base.SetPositiveThreshold(value, out negChanged);
             GenerateModifiedPeptideList();
-        }
-
-        private void GenerateModifiedPeptideList()
-        {
-            ModifiedPeptides.Clear();
-            foreach (string s in NormalizedPeptideWeights.Keys)
-            {
-                if (NormalizedPeptideWeights[s] >= PositiveThreshold)
-                    AddModifiedPeptide(s);
-            }
         }
 
         public void Normalize(double normBy)
@@ -163,36 +201,7 @@ namespace PeSA.Engine
                 }
             GenerateModifiedPeptideList();
         }
-        public int[,] BinaryMatrix {
-            get
-            {
-                int[,] _BinaryMatrix = new int[RowCount, ColCount];
-                for (int i = 0; i < RowCount; i++)
-                    for (int j = 0; j < ColCount; j++)
-                    {
-                        _BinaryMatrix[i, j] = NormalizedMatrix[i, j] <= PositiveThreshold ? 0 : 1;
-                    }
-                return _BinaryMatrix;
-            }
-        }
-        public static PeptideArray ReadFromFile(string filename)
-        {
-            try
-            {
-                PeptideArray PA = null;
-                if (File.Exists(filename))
-                {
-                    PA = (PeptideArray)JsonUtil.ReadFromJson(File.ReadAllText(filename), typeof(PeptideArray));
-                    if (PA.Version == "")
-                    {
-                        PA.Version = "Old version";
-                        PA.Upgrade("PositiveThreshold");
-                    }
-                }
-                return PA;
-            }
-            catch { return null; }
-        }
+
 
         public static bool SaveToFile(string filename, PeptideArray PA)
         {
