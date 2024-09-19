@@ -59,10 +59,10 @@ namespace PeSA.Engine
         }
         public Color GetColorOfAminoAcid(char aa)
         {
-            if (AminoAcidMotifColors.ContainsKey(aa))
-                return AminoAcidMotifColors[aa];
-            if (DefaultAminoAcidMotifColors.ContainsKey(aa))
-                return DefaultAminoAcidMotifColors[aa];
+            if (AminoAcidMotifColors.TryGetValue(aa, out Color value))
+                return value;
+            if (DefaultAminoAcidMotifColors.TryGetValue(aa, out Color value2))
+                return value2;
             return Color.Black;
         }
         public void SetDefaultColors()
@@ -231,7 +231,7 @@ namespace PeSA.Engine
                 else
                     SetImage(NegativeImages, aa, bmp);
             }
-            catch (Exception exc) { }
+            catch (Exception) { }
         }
         public static Bitmap GetAminoAcidImage(char c, bool pos)
         {
@@ -240,10 +240,10 @@ namespace PeSA.Engine
                 Settings settings = Settings.Load("default.settings");
                 settings.GenerateImageResources();
             }
-            if (!PositiveImages.ContainsKey(c))
+            if (!PositiveImages.TryGetValue(c, out Bitmap value))
                 return null;
             if (pos)
-                return PositiveImages[c];
+                return value;
             else
                 return NegativeImages[c];
         }
@@ -258,7 +258,7 @@ namespace PeSA.Engine
                 GenerateImageResourcesOfAminoAcid(c, "Image" + c + ".png", true, GetColorOfAminoAcid(c));
             }
         }
-        public void GenerateNegativeImageResources()
+        public static void GenerateNegativeImageResources()
         {
             if (NegativeImages != null && NegativeImages.Count != 0)
                 return;

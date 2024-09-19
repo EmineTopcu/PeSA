@@ -173,10 +173,12 @@ namespace PeSA.Engine
             for (int i = 0; i < maxRow; i++)
                 for (int j = 0; j < maxCol; j++)
                 {
-                    double val = -1;
-                    Double.TryParse(values[rowind + i, colind + j], out val);
-                    if (val > MaxValue) MaxValue = val;
-                    QuantificationMatrix[i, j] = val;
+                    if (double.TryParse(values[rowind + i, colind + j], out double val))
+                    {
+                        if (val > MaxValue) MaxValue = val;
+                        QuantificationMatrix[i, j] = val;
+                    }
+                    else QuantificationMatrix[i, j] = -1;
                 }
             NormalizationValue = MaxValue;
         }

@@ -56,13 +56,53 @@ namespace PeSA.Engine
         /// <summary>
         /// wildtype weight per position
         /// </summary>
-        private Dictionary<int, double> WildtypeWeights;
+        private Dictionary<int, double> WildtypeWeights = new();
         private bool columnsGenerated = false;
 
         public Dictionary<int, Dictionary<char, double>> PositiveColumns { get; set; }
         public Dictionary<int, Dictionary<char, double>> NegativeColumns { get; set; }
         public Dictionary<int, Dictionary<char, double>> Frequencies { get; set; }
-        public List<char> AminoAcidsUsed;
+        private List<char> _AminoAcidsUsed = null;
+        public List<char> AminoAcidsUsed
+        {
+            get
+            {
+                if (_AminoAcidsUsed == null)
+                {
+                    _AminoAcidsUsed = new List<char>();
+                    if (!string.IsNullOrEmpty(WildTypePeptide))
+                    {
+                        for (int i = 0; i < PeptideLength; i++)
+                        {
+                            char c = WildTypePeptide[i];
+                            if (c != 'X')
+                            {
+                                if (!_AminoAcidsUsed.Contains(c))
+                                    _AminoAcidsUsed.Add(c);
+                            }
+                        }
+                    }
+                    if (PeptideWeights != null)
+                    {
+                        foreach (string s in PeptideWeights.Keys.Where(ps => ps != WildTypePeptide))
+                        {
+                            for (int i = 0; i < PeptideLength; i++)
+                            {
+                                char c = s[i];
+                                //WildTypePeptide is blank/null for OPALs
+                                if ((string.IsNullOrEmpty(WildTypePeptide) && c != 'X') || (!string.IsNullOrEmpty(WildTypePeptide) && c != WildTypePeptide[i]))
+                                {
+                                    if (!_AminoAcidsUsed.Contains(c))
+                                        _AminoAcidsUsed.Add(c);
+                                }
+                            }
+                        }
+                    }
+                }
+                return _AminoAcidsUsed;
+
+            }
+        }
 
         public double MaxPosWeight
         {
@@ -125,16 +165,16 @@ namespace PeSA.Engine
             GenerateFrequencies();
         }
 
-        private void AddColumnValue(Dictionary<int, Dictionary<char, List<double>>> _Columns, int pos, char c, double weight)
+        private static void AddColumnValue(Dictionary<int, Dictionary<char, List<double>>> _Columns, int pos, char c, double weight)
         {
-            if (_Columns == null || !_Columns.ContainsKey(pos)) return;
-            Dictionary<char, List<double>> column = _Columns[pos];
+            if (_Columns == null || !_Columns.TryGetValue(pos, out Dictionary<char, List<double>> value)) return;
+            Dictionary<char, List<double>> column = value;
             if (!column.ContainsKey(c))
                 column.Add(c, new List<double>());
             column[c].Add(weight);
         }
 
-        public Dictionary<int, Dictionary<char, double>> GetScaledColumns(Dictionary<int, Dictionary<char, double>> _Columns)
+        public static Dictionary<int, Dictionary<char, double>> GetScaledColumns(Dictionary<int, Dictionary<char, double>> _Columns)
         {
             if (_Columns == null || !_Columns.Any())
                 return null;
@@ -180,7 +220,7 @@ namespace PeSA.Engine
                 Dictionary<int, Dictionary<char, List<double>>> _NegativeColumns = new();
                 PositiveColumns = new Dictionary<int, Dictionary<char, double>>();
                 NegativeColumns = new Dictionary<int, Dictionary<char, double>>();
-                AminoAcidsUsed = new List<char>();
+                _AminoAcidsUsed = new();
                 for (int i = 0; i < PeptideLength; i++)
                 {
                     _PositiveColumns.Add(i, new Dictionary<char, List<double>>());
@@ -194,10 +234,10 @@ namespace PeSA.Engine
                         char c = WildTypePeptide[i];
                         if (c != 'X')
                         {
-                            double weight = WildtypeWeights.ContainsKey(i) ? WildtypeWeights[i] : 1;
+                            double weight = WildtypeWeights.TryGetValue(i, out double value) ? value : 1;
                             AddColumnValue(_PositiveColumns, i, c, weight);
-                            if (!AminoAcidsUsed.Contains(c))
-                                AminoAcidsUsed.Add(c);
+                            if (!_AminoAcidsUsed.Contains(c))
+                                _AminoAcidsUsed.Add(c);
                         }
                     }
                 }
@@ -205,48 +245,48 @@ namespace PeSA.Engine
 
                 //Positive columns have to be generated first to set MaxPosWeight to be used for negative distance calculations
                 double negReference = 0;
-                foreach (string s in PeptideWeights.Keys.Where(ps => ps != WildTypePeptide))
+                if (PeptideWeights != null)
                 {
-                    for (int i = 0; i < PeptideLength; i++)
+                    foreach (string s in PeptideWeights.Keys.Where(ps => ps != WildTypePeptide))
                     {
-                        char c = s[i];
-                        //WildTypePeptide is blank/null for OPALs
-                        if ((string.IsNullOrEmpty(WildTypePeptide) && c != 'X') || (!string.IsNullOrEmpty(WildTypePeptide) && c != WildTypePeptide[i]))
+                        for (int i = 0; i < PeptideLength; i++)
                         {
-                            double weight = PeptideWeights[s];
-                            if (weight > negReference)
-                                negReference = weight;
-                            if (weight >= positiveThreshold)
+                            char c = s[i];
+                            //WildTypePeptide is blank/null for OPALs
+                            if ((string.IsNullOrEmpty(WildTypePeptide) && c != 'X') || (!string.IsNullOrEmpty(WildTypePeptide) && c != WildTypePeptide[i]))
                             {
-                                AddColumnValue(_PositiveColumns, i, c, weight);
+                                double weight = PeptideWeights[s];
+                                if (weight > negReference)
+                                    negReference = weight;
+                                if (weight >= positiveThreshold)
+                                {
+                                    AddColumnValue(_PositiveColumns, i, c, weight);
+                                }
+                                if (!_AminoAcidsUsed.Contains(c))
+                                    _AminoAcidsUsed.Add(c);
                             }
-                            if (!AminoAcidsUsed.Contains(c))
-                                AminoAcidsUsed.Add(c);
+                        }
+                    }
+
+                    //Negative Columns
+                    //a different loop is required for negReference
+                    foreach (string s in PeptideWeights.Keys.Where(ps => ps != WildTypePeptide))
+                    {
+                        for (int i = 0; i < PeptideLength; i++)
+                        {
+                            char c = s[i];
+                            //WildTypePeptide is blank/null for OPALs
+                            if ((string.IsNullOrEmpty(WildTypePeptide) && c != 'X') || (!string.IsNullOrEmpty(WildTypePeptide) && c != WildTypePeptide[i]))
+                            {
+                                double weight = PeptideWeights[s];
+                                if (weight < negativeThreshold)
+                                {
+                                    AddColumnValue(_NegativeColumns, i, c, negReference - weight);
+                                }
+                            }
                         }
                     }
                 }
-
-                //Negative columns
-                foreach (string s in PeptideWeights.Keys.Where(ps => ps != WildTypePeptide))
-                {
-                    for (int i = 0; i < PeptideLength; i++)
-                    {
-                        char c = s[i];
-                        //WildTypePeptide is blank/null for OPALs
-                        if ((string.IsNullOrEmpty(WildTypePeptide) && c != 'X') || (!string.IsNullOrEmpty(WildTypePeptide) && c != WildTypePeptide[i]))
-                        {
-                            double weight = PeptideWeights[s];
-                            if (weight < negativeThreshold)
-                            {
-                                AddColumnValue(_NegativeColumns, i, c, negReference - weight);
-                            }
-                            //TODO optimize - there can be a mode // break;//there can be one aa change per peptide 
-                            if (!AminoAcidsUsed.Contains(c))
-                                AminoAcidsUsed.Add(c);
-                        }
-                    }
-                }
-
                 for (int i = 0; i < PeptideLength; i++)
                 {
                     PositiveColumns.Add(i, new Dictionary<char, double>());
@@ -315,7 +355,7 @@ namespace PeSA.Engine
 
 
         #region Bitmap functions
-        private bool IsVerticallyEmpty(Bitmap img, int x)
+        private static bool IsVerticallyEmpty(Bitmap img, int x)
         {
             var white = Color.White.ToArgb();
             for (var y = 0; y < img.Height; y += 3)
@@ -324,7 +364,7 @@ namespace PeSA.Engine
             return true;
         }
 
-        private bool IsHorizontallyEmpty(Bitmap img, int y)
+        private static bool IsHorizontallyEmpty(Bitmap img, int y)
         {
             var white = Color.White.ToArgb();
             for (var x = 0; x < img.Width; x += 3)
@@ -333,7 +373,7 @@ namespace PeSA.Engine
             return true;
         }
 
-        private RectangleF SelectFilledPixels(Bitmap img)
+        private static RectangleF SelectFilledPixels(Bitmap img)
         {
             var left = 0;
             var top = 0;
@@ -370,7 +410,7 @@ namespace PeSA.Engine
 
             return new RectangleF(left, top, right - left, bottom - top);
         }
-        private Bitmap GetLetterImage(Char c, int width, int height, Color color)
+        private static Bitmap GetLetterImage(char c, int width, int height, Color color)
         {
             if (width <= 0 || height <= 0) return null;
 
@@ -392,7 +432,7 @@ namespace PeSA.Engine
                     }
                     return scaledBitmap;
                 }
-                catch (Exception exc) { }
+                catch (Exception) { }
             }
             var initialFontSize = (int)(Math.Max(width, height) / 1.5);
 
@@ -491,7 +531,7 @@ namespace PeSA.Engine
                                     break;
                                 }
                                 var letterHeight = (int)Math.Round(usableHeight * kvp.Value);
-                                Color color = defColor ?? (settings.AminoAcidMotifColors.ContainsKey(kvp.Key) ? settings.AminoAcidMotifColors[kvp.Key] : Color.Black);
+                                Color color = defColor ?? (settings.AminoAcidMotifColors.TryGetValue(kvp.Key, out Color value) ? value : Color.Black);
                                 var letterImage = GetLetterImage(kvp.Key, letterWidth, letterHeight, color);
                                 if (letterImage != null)
                                 {
@@ -535,7 +575,7 @@ namespace PeSA.Engine
                 }
                 return motif;
             }
-            catch (Exception exc) { return null; }
+            catch (Exception) { return null; }
         }
 
         public static bool SaveToFile(string filename, Motif motif)
@@ -609,15 +649,14 @@ namespace PeSA.Engine
             Pen negPen = new(brush);
             foreach (char aachar in AminoAcidsUsed)
             {
-                Color col = settings.AminoAcidMotifColors.ContainsKey(aachar) ?
-                    settings.AminoAcidMotifColors[aachar] : Color.Black;
+                Color col = settings.AminoAcidMotifColors.TryGetValue(aachar, out Color value) ? value : Color.Black;
                 brush = new SolidBrush(col);
                 Pen p = new(brush);
                 aaPens.Add(aachar, p);
             }
 
             Font font = new("Microsoft Sans Serif", fontsize, FontStyle.Regular);
-            float xcoor = 5, ycoor = 5;
+            float xcoor, ycoor = 5;
             using (var g = Graphics.FromImage(bmp))
             {
                 g.FillRectangle(Brushes.White, 0, 0, width, height);
@@ -639,10 +678,10 @@ namespace PeSA.Engine
                         Dictionary<char, double> positive = PositiveColumns[pos];
                         Dictionary<char, double> negative = NegativeColumns[pos];
                         double? val = null;
-                        if (positive.ContainsKey(aachar))
-                            val = positive[aachar];
-                        if (negative.ContainsKey(aachar))
-                            val = negative[aachar] * -1;
+                        if (positive.TryGetValue(aachar, out double value))
+                            val = value;
+                        if (negative.TryGetValue(aachar, out double value2))
+                            val = value2 * -1;
                         if (val != null)
                         {
                             float f = (float)val;
