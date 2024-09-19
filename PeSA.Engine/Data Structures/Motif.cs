@@ -316,6 +316,8 @@ namespace PeSA.Engine
         {
             try
             {
+                if (PeptideWeights == null)
+                    return null;
                 List<string> peptides = PeptideWeights.Select(kvp => kvp.Key).ToList();
                 Dictionary<int, Dictionary<char, int>> frequencies;
                 if (PeptideLength == 0)

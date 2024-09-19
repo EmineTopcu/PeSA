@@ -237,7 +237,7 @@ namespace PeSA.Engine
         {
             if (PositiveImages == null || PositiveImages.Count == 0)
             {
-                Settings settings = Settings.Load("default.settings");
+                Settings settings = Load("default.settings");
                 settings.GenerateImageResources();
             }
             if (!PositiveImages.TryGetValue(c, out Bitmap value))

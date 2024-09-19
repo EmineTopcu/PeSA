@@ -1,3 +1,6 @@
+__Version 2.2.2__
+* Buf fix in loading a motif file
+
 __Version 2.2.1__
 * Buf fixes related to backward compatibility with the new Json library
 

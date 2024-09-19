@@ -1,12 +1,14 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using PeSA.Engine.Data_Structures;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace PeSA.Engine.Helpers
 {
     public class FileUtil
     {
+        public static bool OpenExcelFile = true;
         public static string ImageToBase64(Image image)
         {
             using MemoryStream m = new();
@@ -602,6 +604,15 @@ namespace PeSA.Engine.Helpers
             catch { return false; }
         }
 
+        public static void AfterExcelExport(string fileName)
+        {
+            try
+            {
+                if (!OpenExcelFile) return;
+                Process.Start(new ProcessStartInfo { FileName = fileName, UseShellExecute = true });
+            }
+            catch { }
+        }
         public static bool ExportPeptideArrayToExcel(string fileName, PeptideArray PA, bool overwrite, out string errormsg)
         {
             try
@@ -673,7 +684,7 @@ namespace PeSA.Engine.Helpers
                     errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
                     return false;
                 }
-
+                AfterExcelExport(fileName);    
                 return true;
 
             }
@@ -797,7 +808,7 @@ namespace PeSA.Engine.Helpers
                     errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
                     return false;
                 }
-
+                AfterExcelExport(fileName);
                 return true;
 
             }
@@ -871,7 +882,7 @@ namespace PeSA.Engine.Helpers
                     errormsg = "There is a problem with saving the export file. Please make sure the file is not open and you have writing rights to the specific folder.";
                     return false;
                 }
-
+                AfterExcelExport(fileName);
                 return true;
 
             }
@@ -914,6 +925,7 @@ namespace PeSA.Engine.Helpers
                 errormsg = "There is a problem with creating the export file. Please try again.";
                 return false;
             }
+            AfterExcelExport(fileName);
             return true;
         }
 
@@ -949,6 +961,7 @@ namespace PeSA.Engine.Helpers
                 errormsg = "There is a problem with creating the export file. Please try again.";
                 return false;
             }
+            AfterExcelExport(fileName);
             return true;
         }
     }
