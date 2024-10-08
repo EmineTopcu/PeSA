@@ -54,7 +54,7 @@ namespace PeSA.Engine
 
     static public class AminoAcids
     {
-        static Dictionary<char, AminoAcid> AminoAcidList = new Dictionary<char, AminoAcid>()
+        static Dictionary<char, AminoAcid> AminoAcidList = new()
             {
                 {'A', new AminoAcid {Name="Alanine", Polarity="nonpolar", Charge="neutral", Abbrev1='A', Abbrev3 = "Ala", MolecularWeight=89.10, ResidueWeight = 71.08, pKa1 = 2.34, pKa2=9.69, pKa3=null, pI =6.00 } },//C3H7NO2 	residue: C3H5NO
                 {'R', new AminoAcid {Name="Arginine", Polarity="basic polar", Charge="positive", Abbrev1='R', Abbrev3 = "Arg", MolecularWeight=174.20, ResidueWeight = 156.19, pKa1 = 2.17, pKa2=9.04, pKa3=12.48, pI =10.76} },//C6H14N4O2 	C6H12N4O

@@ -1,7 +1,9 @@
-﻿using PeSA.Engine.Helpers;
-using System.Drawing;
-using System.Text.Json;
+﻿#pragma warning disable CA1416 
+//FUTURE:
+//System.Drawing can be replaced by SixLabors/ImageSharp with modifications for cross platform application
 
+using PeSA.Engine.Helpers;
+using System.Drawing;
 
 namespace PeSA.Engine
 {

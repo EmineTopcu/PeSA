@@ -45,7 +45,7 @@
             this.lPTMA.Name = "lPTMA";
             this.lPTMA.Size = new System.Drawing.Size(320, 25);
             this.lPTMA.TabIndex = 0;
-            this.lPTMA.Text = "Peptide Specificity Analyst - PeSA 2.0";
+            this.lPTMA.Text = "Peptide Specificity Analyst - PeSA 2.2";
             // 
             // lVersionWindows
             // 

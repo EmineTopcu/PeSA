@@ -228,7 +228,7 @@ namespace PeSA.Windows
                         col.Width = width;
                 else if (dg.SelectedCells.Count > 0)
                 {
-                    List<int> colList = new List<int>();
+                    List<int> colList = new();
                     foreach (DataGridViewCell cell in dg.SelectedCells)
                     {
                         if (!colList.Contains(cell.ColumnIndex))
@@ -262,7 +262,7 @@ namespace PeSA.Windows
                         row.Height = height;
                 else if (dg.SelectedCells.Count > 0)
                 {
-                    List<int> rowList = new List<int>();
+                    List<int> rowList = new();
                     foreach (DataGridViewCell cell in dg.SelectedCells)
                     {
                         if (!rowList.Contains(cell.RowIndex))

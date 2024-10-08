@@ -1,4 +1,8 @@
-﻿using OfficeOpenXml;
+﻿#pragma warning disable CA1416 
+//FUTURE:
+//System.Drawing can be replaced by SixLabors/ImageSharp with modifications for cross platform application
+
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using PeSA.Engine.Data_Structures;
 using System.Diagnostics;
@@ -9,6 +13,12 @@ namespace PeSA.Engine.Helpers
     public class FileUtil
     {
         public static bool OpenExcelFile = true;
+
+        private static void ClearWorksheets(ExcelPackage package)
+        {
+            while (package.Workbook.Worksheets.Count > 0)
+                package.Workbook.Worksheets.Delete(0);
+        }
         public static string ImageToBase64(Image image)
         {
             using MemoryStream m = new();
@@ -24,6 +34,23 @@ namespace PeSA.Engine.Helpers
             ms.Write(imageBytes, 0, imageBytes.Length);
             Image image = Image.FromStream(ms, true);
             return image;
+        }
+
+        private static Stream Base64ToStream(string base64String)
+        {
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+            MemoryStream ms = new(imageBytes, 0, imageBytes.Length);
+            ms.Write(imageBytes, 0, imageBytes.Length);
+            return ms;
+        }
+        private static Stream BitmapToStream(Bitmap bitmap)
+        {
+            MemoryStream memoryStream = new();
+            // Save the bitmap to the stream in PNG format
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            // Rewind the stream to the beginning
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
         private static string[,] ReadArrayFromFile(string fileName, out bool wtStripped)
@@ -479,6 +506,13 @@ namespace PeSA.Engine.Helpers
 
         private static void WriteToSheetMotif(ExcelPackage package, Motif motif)
         {
+            //check if it is a frequency based motif
+            if (motif.PositiveColumns == null && motif.Frequencies != null)
+            {
+                int row = 1;
+                WriteToSheetFrequencyMotif(package, motif, "Title", ref row);
+                return;
+            }
             ExcelWorksheet worksheet = GetWorksheetBlank(package, "Motif");
 
             worksheet.Drawings.Clear();
@@ -504,7 +538,7 @@ namespace PeSA.Engine.Helpers
             Bitmap bmp = motif.GetPositiveMotif(widthImage, heightImage);
             if (bmp != null)
             {
-                var picture = worksheet.Drawings.AddPicture("Positive Motif", bmp);
+                var picture = worksheet.Drawings.AddPicture("Positive Motif", BitmapToStream(bmp));
                 picture.SetPosition(rowind, 0, 1, 0);
             }
 
@@ -522,7 +556,7 @@ namespace PeSA.Engine.Helpers
             bmp = motif.GetNegativeMotif(widthImage, heightImage);
             if (bmp != null)
             {
-                var picture = worksheet.Drawings.AddPicture("Negative Motif", bmp);
+                var picture = worksheet.Drawings.AddPicture("Negative Motif", BitmapToStream(bmp));
                 picture.SetPosition(rowind, 0, 1, 0);
             }
 
@@ -538,7 +572,7 @@ namespace PeSA.Engine.Helpers
             bmp = motif.GetBarChart(widthImage / 2);
             if (bmp != null)
             {
-                var picture = worksheet.Drawings.AddPicture("Bar Chart", bmp);
+                var picture = worksheet.Drawings.AddPicture("Bar Chart", BitmapToStream(bmp));
                 picture.SetPosition(rowind, 0, 1, 0);
             }
 
@@ -568,7 +602,7 @@ namespace PeSA.Engine.Helpers
             Bitmap bmp = motif.GetFrequencyMotif(widthImage, heightImage);
             if (bmp != null)
             {
-                var picture = worksheet.Drawings.AddPicture(title, bmp);
+                var picture = worksheet.Drawings.AddPicture(title, BitmapToStream(bmp));
                 picture.SetPosition(rowind, 0, 1, 0);
             }
             int occupiedRows = (int)Math.Round(heightImage / worksheet.Row(rowind).Height);
@@ -597,7 +631,7 @@ namespace PeSA.Engine.Helpers
                     heightImage = settings.MotifHeight;
                     widthImage = settings.MotifWidth;
                 }
-                var picture = worksheet.Drawings.AddPicture("Reference Image", Base64ToImage(array.ImageStr));
+                var picture = worksheet.Drawings.AddPicture("Reference Image", Base64ToStream(array.ImageStr));
                 picture.SetPosition(3, 0, 1, 0);
                 return true;
             }
@@ -623,10 +657,7 @@ namespace PeSA.Engine.Helpers
                     return false;
                 using ExcelPackage package = new(existingFile);
                 if (existingFile.Exists)
-                {
-                    while (package.Workbook.Worksheets.Count > 0)
-                        package.Workbook.Worksheets.Delete(1);
-                }
+                    ClearWorksheets(package);
                 ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                 int lastrow = MatrixToExcel(worksheet, 1, "Peptide Matrix", PA.PeptideMatrix);
@@ -741,10 +772,7 @@ namespace PeSA.Engine.Helpers
                     return false;
                 using ExcelPackage package = new(existingFile);
                 if (existingFile.Exists)
-                {
-                    while (package.Workbook.Worksheets.Count > 0)
-                        package.Workbook.Worksheets.Delete(1);
-                }
+                    ClearWorksheets(package);
                 ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                 List<string> headerrow = new();
@@ -829,10 +857,7 @@ namespace PeSA.Engine.Helpers
                     return false;
                 using ExcelPackage package = new(existingFile);
                 if (existingFile.Exists)
-                {
-                    while (package.Workbook.Worksheets.Count > 0)
-                        package.Workbook.Worksheets.Delete(1);
-                }
+                    ClearWorksheets(package);
                 ExcelWorksheet worksheet = GetWorksheetBlank(package, "Arrays");
 
                 List<string> headerrow = new();
@@ -903,10 +928,7 @@ namespace PeSA.Engine.Helpers
                     return false;
                 using ExcelPackage package = new(existingFile);
                 if (existingFile.Exists)
-                {
-                    while (package.Workbook.Worksheets.Count > 0)
-                        package.Workbook.Worksheets.Delete(1);
-                }
+                    ClearWorksheets(package);
                 WriteToSheetScoreList(package, scorer);
                 WriteToSheetMotif(package, scorer.Motif);
 
@@ -939,10 +961,7 @@ namespace PeSA.Engine.Helpers
                     return false;
                 using ExcelPackage package = new(existingFile);
                 if (existingFile.Exists)
-                {
-                    while (package.Workbook.Worksheets.Count > 0)
-                        package.Workbook.Worksheets.Delete(1);
-                }
+                    ClearWorksheets(package);
                 WriteToSheetValidator(package, validator);
                 WriteToSheetMotif(package, validator.Motif);
 

@@ -16,7 +16,7 @@ namespace PeSA.Engine
         static public List<string> ShiftPeptides(List<string> peptidesToShift, char keyAA,
             int pepsize, int midpoint, out List<string> replacements)
         {
-            List<string> peptidesShifted = new List<string>();
+            List<string> peptidesShifted = new();
             replacements = new List<string>();
             int maxshift = pepsize - 1 - midpoint;
             if (midpoint > maxshift)

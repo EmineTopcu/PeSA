@@ -140,7 +140,7 @@ namespace PeSA.Windows
                     rowHeader = OA.Permutation;
                 }
 
-                ColorMatrix cm = new ColorMatrix();
+                ColorMatrix cm = new();
                 cm.SetData(OA.NormalizedMatrix, colHeader, rowHeader);
                 mdMatrix.SetThreshold(OA.PositiveThreshold, OA.NegativeThreshold);
                 mdMatrix.SetColorMatrix(cm);
@@ -271,7 +271,6 @@ namespace PeSA.Windows
                 for (int iCol = 0; iCol < dgQuantification.ColumnCount; iCol++)
                     values[iRow, iCol] = dgQuantification[iCol, iRow].Value?.ToString() ?? "";
 
-            string error = "";
             bool xPossible = true, yPossible = true;
             OPALArray.CheckPermutationAxis(values, ref xPossible, ref yPossible);
             if (xPossible && yPossible)
@@ -291,9 +290,9 @@ namespace PeSA.Windows
                 MessageBox.Show("Please make sure one the axes have OPAL array (each amino acid has to exist at most once)", Analyzer.ProgramName);
                 return;
             };
-            OA = new OPALArray(values, PermutationXAxis, cbYAxisTopToBottom.Checked, out error);
-            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
-            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
+            OA = new OPALArray(values, PermutationXAxis, cbYAxisTopToBottom.Checked, out string error);
+            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out _);
+            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out _);
             if (error != "")
             {
                 MessageBox.Show(error, Analyzer.ProgramName);
@@ -313,8 +312,7 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgExcelExport.FileName;
-            string errormsg = "";
-            if (FileUtil.ExportOPALArrayToExcel(filename, OA, true, out errormsg))
+            if (FileUtil.ExportOPALArrayToExcel(filename, OA, true, out string errormsg))
                 MessageBox.Show("Project is exported as an excel file:" + filename, Analyzer.ProgramName);
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);
@@ -331,8 +329,8 @@ namespace PeSA.Windows
         {
             if (OA == null)
                 return;
-            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
-            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);
+            OA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out _);
+            OA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out _);
             ColorGridsandDrawMotifs();
             mdMatrix.SetThreshold(OA.PositiveThreshold, OA.NegativeThreshold);
         }
@@ -432,8 +430,7 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgSaveMotif.FileName;
-            if (Motif == null)
-                Motif = new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
+            Motif ??= new Motif(OA.NormalizedPeptideWeights, OA.PositionCaptions, OA.PositiveThreshold, OA.NegativeThreshold);
 
             if (Motif.SaveToFile(filename, Motif))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);

@@ -35,7 +35,7 @@ namespace PeSA.Engine.Data_Structures
         {
             RawSequence = rawSequence.Trim();
             string[] lines = Regex.Split(RawSequence, "\r\n|\r|\n");
-            if (lines.Count() == 0)
+            if (lines.Length == 0)
             {
                 parseError = "Empty string";
                 return;
@@ -56,7 +56,7 @@ namespace PeSA.Engine.Data_Structures
                 Caption = rawSequenceLines[0].Substring(1);
                 ind++;
             }
-            for (int iter = ind; iter < rawSequenceLines.Count(); iter++)
+            for (int iter = ind; iter < rawSequenceLines.Count; iter++)
             {
                 string line = rawSequenceLines[iter].Trim();
                 if (line.StartsWith(">")) //another protein sequence
@@ -86,24 +86,24 @@ namespace PeSA.Engine.Data_Structures
         public static List<Protein> GenerateProteins(string fullText)
         {
             List<string> lines = Regex.Split(fullText, "\r\n|\r|\n").ToList();
-            List<Protein> proteins = new List<Protein>();
-            List<string> curLines = new List<string>();
+            List<Protein> proteins = new();
+            List<string> curLines = new();
             foreach (string line in lines)
             {
                 if (line.Trim().StartsWith(">")) //new protein sequence
                 {
-                    if (curLines.Count() != 0) //not first sequence
+                    if (curLines.Count != 0) //not first sequence
                     {
-                        Protein p = new Protein(curLines);
+                        Protein p = new(curLines);
                         proteins.Add(p);
                         curLines.Clear();
                     }
                 }
                 curLines.Add(line.Trim());
             }
-            if (curLines.Count() != 0)
+            if (curLines.Count != 0)
             {
-                Protein p = new Protein(curLines);
+                Protein p = new(curLines);
                 proteins.Add(p);
                 curLines.Clear();
             }

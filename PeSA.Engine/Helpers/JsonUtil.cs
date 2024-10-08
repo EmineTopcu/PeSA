@@ -23,7 +23,7 @@ namespace PeSA.Engine.Helpers
                 throw new JsonException();
             }
 
-            List<T[]> listMatrix = new List<T[]>();
+            List<T[]> listMatrix = new();
 
             reader.Read();
             int colCount = 0;

@@ -1,4 +1,9 @@
-__Version 2.2.2__
+__Version 2.2.3__
+* Bug fix in exporting frequency based motif to Excel
+* Upgrade third party NuGet packages (EPPLUS)
+* Misc code cleaning
+
+* __Version 2.2.2__
 * Buf fix in loading a motif file
 
 __Version 2.2.1__

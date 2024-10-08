@@ -184,7 +184,7 @@ namespace PeSA.Engine
             if (values == null) return;
             int rowCount = values.GetLength(0) - 1;
             int colCount = values.GetLength(1) - 1;
-            List<char> aaList = new List<char>();
+            List<char> aaList = new();
             for (int iCol = 1; iCol <= colCount; iCol++)
             {
                 string s = values[0, iCol].Trim();

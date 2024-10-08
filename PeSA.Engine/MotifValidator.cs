@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PeSA.Engine
+﻿namespace PeSA.Engine
 {
     public class MotifValidator
     {
@@ -35,22 +28,18 @@ namespace PeSA.Engine
             for (int pos = 0; pos < Motif.PeptideLength; pos++)
             {
                 string substr = "";
-                if (Motif.PositiveColumns[pos].Count() <= PositiveSpecificity)
-                {
-                    foreach (char c in Motif.PositiveColumns[pos].Keys)
-                        substr += c.ToString();
-                }
-                if (substr == "")
+                if (Motif.PositiveColumns != null && Motif.PositiveColumns[pos].Count <= PositiveSpecificity)
+                    substr = string.Concat(Motif.PositiveColumns[pos].Keys);
+                else if (Motif.Frequencies != null && Motif.Frequencies[pos].Count <= PositiveSpecificity)
+                    substr = string.Concat(Motif.Frequencies[pos].Keys);
+                if (substr == "" && Motif.WildTypePeptide != null)
                     substr = Motif.WildTypePeptide[pos].ToString();
                 if (substr.Length > 1)
                     PositiveTemplate += "[" + substr + "]";
                 else
                     PositiveTemplate += substr;
-                if (Motif.NegativeColumns[pos].Count() <= NegativeSpecificity)
-                {
-                    foreach (char c in Motif.NegativeColumns[pos].Keys)
-                        substr += c.ToString();
-                }
+                if (Motif.NegativeColumns != null && Motif.NegativeColumns[pos].Count <= NegativeSpecificity)
+                    substr = string.Concat(Motif.NegativeColumns[pos].Keys);
                 if (substr.Length > 1)
                     substr = "[" + substr + "]";
                 FullTemplate += substr;

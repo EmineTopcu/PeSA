@@ -51,17 +51,19 @@ namespace PeSA.Windows
                 int left = 10;
                 foreach (char c in settings.AminoAcidMotifColors.Keys.Union(AminoAcids.GetFullAminoAcidList().Select(aa=>aa.Abbrev1)))
                 {
-                    Label label = new Label();
-                    label.Text = c.ToString();
-                    label.AutoSize = false;
-                    label.Height = 20;
-                    label.Width = 20;
-                    //label.Margin = new Padding(0, 5, 0, 0);
-                    label.Top = top + 5;
-                    label.Left = left;
+                    Label label = new()
+                    {
+                        Text = c.ToString(),
+                        AutoSize = false,
+                        Height = 20,
+                        Width = 20,
+                        //label.Margin = new Padding(0, 5, 0, 0);
+                        Top = top + 5,
+                        Left = left
+                    };
                     left += 20;
                     pColors.Controls.Add(label);
-                    Button button = new Button
+                    Button button = new()
                     {
                         BackColor = settings.GetColorOfAminoAcid(c),
                         Tag = c
@@ -110,16 +112,14 @@ namespace PeSA.Windows
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            int w, h, m;
-            if (!Int32.TryParse(eMotifHeight.Text, out h))
+            if (!Int32.TryParse(eMotifHeight.Text, out int h))
                 h = 200;
-            if (!Int32.TryParse(eMotifWidth.Text, out w))
+            if (!Int32.TryParse(eMotifWidth.Text, out int w))
                 w = 800;
-            if (!Int32.TryParse(eMaxAAPerColumn.Text, out m))
+            if (!Int32.TryParse(eMaxAAPerColumn.Text, out int m))
                 m = 10;
 
-            double t;
-            if (!Double.TryParse(eThreshold.Text, out t))
+            if (!Double.TryParse(eThreshold.Text, out double t))
                 t = 0.1;
             settings.MotifHeight = h;
             settings.MotifWidth = w;

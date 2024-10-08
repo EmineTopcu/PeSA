@@ -93,9 +93,11 @@ namespace PeSA.Windows
                 MessageBox.Show("Please load a motif.");
                 return;
             }
-            Scorer = new Scorer();
-            Scorer.Motif = Motif;
-            Scorer.ProteinList = Proteins;
+            Scorer = new Scorer
+            {
+                Motif = Motif,
+                ProteinList = Proteins
+            };
             if (double.TryParse(eScorerPosThreshold.Text, out double posthres))
                 Scorer.UserEnteredPosThreshold = posthres;
             else
@@ -124,7 +126,7 @@ namespace PeSA.Windows
             ClearResults();
 
             Scorer.StopScoringRequested = false;
-            frmProgressDialog prdlg = new frmProgressDialog
+            frmProgressDialog prdlg = new()
             {
                 ProgressMax = (int) Proteins.Sum(p=>Math.Ceiling((double)(p.AASequence.Length - Motif.PeptideLength + 1)))
             };

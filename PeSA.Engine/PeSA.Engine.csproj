@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <FileVersion></FileVersion>
-    <AssemblyVersion>2.2.2</AssemblyVersion>
+    <AssemblyVersion>2.2.3</AssemblyVersion>
+	<NoWarn>IDE0044</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -67,8 +68,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+    <PackageReference Include="EPPlus" Version="7.4.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

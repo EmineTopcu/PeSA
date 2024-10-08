@@ -52,7 +52,7 @@ namespace PeSA.Windows
                 heightImage = settings.MotifHeight;
                 widthImage = settings.MotifWidth;
             }
-            mdPositive.Image = Motif.GetPositiveMotif(widthImage, heightImage);
+            mdPositive.Image = Motif.GetPositiveMotif(widthImage, heightImage) ?? Motif.GetFrequencyMotif(widthImage, heightImage);
             mdNegative.Image = Motif.GetNegativeMotif(widthImage, heightImage);
             mdChart.Image = Motif.GetBarChart(pMotif.Width - 6);
             eWildtype.Text = Motif.WildTypePeptide;
@@ -90,7 +90,15 @@ namespace PeSA.Windows
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             if (Motif == null) return;
-            GenerateValidationSequence();
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                GenerateValidationSequence();
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
         }
 
         private void btnExport_Click(object sender, EventArgs e)

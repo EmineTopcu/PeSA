@@ -400,7 +400,7 @@ namespace PeSA.Windows
                     rowHeader = PA.Permutation;
                 }
 
-                ColorMatrix cm = new ColorMatrix();
+                ColorMatrix cm = new();
                 cm.SetData(PA.NormalizedMatrix, colHeader, rowHeader);
                 mdMatrix.SetThreshold(PA.PositiveThreshold, PA.NegativeThreshold);
                 mdMatrix.SetColorMatrix(cm);
@@ -487,8 +487,7 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgSaveMotif.FileName;
-            if (Motif == null)
-                Motif = new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
+            Motif ??= new Motif(PA.NormalizedPeptideWeights, PA.NormalizedWildtypeWeights, PA.WildTypePeptide, PA.PositiveThreshold, PA.NegativeThreshold);
 
             if (Motif.SaveToFile(filename, Motif))
                 MessageBox.Show(filename + " is saved", Analyzer.ProgramName);

@@ -85,7 +85,7 @@ namespace PeSA.Windows
 
         private void AnalyzePeptideList()
         {
-            frmMotifCreator frm = new frmMotifCreator
+            frmMotifCreator frm = new()
             {
                 MdiParent = this
             };
@@ -94,14 +94,16 @@ namespace PeSA.Windows
         }
         private void AnalyzePeptideArray()
         {
-            frmAnalyzePeptideArray frm = new frmAnalyzePeptideArray();
-            frm.MdiParent = this;
+            frmAnalyzePeptideArray frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
         private void AnalyzePermutationArray()
         {
-            frmAnalyzePermutationArray frm = new frmAnalyzePermutationArray
+            frmAnalyzePermutationArray frm = new()
             {
                 MdiParent = this
             };
@@ -110,15 +112,19 @@ namespace PeSA.Windows
         }
         private void AnalyzeOPALArray()
         {
-            frmAnalyzeOPALArray frm = new frmAnalyzeOPALArray();
-            frm.MdiParent = this;
+            frmAnalyzeOPALArray frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
         private void RunSequenceGenerator()
         {
-            frmSequenceGenerator frm = new frmSequenceGenerator();
-            frm.MdiParent = this;
+            frmSequenceGenerator frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
@@ -148,8 +154,10 @@ namespace PeSA.Windows
 
         private void RunMotifValidationDesigner()
         {
-            frmMotifValidationDesigner frm = new frmMotifValidationDesigner();
-            frm.MdiParent = this;
+            frmMotifValidationDesigner frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
@@ -246,22 +254,26 @@ namespace PeSA.Windows
 
         private void mSettingsMotif_Click(object sender, EventArgs e)
         {
-            frmSettings frm = new frmSettings();
-            frm.MdiParent = this;
+            frmSettings frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
         private void mSettingsAminoAcidList_Click(object sender, EventArgs e)
         {
-            frmAminoAcids frm = new frmAminoAcids();
-            frm.MdiParent = this;
+            frmAminoAcids frm = new()
+            {
+                MdiParent = this
+            };
             frm.Show();
             AddWindowMenuItem(frm);
         }
 
         private void mAbout_Click(object sender, EventArgs e)
         {
-            frmAbout frm = new frmAbout();
+            frmAbout frm = new();
             frm.ShowDialog();
         }
 

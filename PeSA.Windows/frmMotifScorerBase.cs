@@ -113,8 +113,7 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgExcelExport.FileName;
-            string errormsg = "";
-            if (FileUtil.ExportScoresToExcel(filename, Scorer, true, out errormsg))
+            if (FileUtil.ExportScoresToExcel(filename, Scorer, true, out string errormsg))
                 MessageBox.Show("Project is exported as an excel file:" + filename, Analyzer.ProgramName);
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);

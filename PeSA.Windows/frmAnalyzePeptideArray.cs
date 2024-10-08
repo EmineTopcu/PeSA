@@ -104,8 +104,7 @@ namespace PeSA.Windows
 
         private void eNormalizeBy_Leave(object sender, EventArgs e)
         {
-            double d;
-            if (double.TryParse(eNormalizeBy.Text, out d))
+            if (double.TryParse(eNormalizeBy.Text, out double d))
             {
                 Normalize(d);
             }
@@ -115,8 +114,7 @@ namespace PeSA.Windows
         {
             if (quantificationLoaded && peptidesLoaded)
             {
-                double d;
-                if (double.TryParse(eNormalizeBy.Text, out d))
+                if (double.TryParse(eNormalizeBy.Text, out double d))
                 {
                     Normalize(d);
                 }
@@ -260,8 +258,7 @@ namespace PeSA.Windows
             DialogResult dlg = dlgExcelExport.ShowDialog();
             if (dlg != DialogResult.OK) return;
             string filename = dlgExcelExport.FileName;
-            string errormsg = "";
-            if (FileUtil.ExportPeptideArrayToExcel(filename, PA, true, out errormsg))
+            if (FileUtil.ExportPeptideArrayToExcel(filename, PA, true, out string errormsg))
                 MessageBox.Show("Project is exported as an excel file:" + filename);
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);
@@ -307,21 +304,27 @@ namespace PeSA.Windows
                     List<string> mainList = PA.ModifiedPeptides.Where(s => s[keyPos - 1] == keyAA).ToList();
 
                     List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
-                    MotifMain = new Motif(mainList, peptidelength);
-                    MotifMain.FreqThreshold = PA.FrequencyThreshold;
+                    MotifMain = new Motif(mainList, peptidelength)
+                    {
+                        FreqThreshold = PA.FrequencyThreshold
+                    };
                     Bitmap bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
                     mdMain.Image = bm;
 
-                    MotifShifted = new Motif(shiftedList, peptidelength);
-                    MotifShifted.FreqThreshold = PA.FrequencyThreshold;
+                    MotifShifted = new Motif(shiftedList, peptidelength)
+                    {
+                        FreqThreshold = PA.FrequencyThreshold
+                    };
                     bm = MotifShifted.GetFrequencyMotif(widthImage, heightImage);
                     mdShifted.Image = bm;
                     mdShifted.Visible = true;
                 }
                 else
                 {
-                    MotifMain = new Motif(PA.ModifiedPeptides, peptidelength);
-                    MotifMain.FreqThreshold = PA.FrequencyThreshold;
+                    MotifMain = new Motif(PA.ModifiedPeptides, peptidelength)
+                    {
+                        FreqThreshold = PA.FrequencyThreshold
+                    };
                     Bitmap bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
                     mdMain.Image = bm;
                     mdShifted.Visible = false;
@@ -454,8 +457,7 @@ namespace PeSA.Windows
 
         private void ePeptideLength_Leave(object sender, EventArgs e)
         {
-            int i = 0;
-            if (int.TryParse(ePeptideLength.Text, out i) && i > 0 && peptidelength != i)
+            if (int.TryParse(ePeptideLength.Text, out int i) && i > 0 && peptidelength != i)
             {
                 peptidelength = i;
                 if (PA != null)

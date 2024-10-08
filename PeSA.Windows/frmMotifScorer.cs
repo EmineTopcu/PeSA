@@ -116,9 +116,11 @@ namespace PeSA.Windows
                 MessageBox.Show("Please load a motif.");
                 return;
             }
-            Scorer = new Scorer();
-            Scorer.Motif = Motif;
-            Scorer.PeptideList = Peptides;
+            Scorer = new Scorer
+            {
+                Motif = Motif,
+                PeptideList = Peptides
+            };
             if (double.TryParse(eScorerPosThreshold.Text, out double posthres))
                 Scorer.UserEnteredPosThreshold = posthres;
             else
@@ -146,7 +148,7 @@ namespace PeSA.Windows
             }
             dgScores.Rows.Clear();
             Scorer.StopScoringRequested = false;
-            frmProgressDialog prdlg = new frmProgressDialog
+            frmProgressDialog prdlg = new()
             {
                 ProgressMax = Peptides.Count
             };
@@ -180,8 +182,7 @@ namespace PeSA.Windows
             if (dlg != DialogResult.OK) return;
 
             string filename = dlgExcelExport.FileName;
-            string errormsg = "";
-            if (FileUtil.ExportScoresToExcel(filename, Scorer, true, out errormsg))
+            if (FileUtil.ExportScoresToExcel(filename, Scorer, true, out string errormsg))
                 MessageBox.Show("Project is exported as an excel file:" + filename, Analyzer.ProgramName);
             else if (errormsg != "")
                 MessageBox.Show(errormsg, Analyzer.ProgramName);

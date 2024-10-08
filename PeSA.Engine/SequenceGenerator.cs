@@ -36,7 +36,7 @@ namespace PeSA.Engine
 
             int end = input.IndexOf(']', start + 1);
             if (end < 0) throw new Exception();
-            List<string> comb = new List<string>();
+            List<string> comb = new();
 
             string chars = input.Substring(start + 1, end - start - 1);
             string firstpart = start > 0 ? input.Substring(0, start) : "";
@@ -51,7 +51,7 @@ namespace PeSA.Engine
                 }
                 chars = charstouse;
             }
-            List<string> withinbrackets = new List<string>();
+            List<string> withinbrackets = new();
             while (chars != "")
             {
                 char c = chars.First();

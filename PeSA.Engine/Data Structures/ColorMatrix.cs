@@ -1,10 +1,8 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System;
-using System.Collections.Generic;
+﻿#pragma warning disable CA1416 
+//FUTURE:
+//System.Drawing can be replaced by SixLabors/ImageSharp with modifications for cross platform application
+
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PeSA.Engine
 {
@@ -21,7 +19,7 @@ namespace PeSA.Engine
         private int scalaWidth = 50;
         private int scalaLabelWidth = 50;
         private int imgWidth, imgHeight;
-        Font textfont = new Font("Microsoft Sans Serif", 8, FontStyle.Regular);
+        Font textfont = new("Microsoft Sans Serif", 8, FontStyle.Regular);
         public void SetTheme(ColorMatrixTheme theme)
         {
             Theme = theme;
@@ -59,7 +57,7 @@ namespace PeSA.Engine
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             double f = hue / 60 - Math.Floor(hue / 60);
 
-            value = value * 255;
+            value *= 255;
             int v = Convert.ToInt32(value);
             int p = Convert.ToInt32(value * (1 - saturation));
             int q = Convert.ToInt32(value * (1 - f * saturation));
@@ -92,7 +90,7 @@ namespace PeSA.Engine
                 hueScale += 360;
             int mult = 1;
             if (flip)
-                hueScale = hueScale - 360;
+                hueScale -= 360;
             double hue = hueStart + dist * hueScale * mult;
             if (hue < 0) hue += 360;
             else if (hue > 360) hue -= 360;
@@ -128,12 +126,12 @@ namespace PeSA.Engine
             imgHeight = (numRows + 1) * poswidth;
             imgWidth = width + left;
 
-            Bitmap bmp = new Bitmap(imgWidth, imgHeight);
-            List<Pen> usedPens = new List<Pen>();
-            List<Brush> usedBrushes = new List<Brush>();
+            Bitmap bmp = new(imgWidth, imgHeight);
+            List<Pen> usedPens = new();
+            List<Brush> usedBrushes = new();
 
             int fontsize = Theme.Dia >= 200 ? Theme.Dia - 12 : Math.Max(Theme.Dia - 4, 6);
-            Font font = new Font("Microsoft Sans Serif", fontsize, FontStyle.Regular);
+            Font font = new("Microsoft Sans Serif", fontsize, FontStyle.Regular);
             float buffer = Theme.Dia / 10;
             float ycoor = buffer;
             using (var g = Graphics.FromImage(bmp))
@@ -163,7 +161,7 @@ namespace PeSA.Engine
                         Color col = GetColor(dist, Theme.Flip);
                         Brush brush = new SolidBrush(col);
                         usedBrushes.Add(brush);
-                        Pen p = new Pen(brush);
+                        Pen p = new(brush);
                         usedPens.Add(p);
                         g.FillEllipse(brush, xcoor, ycoor, Theme.Dia, Theme.Dia);
                         xcoor += poswidth;
@@ -179,7 +177,7 @@ namespace PeSA.Engine
                 while (dist >= 0)
                 {
                     Color col = GetColor(dist, Theme.Flip);
-                    Pen p = new Pen(col);
+                    Pen p = new(col);
                     usedPens.Add(p);
                     g.DrawRectangle(p, scalaLabelWidth, ycoor, scalaWidth, (int)inc);
                     g.FillRectangle(new SolidBrush(col), scalaLabelWidth, ycoor, scalaWidth, (int)inc);
