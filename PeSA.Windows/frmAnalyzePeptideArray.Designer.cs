@@ -28,894 +28,935 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAnalyzePeptideArray));
-            this.cmsLoadPeptide = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmiLoadPeptideList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmiLoadPeptideMatrix = new System.Windows.Forms.ToolStripMenuItem();
-            this.dlgOpenPeptideList = new System.Windows.Forms.OpenFileDialog();
-            this.dlgOpenQuantification = new System.Windows.Forms.OpenFileDialog();
-            this.splitLeftTop = new System.Windows.Forms.SplitContainer();
-            this.dgPeptides = new System.Windows.Forms.DataGridView();
-            this.cmsPeptide = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmiPastePeptide = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmiFindPeptide = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmiFindNext = new System.Windows.Forms.ToolStripMenuItem();
-            this.pPeptidesTop = new System.Windows.Forms.Panel();
-            this.linkRun = new System.Windows.Forms.LinkLabel();
-            this.lLoadPeptides = new System.Windows.Forms.LinkLabel();
-            this.lArrayInfo = new System.Windows.Forms.Label();
-            this.lPeptides = new System.Windows.Forms.Label();
-            this.dgQuantification = new System.Windows.Forms.DataGridView();
-            this.cmsQuantification = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmiPasteQuantification = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.linkLoadQuantification = new System.Windows.Forms.LinkLabel();
-            this.lQuantification = new System.Windows.Forms.Label();
-            this.ePeptideLength = new System.Windows.Forms.TextBox();
-            this.lPeptideLength = new System.Windows.Forms.Label();
-            this.splitLeft = new System.Windows.Forms.SplitContainer();
-            this.dgNormalized = new System.Windows.Forms.DataGridView();
-            this.pBottom = new System.Windows.Forms.Panel();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.thresholdEntry = new PeSA.Windows.Controls.ThresholdEntry();
-            this.eNormalizeBy = new System.Windows.Forms.TextBox();
-            this.lNormalizeBy = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.dlgOpenProject = new System.Windows.Forms.OpenFileDialog();
-            this.dlgSaveProject = new System.Windows.Forms.SaveFileDialog();
-            this.dlgExcelExport = new System.Windows.Forms.SaveFileDialog();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.dlgOpenPeptideMatrix = new System.Windows.Forms.OpenFileDialog();
-            this.dlgSaveMotif = new System.Windows.Forms.SaveFileDialog();
-            this.splitMain = new System.Windows.Forms.SplitContainer();
-            this.tabImages = new System.Windows.Forms.TabControl();
-            this.tMotif = new System.Windows.Forms.TabPage();
-            this.pMotif = new System.Windows.Forms.Panel();
-            this.mdShifted = new PeSA.Windows.MotifDisplay();
-            this.mdMain = new PeSA.Windows.MotifDisplay();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.lQuestion = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.eKeyPosition = new System.Windows.Forms.TextBox();
-            this.lAminoAcid = new System.Windows.Forms.Label();
-            this.eAminoAcid = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.eFreqThreshold = new System.Windows.Forms.TextBox();
-            this.tInfo = new System.Windows.Forms.TabPage();
-            this.flowpanelReference = new System.Windows.Forms.FlowLayoutPanel();
-            this.imageReference = new PeSA.Windows.Controls.ImageDisplay();
-            this.lNotes = new System.Windows.Forms.Label();
-            this.eNotes = new System.Windows.Forms.TextBox();
-            this.tDecisionList = new System.Windows.Forms.TabPage();
-            this.dgDecision = new System.Windows.Forms.DataGridView();
-            this.colPeptide = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDecision = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dlgOpenImage = new System.Windows.Forms.OpenFileDialog();
-            this.btnSaveMotif = new System.Windows.Forms.Button();
-            this.btnRunScorer = new System.Windows.Forms.Button();
-            this.cmsRunScorer = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmiPeptideScorer = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmiProteinScorer = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsLoadPeptide.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitLeftTop)).BeginInit();
-            this.splitLeftTop.Panel1.SuspendLayout();
-            this.splitLeftTop.Panel2.SuspendLayout();
-            this.splitLeftTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgPeptides)).BeginInit();
-            this.cmsPeptide.SuspendLayout();
-            this.pPeptidesTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgQuantification)).BeginInit();
-            this.cmsQuantification.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitLeft)).BeginInit();
-            this.splitLeft.Panel1.SuspendLayout();
-            this.splitLeft.Panel2.SuspendLayout();
-            this.splitLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgNormalized)).BeginInit();
-            this.pBottom.SuspendLayout();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
-            this.splitMain.Panel1.SuspendLayout();
-            this.splitMain.Panel2.SuspendLayout();
-            this.splitMain.SuspendLayout();
-            this.tabImages.SuspendLayout();
-            this.tMotif.SuspendLayout();
-            this.pMotif.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.tInfo.SuspendLayout();
-            this.flowpanelReference.SuspendLayout();
-            this.tDecisionList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).BeginInit();
-            this.cmsRunScorer.SuspendLayout();
-            this.SuspendLayout();
+            cmsLoadPeptide = new ContextMenuStrip(components);
+            cmiLoadPeptideList = new ToolStripMenuItem();
+            cmiLoadPeptideMatrix = new ToolStripMenuItem();
+            dlgOpenPeptideList = new OpenFileDialog();
+            dlgOpenQuantification = new OpenFileDialog();
+            splitLeftTop = new SplitContainer();
+            dgPeptides = new DataGridView();
+            cmsPeptide = new ContextMenuStrip(components);
+            cmiPastePeptide = new ToolStripMenuItem();
+            cmiFindPeptide = new ToolStripMenuItem();
+            cmiFindNext = new ToolStripMenuItem();
+            pPeptidesTop = new Panel();
+            linkRun = new LinkLabel();
+            lLoadPeptides = new LinkLabel();
+            lArrayInfo = new Label();
+            lPeptides = new Label();
+            dgQuantification = new DataGridView();
+            cmsQuantification = new ContextMenuStrip(components);
+            cmiPasteQuantification = new ToolStripMenuItem();
+            panel2 = new Panel();
+            linkLoadQuantification = new LinkLabel();
+            lQuantification = new Label();
+            ePeptideLength = new TextBox();
+            lPeptideLength = new Label();
+            splitLeft = new SplitContainer();
+            dgNormalized = new DataGridView();
+            panel1 = new Panel();
+            thresholdEntry = new Controls.ThresholdEntry();
+            eNormalizeBy = new TextBox();
+            lNormalizeBy = new Label();
+            label2 = new Label();
+            pBottom = new Panel();
+            btnRunScorer = new Button();
+            btnSaveMotif = new Button();
+            btnExport = new Button();
+            btnLoad = new Button();
+            btnSave = new Button();
+            dlgOpenProject = new OpenFileDialog();
+            dlgSaveProject = new SaveFileDialog();
+            dlgExcelExport = new SaveFileDialog();
+            errorProvider1 = new ErrorProvider(components);
+            dlgOpenPeptideMatrix = new OpenFileDialog();
+            dlgSaveMotif = new SaveFileDialog();
+            splitMain = new SplitContainer();
+            tabImages = new TabControl();
+            tMotif = new TabPage();
+            pMotif = new Panel();
+            mdNegative = new MotifDisplay();
+            mdMain = new MotifDisplay();
+            panel3 = new Panel();
+            lQuestion = new Label();
+            label3 = new Label();
+            eKeyPosition = new TextBox();
+            lAminoAcid = new Label();
+            eAminoAcid = new TextBox();
+            label6 = new Label();
+            eFreqThreshold = new TextBox();
+            tInfo = new TabPage();
+            flowpanelReference = new FlowLayoutPanel();
+            imageReference = new Controls.ImageDisplay();
+            lNotes = new Label();
+            eNotes = new TextBox();
+            tDecisionList = new TabPage();
+            dgDecision = new DataGridView();
+            colPeptide = new DataGridViewTextBoxColumn();
+            colWeight = new DataGridViewTextBoxColumn();
+            colDecision = new DataGridViewTextBoxColumn();
+            dlgOpenImage = new OpenFileDialog();
+            cmsRunScorer = new ContextMenuStrip(components);
+            cmiPeptideScorer = new ToolStripMenuItem();
+            cmiProteinScorer = new ToolStripMenuItem();
+            mdShifted = new MotifDisplay();
+            cmsLoadPeptide.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitLeftTop).BeginInit();
+            splitLeftTop.Panel1.SuspendLayout();
+            splitLeftTop.Panel2.SuspendLayout();
+            splitLeftTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgPeptides).BeginInit();
+            cmsPeptide.SuspendLayout();
+            pPeptidesTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgQuantification).BeginInit();
+            cmsQuantification.SuspendLayout();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitLeft).BeginInit();
+            splitLeft.Panel1.SuspendLayout();
+            splitLeft.Panel2.SuspendLayout();
+            splitLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgNormalized).BeginInit();
+            panel1.SuspendLayout();
+            pBottom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
+            splitMain.Panel1.SuspendLayout();
+            splitMain.Panel2.SuspendLayout();
+            splitMain.SuspendLayout();
+            tabImages.SuspendLayout();
+            tMotif.SuspendLayout();
+            pMotif.SuspendLayout();
+            panel3.SuspendLayout();
+            tInfo.SuspendLayout();
+            flowpanelReference.SuspendLayout();
+            tDecisionList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgDecision).BeginInit();
+            cmsRunScorer.SuspendLayout();
+            SuspendLayout();
             // 
             // cmsLoadPeptide
             // 
-            this.cmsLoadPeptide.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.cmsLoadPeptide.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmiLoadPeptideList,
-            this.cmiLoadPeptideMatrix});
-            this.cmsLoadPeptide.Name = "cmsLoadPeptide";
-            this.cmsLoadPeptide.Size = new System.Drawing.Size(181, 48);
+            cmsLoadPeptide.ImageScalingSize = new Size(24, 24);
+            cmsLoadPeptide.Items.AddRange(new ToolStripItem[] { cmiLoadPeptideList, cmiLoadPeptideMatrix });
+            cmsLoadPeptide.Name = "cmsLoadPeptide";
+            cmsLoadPeptide.Size = new Size(181, 48);
             // 
             // cmiLoadPeptideList
             // 
-            this.cmiLoadPeptideList.Name = "cmiLoadPeptideList";
-            this.cmiLoadPeptideList.Size = new System.Drawing.Size(180, 22);
-            this.cmiLoadPeptideList.Text = "Load Peptide List";
-            this.cmiLoadPeptideList.Click += new System.EventHandler(this.cmiLoadPeptideList_Click);
+            cmiLoadPeptideList.Name = "cmiLoadPeptideList";
+            cmiLoadPeptideList.Size = new Size(180, 22);
+            cmiLoadPeptideList.Text = "Load Peptide List";
+            cmiLoadPeptideList.Click += cmiLoadPeptideList_Click;
             // 
             // cmiLoadPeptideMatrix
             // 
-            this.cmiLoadPeptideMatrix.Name = "cmiLoadPeptideMatrix";
-            this.cmiLoadPeptideMatrix.Size = new System.Drawing.Size(180, 22);
-            this.cmiLoadPeptideMatrix.Text = "Load Peptide Matrix";
-            this.cmiLoadPeptideMatrix.Click += new System.EventHandler(this.cmiLoadPeptideMatrix_Click);
+            cmiLoadPeptideMatrix.Name = "cmiLoadPeptideMatrix";
+            cmiLoadPeptideMatrix.Size = new Size(180, 22);
+            cmiLoadPeptideMatrix.Text = "Load Peptide Matrix";
+            cmiLoadPeptideMatrix.Click += cmiLoadPeptideMatrix_Click;
             // 
             // dlgOpenPeptideList
             // 
-            this.dlgOpenPeptideList.FileName = "Peptides.txt";
-            this.dlgOpenPeptideList.Filter = "Text files|*.txt";
+            dlgOpenPeptideList.FileName = "Peptides.txt";
+            dlgOpenPeptideList.Filter = "Text files|*.txt";
             // 
             // dlgOpenQuantification
             // 
-            this.dlgOpenQuantification.FileName = "GridMeasurementsTable.xls";
-            this.dlgOpenQuantification.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm|Comma Delimited|*.csv";
+            dlgOpenQuantification.FileName = "GridMeasurementsTable.xls";
+            dlgOpenQuantification.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm|Comma Delimited|*.csv";
             // 
             // splitLeftTop
             // 
-            this.splitLeftTop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitLeftTop.Location = new System.Drawing.Point(0, 0);
-            this.splitLeftTop.Margin = new System.Windows.Forms.Padding(2);
-            this.splitLeftTop.Name = "splitLeftTop";
-            this.splitLeftTop.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            splitLeftTop.Dock = DockStyle.Fill;
+            splitLeftTop.Location = new Point(0, 0);
+            splitLeftTop.Margin = new Padding(2);
+            splitLeftTop.Name = "splitLeftTop";
+            splitLeftTop.Orientation = Orientation.Horizontal;
             // 
             // splitLeftTop.Panel1
             // 
-            this.splitLeftTop.Panel1.Controls.Add(this.dgPeptides);
-            this.splitLeftTop.Panel1.Controls.Add(this.pPeptidesTop);
-            this.splitLeftTop.Panel1MinSize = 32;
+            splitLeftTop.Panel1.Controls.Add(dgPeptides);
+            splitLeftTop.Panel1.Controls.Add(pPeptidesTop);
+            splitLeftTop.Panel1MinSize = 32;
             // 
             // splitLeftTop.Panel2
             // 
-            this.splitLeftTop.Panel2.Controls.Add(this.dgQuantification);
-            this.splitLeftTop.Panel2.Controls.Add(this.panel2);
-            this.splitLeftTop.Panel2MinSize = 32;
-            this.splitLeftTop.Size = new System.Drawing.Size(580, 513);
-            this.splitLeftTop.SplitterDistance = 173;
-            this.splitLeftTop.SplitterWidth = 3;
-            this.splitLeftTop.TabIndex = 4;
+            splitLeftTop.Panel2.Controls.Add(dgQuantification);
+            splitLeftTop.Panel2.Controls.Add(panel2);
+            splitLeftTop.Panel2MinSize = 32;
+            splitLeftTop.Size = new Size(676, 591);
+            splitLeftTop.SplitterDistance = 199;
+            splitLeftTop.SplitterWidth = 3;
+            splitLeftTop.TabIndex = 4;
             // 
             // dgPeptides
             // 
-            this.dgPeptides.AllowUserToAddRows = false;
-            this.dgPeptides.AllowUserToDeleteRows = false;
-            this.dgPeptides.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgPeptides.ContextMenuStrip = this.cmsPeptide;
-            this.dgPeptides.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgPeptides.Location = new System.Drawing.Point(0, 30);
-            this.dgPeptides.Margin = new System.Windows.Forms.Padding(2);
-            this.dgPeptides.Name = "dgPeptides";
-            this.dgPeptides.ReadOnly = true;
-            this.dgPeptides.RowTemplate.Height = 28;
-            this.dgPeptides.Size = new System.Drawing.Size(580, 143);
-            this.dgPeptides.TabIndex = 2;
+            dgPeptides.AllowUserToAddRows = false;
+            dgPeptides.AllowUserToDeleteRows = false;
+            dgPeptides.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgPeptides.ContextMenuStrip = cmsPeptide;
+            dgPeptides.Dock = DockStyle.Fill;
+            dgPeptides.Location = new Point(0, 35);
+            dgPeptides.Margin = new Padding(2);
+            dgPeptides.Name = "dgPeptides";
+            dgPeptides.ReadOnly = true;
+            dgPeptides.RowTemplate.Height = 28;
+            dgPeptides.Size = new Size(676, 164);
+            dgPeptides.TabIndex = 2;
             // 
             // cmsPeptide
             // 
-            this.cmsPeptide.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.cmsPeptide.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmiPastePeptide,
-            this.cmiFindPeptide,
-            this.cmiFindNext});
-            this.cmsPeptide.Name = "cmsClipBoard";
-            this.cmsPeptide.Size = new System.Drawing.Size(203, 70);
+            cmsPeptide.ImageScalingSize = new Size(24, 24);
+            cmsPeptide.Items.AddRange(new ToolStripItem[] { cmiPastePeptide, cmiFindPeptide, cmiFindNext });
+            cmsPeptide.Name = "cmsClipBoard";
+            cmsPeptide.Size = new Size(203, 70);
             // 
             // cmiPastePeptide
             // 
-            this.cmiPastePeptide.Name = "cmiPastePeptide";
-            this.cmiPastePeptide.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.cmiPastePeptide.Size = new System.Drawing.Size(202, 22);
-            this.cmiPastePeptide.Text = "Paste from Excel";
-            this.cmiPastePeptide.Click += new System.EventHandler(this.cmiPastePeptide_Click);
+            cmiPastePeptide.Name = "cmiPastePeptide";
+            cmiPastePeptide.ShortcutKeys = Keys.Control | Keys.V;
+            cmiPastePeptide.Size = new Size(202, 22);
+            cmiPastePeptide.Text = "Paste from Excel";
+            cmiPastePeptide.Click += cmiPastePeptide_Click;
             // 
             // cmiFindPeptide
             // 
-            this.cmiFindPeptide.Name = "cmiFindPeptide";
-            this.cmiFindPeptide.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.cmiFindPeptide.Size = new System.Drawing.Size(202, 22);
-            this.cmiFindPeptide.Text = "Find Peptide";
-            this.cmiFindPeptide.Click += new System.EventHandler(this.cmiFindPeptide_Click);
+            cmiFindPeptide.Name = "cmiFindPeptide";
+            cmiFindPeptide.ShortcutKeys = Keys.Control | Keys.F;
+            cmiFindPeptide.Size = new Size(202, 22);
+            cmiFindPeptide.Text = "Find Peptide";
+            cmiFindPeptide.Click += cmiFindPeptide_Click;
             // 
             // cmiFindNext
             // 
-            this.cmiFindNext.Name = "cmiFindNext";
-            this.cmiFindNext.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.cmiFindNext.Size = new System.Drawing.Size(202, 22);
-            this.cmiFindNext.Text = "Find Next";
-            this.cmiFindNext.Click += new System.EventHandler(this.cmiFindNext_Click);
+            cmiFindNext.Name = "cmiFindNext";
+            cmiFindNext.ShortcutKeys = Keys.Control | Keys.N;
+            cmiFindNext.Size = new Size(202, 22);
+            cmiFindNext.Text = "Find Next";
+            cmiFindNext.Click += cmiFindNext_Click;
             // 
             // pPeptidesTop
             // 
-            this.pPeptidesTop.Controls.Add(this.linkRun);
-            this.pPeptidesTop.Controls.Add(this.lLoadPeptides);
-            this.pPeptidesTop.Controls.Add(this.lArrayInfo);
-            this.pPeptidesTop.Controls.Add(this.lPeptides);
-            this.pPeptidesTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pPeptidesTop.Location = new System.Drawing.Point(0, 0);
-            this.pPeptidesTop.Name = "pPeptidesTop";
-            this.pPeptidesTop.Size = new System.Drawing.Size(580, 30);
-            this.pPeptidesTop.TabIndex = 1;
+            pPeptidesTop.Controls.Add(linkRun);
+            pPeptidesTop.Controls.Add(lLoadPeptides);
+            pPeptidesTop.Controls.Add(lArrayInfo);
+            pPeptidesTop.Controls.Add(lPeptides);
+            pPeptidesTop.Dock = DockStyle.Top;
+            pPeptidesTop.Location = new Point(0, 0);
+            pPeptidesTop.Margin = new Padding(4, 3, 4, 3);
+            pPeptidesTop.Name = "pPeptidesTop";
+            pPeptidesTop.Size = new Size(676, 35);
+            pPeptidesTop.TabIndex = 1;
             // 
             // linkRun
             // 
-            this.linkRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkRun.AutoSize = true;
-            this.linkRun.Location = new System.Drawing.Point(448, 9);
-            this.linkRun.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.linkRun.Name = "linkRun";
-            this.linkRun.Size = new System.Drawing.Size(27, 13);
-            this.linkRun.TabIndex = 22;
-            this.linkRun.TabStop = true;
-            this.linkRun.Text = "Run";
-            this.linkRun.Visible = false;
-            this.linkRun.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkRun_LinkClicked);
+            linkRun.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            linkRun.AutoSize = true;
+            linkRun.Location = new Point(522, 10);
+            linkRun.Margin = new Padding(2, 0, 2, 0);
+            linkRun.Name = "linkRun";
+            linkRun.Size = new Size(28, 15);
+            linkRun.TabIndex = 22;
+            linkRun.TabStop = true;
+            linkRun.Text = "Run";
+            linkRun.Visible = false;
+            linkRun.LinkClicked += linkRun_LinkClicked;
             // 
             // lLoadPeptides
             // 
-            this.lLoadPeptides.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lLoadPeptides.AutoSize = true;
-            this.lLoadPeptides.ContextMenuStrip = this.cmsLoadPeptide;
-            this.lLoadPeptides.Location = new System.Drawing.Point(479, 9);
-            this.lLoadPeptides.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lLoadPeptides.Name = "lLoadPeptides";
-            this.lLoadPeptides.Size = new System.Drawing.Size(73, 13);
-            this.lLoadPeptides.TabIndex = 21;
-            this.lLoadPeptides.TabStop = true;
-            this.lLoadPeptides.Text = "Load from File";
-            this.lLoadPeptides.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lLoadPeptides_LinkClicked);
+            lLoadPeptides.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lLoadPeptides.AutoSize = true;
+            lLoadPeptides.ContextMenuStrip = cmsLoadPeptide;
+            lLoadPeptides.Location = new Point(558, 10);
+            lLoadPeptides.Margin = new Padding(2, 0, 2, 0);
+            lLoadPeptides.Name = "lLoadPeptides";
+            lLoadPeptides.Size = new Size(83, 15);
+            lLoadPeptides.TabIndex = 21;
+            lLoadPeptides.TabStop = true;
+            lLoadPeptides.Text = "Load from File";
+            lLoadPeptides.LinkClicked += lLoadPeptides_LinkClicked;
             // 
             // lArrayInfo
             // 
-            this.lArrayInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lArrayInfo.Location = new System.Drawing.Point(303, 9);
-            this.lArrayInfo.MinimumSize = new System.Drawing.Size(20, 0);
-            this.lArrayInfo.Name = "lArrayInfo";
-            this.lArrayInfo.Size = new System.Drawing.Size(130, 13);
-            this.lArrayInfo.TabIndex = 3;
-            this.lArrayInfo.Text = "20x30 matrix - Rows first";
+            lArrayInfo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lArrayInfo.Location = new Point(353, 10);
+            lArrayInfo.Margin = new Padding(4, 0, 4, 0);
+            lArrayInfo.MinimumSize = new Size(23, 0);
+            lArrayInfo.Name = "lArrayInfo";
+            lArrayInfo.Size = new Size(152, 15);
+            lArrayInfo.TabIndex = 3;
+            lArrayInfo.Text = "20x30 matrix - Rows first";
             // 
             // lPeptides
             // 
-            this.lPeptides.AutoSize = true;
-            this.lPeptides.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lPeptides.Location = new System.Drawing.Point(6, 6);
-            this.lPeptides.Name = "lPeptides";
-            this.lPeptides.Size = new System.Drawing.Size(63, 17);
-            this.lPeptides.TabIndex = 2;
-            this.lPeptides.Text = "Peptides";
+            lPeptides.AutoSize = true;
+            lPeptides.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lPeptides.Location = new Point(7, 7);
+            lPeptides.Margin = new Padding(4, 0, 4, 0);
+            lPeptides.Name = "lPeptides";
+            lPeptides.Size = new Size(63, 17);
+            lPeptides.TabIndex = 2;
+            lPeptides.Text = "Peptides";
             // 
             // dgQuantification
             // 
-            this.dgQuantification.AllowUserToAddRows = false;
-            this.dgQuantification.AllowUserToDeleteRows = false;
-            this.dgQuantification.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgQuantification.ContextMenuStrip = this.cmsQuantification;
-            this.dgQuantification.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgQuantification.Location = new System.Drawing.Point(0, 30);
-            this.dgQuantification.Margin = new System.Windows.Forms.Padding(2);
-            this.dgQuantification.Name = "dgQuantification";
-            this.dgQuantification.ReadOnly = true;
-            this.dgQuantification.RowTemplate.Height = 28;
-            this.dgQuantification.Size = new System.Drawing.Size(580, 307);
-            this.dgQuantification.TabIndex = 0;
+            dgQuantification.AllowUserToAddRows = false;
+            dgQuantification.AllowUserToDeleteRows = false;
+            dgQuantification.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgQuantification.ContextMenuStrip = cmsQuantification;
+            dgQuantification.Dock = DockStyle.Fill;
+            dgQuantification.Location = new Point(0, 35);
+            dgQuantification.Margin = new Padding(2);
+            dgQuantification.Name = "dgQuantification";
+            dgQuantification.ReadOnly = true;
+            dgQuantification.RowTemplate.Height = 28;
+            dgQuantification.Size = new Size(676, 354);
+            dgQuantification.TabIndex = 0;
             // 
             // cmsQuantification
             // 
-            this.cmsQuantification.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.cmsQuantification.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmiPasteQuantification});
-            this.cmsQuantification.Name = "cmsClipBoard";
-            this.cmsQuantification.Size = new System.Drawing.Size(203, 26);
+            cmsQuantification.ImageScalingSize = new Size(24, 24);
+            cmsQuantification.Items.AddRange(new ToolStripItem[] { cmiPasteQuantification });
+            cmsQuantification.Name = "cmsClipBoard";
+            cmsQuantification.Size = new Size(203, 26);
             // 
             // cmiPasteQuantification
             // 
-            this.cmiPasteQuantification.Name = "cmiPasteQuantification";
-            this.cmiPasteQuantification.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.cmiPasteQuantification.Size = new System.Drawing.Size(202, 22);
-            this.cmiPasteQuantification.Text = "Paste from Excel";
-            this.cmiPasteQuantification.Click += new System.EventHandler(this.cmiPasteQuantification_Click);
+            cmiPasteQuantification.Name = "cmiPasteQuantification";
+            cmiPasteQuantification.ShortcutKeys = Keys.Control | Keys.V;
+            cmiPasteQuantification.Size = new Size(202, 22);
+            cmiPasteQuantification.Text = "Paste from Excel";
+            cmiPasteQuantification.Click += cmiPasteQuantification_Click;
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.linkLoadQuantification);
-            this.panel2.Controls.Add(this.lQuantification);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(580, 30);
-            this.panel2.TabIndex = 3;
+            panel2.Controls.Add(linkLoadQuantification);
+            panel2.Controls.Add(lQuantification);
+            panel2.Dock = DockStyle.Top;
+            panel2.Location = new Point(0, 0);
+            panel2.Margin = new Padding(4, 3, 4, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(676, 35);
+            panel2.TabIndex = 3;
             // 
             // linkLoadQuantification
             // 
-            this.linkLoadQuantification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLoadQuantification.AutoSize = true;
-            this.linkLoadQuantification.Location = new System.Drawing.Point(479, 8);
-            this.linkLoadQuantification.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.linkLoadQuantification.Name = "linkLoadQuantification";
-            this.linkLoadQuantification.Size = new System.Drawing.Size(73, 13);
-            this.linkLoadQuantification.TabIndex = 3;
-            this.linkLoadQuantification.TabStop = true;
-            this.linkLoadQuantification.Text = "Load from File";
-            this.linkLoadQuantification.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLoadQuantification_LinkClicked);
+            linkLoadQuantification.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            linkLoadQuantification.AutoSize = true;
+            linkLoadQuantification.Location = new Point(558, 9);
+            linkLoadQuantification.Margin = new Padding(2, 0, 2, 0);
+            linkLoadQuantification.Name = "linkLoadQuantification";
+            linkLoadQuantification.Size = new Size(83, 15);
+            linkLoadQuantification.TabIndex = 3;
+            linkLoadQuantification.TabStop = true;
+            linkLoadQuantification.Text = "Load from File";
+            linkLoadQuantification.LinkClicked += linkLoadQuantification_LinkClicked;
             // 
             // lQuantification
             // 
-            this.lQuantification.AutoSize = true;
-            this.lQuantification.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lQuantification.Location = new System.Drawing.Point(6, 6);
-            this.lQuantification.Name = "lQuantification";
-            this.lQuantification.Size = new System.Drawing.Size(258, 17);
-            this.lQuantification.TabIndex = 2;
-            this.lQuantification.Text = "Quantification (Background normalized)";
+            lQuantification.AutoSize = true;
+            lQuantification.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lQuantification.Location = new Point(7, 7);
+            lQuantification.Margin = new Padding(4, 0, 4, 0);
+            lQuantification.Name = "lQuantification";
+            lQuantification.Size = new Size(258, 17);
+            lQuantification.TabIndex = 2;
+            lQuantification.Text = "Quantification (Background normalized)";
             // 
             // ePeptideLength
             // 
-            this.ePeptideLength.Location = new System.Drawing.Point(122, 10);
-            this.ePeptideLength.Name = "ePeptideLength";
-            this.ePeptideLength.Size = new System.Drawing.Size(55, 20);
-            this.ePeptideLength.TabIndex = 6;
-            this.ePeptideLength.Leave += new System.EventHandler(this.ePeptideLength_Leave);
+            ePeptideLength.Location = new Point(142, 12);
+            ePeptideLength.Margin = new Padding(4, 3, 4, 3);
+            ePeptideLength.Name = "ePeptideLength";
+            ePeptideLength.Size = new Size(63, 20);
+            ePeptideLength.TabIndex = 6;
+            ePeptideLength.Leave += ePeptideLength_Leave;
             // 
             // lPeptideLength
             // 
-            this.lPeptideLength.AutoSize = true;
-            this.lPeptideLength.Location = new System.Drawing.Point(12, 14);
-            this.lPeptideLength.Name = "lPeptideLength";
-            this.lPeptideLength.Size = new System.Drawing.Size(79, 13);
-            this.lPeptideLength.TabIndex = 4;
-            this.lPeptideLength.Text = "Peptide Length";
+            lPeptideLength.AutoSize = true;
+            lPeptideLength.Location = new Point(14, 16);
+            lPeptideLength.Margin = new Padding(4, 0, 4, 0);
+            lPeptideLength.Name = "lPeptideLength";
+            lPeptideLength.Size = new Size(79, 13);
+            lPeptideLength.TabIndex = 4;
+            lPeptideLength.Text = "Peptide Length";
             // 
             // splitLeft
             // 
-            this.splitLeft.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitLeft.Location = new System.Drawing.Point(0, 0);
-            this.splitLeft.Name = "splitLeft";
-            this.splitLeft.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            splitLeft.Dock = DockStyle.Fill;
+            splitLeft.Location = new Point(0, 0);
+            splitLeft.Margin = new Padding(4, 3, 4, 3);
+            splitLeft.Name = "splitLeft";
+            splitLeft.Orientation = Orientation.Horizontal;
             // 
             // splitLeft.Panel1
             // 
-            this.splitLeft.Panel1.Controls.Add(this.splitLeftTop);
-            this.splitLeft.Panel1MinSize = 64;
+            splitLeft.Panel1.Controls.Add(splitLeftTop);
+            splitLeft.Panel1MinSize = 64;
             // 
             // splitLeft.Panel2
             // 
-            this.splitLeft.Panel2.Controls.Add(this.dgNormalized);
-            this.splitLeft.Panel2.Controls.Add(this.panel1);
-            this.splitLeft.Panel2MinSize = 115;
-            this.splitLeft.Size = new System.Drawing.Size(580, 794);
-            this.splitLeft.SplitterDistance = 513;
-            this.splitLeft.TabIndex = 5;
+            splitLeft.Panel2.Controls.Add(dgNormalized);
+            splitLeft.Panel2.Controls.Add(panel1);
+            splitLeft.Panel2MinSize = 115;
+            splitLeft.Size = new Size(676, 916);
+            splitLeft.SplitterDistance = 591;
+            splitLeft.SplitterWidth = 5;
+            splitLeft.TabIndex = 5;
             // 
             // dgNormalized
             // 
-            this.dgNormalized.AllowUserToAddRows = false;
-            this.dgNormalized.AllowUserToDeleteRows = false;
-            this.dgNormalized.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.Format = "N3";
-            dataGridViewCellStyle3.NullValue = null;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgNormalized.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dgNormalized.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgNormalized.Location = new System.Drawing.Point(0, 74);
-            this.dgNormalized.Name = "dgNormalized";
-            this.dgNormalized.ReadOnly = true;
-            this.dgNormalized.Size = new System.Drawing.Size(580, 203);
-            this.dgNormalized.TabIndex = 3;
-            // 
-            // pBottom
-            // 
-            this.pBottom.Controls.Add(this.btnRunScorer);
-            this.pBottom.Controls.Add(this.btnSaveMotif);
-            this.pBottom.Controls.Add(this.btnExport);
-            this.pBottom.Controls.Add(this.btnLoad);
-            this.pBottom.Controls.Add(this.btnSave);
-            this.pBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pBottom.Location = new System.Drawing.Point(0, 794);
-            this.pBottom.Name = "pBottom";
-            this.pBottom.Size = new System.Drawing.Size(1197, 36);
-            this.pBottom.TabIndex = 4;
-            // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(231, 6);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(105, 23);
-            this.btnExport.TabIndex = 2;
-            this.btnExport.Text = "Export to Excel";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(120, 6);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(105, 23);
-            this.btnLoad.TabIndex = 1;
-            this.btnLoad.Text = "Load Project";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(9, 6);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(105, 23);
-            this.btnSave.TabIndex = 0;
-            this.btnSave.Text = "Save Project";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            dgNormalized.AllowUserToAddRows = false;
+            dgNormalized.AllowUserToDeleteRows = false;
+            dgNormalized.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.Format = "N3";
+            dataGridViewCellStyle1.NullValue = null;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgNormalized.DefaultCellStyle = dataGridViewCellStyle1;
+            dgNormalized.Dock = DockStyle.Fill;
+            dgNormalized.Location = new Point(0, 85);
+            dgNormalized.Margin = new Padding(4, 3, 4, 3);
+            dgNormalized.Name = "dgNormalized";
+            dgNormalized.ReadOnly = true;
+            dgNormalized.Size = new Size(676, 235);
+            dgNormalized.TabIndex = 3;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.thresholdEntry);
-            this.panel1.Controls.Add(this.eNormalizeBy);
-            this.panel1.Controls.Add(this.lNormalizeBy);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(580, 74);
-            this.panel1.TabIndex = 2;
+            panel1.Controls.Add(thresholdEntry);
+            panel1.Controls.Add(eNormalizeBy);
+            panel1.Controls.Add(lNormalizeBy);
+            panel1.Controls.Add(label2);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(4, 3, 4, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(676, 85);
+            panel1.TabIndex = 2;
             // 
             // thresholdEntry
             // 
-            this.thresholdEntry.Location = new System.Drawing.Point(200, 2);
-            this.thresholdEntry.Margin = new System.Windows.Forms.Padding(4);
-            this.thresholdEntry.MinimumSize = new System.Drawing.Size(400, 70);
-            this.thresholdEntry.Name = "thresholdEntry";
-            this.thresholdEntry.NegativeThreshold = 0.5D;
-            this.thresholdEntry.PositiveThreshold = 0.5D;
-            this.thresholdEntry.Size = new System.Drawing.Size(400, 70);
-            this.thresholdEntry.TabIndex = 12;
-            this.thresholdEntry.ThresholdChanged += new System.EventHandler(this.thresholdEntry_ThresholdChanged);
+            thresholdEntry.Location = new Point(233, 2);
+            thresholdEntry.Margin = new Padding(5);
+            thresholdEntry.MinimumSize = new Size(467, 81);
+            thresholdEntry.Name = "thresholdEntry";
+            thresholdEntry.NegativeThreshold = 0.5D;
+            thresholdEntry.PositiveThreshold = 0.5D;
+            thresholdEntry.Size = new Size(467, 81);
+            thresholdEntry.TabIndex = 12;
+            thresholdEntry.ThresholdChanged += thresholdEntry_ThresholdChanged;
             // 
             // eNormalizeBy
             // 
-            this.eNormalizeBy.Location = new System.Drawing.Point(81, 43);
-            this.eNormalizeBy.Name = "eNormalizeBy";
-            this.eNormalizeBy.Size = new System.Drawing.Size(78, 20);
-            this.eNormalizeBy.TabIndex = 5;
-            this.eNormalizeBy.Leave += new System.EventHandler(this.eNormalizeBy_Leave);
+            eNormalizeBy.Location = new Point(94, 50);
+            eNormalizeBy.Margin = new Padding(4, 3, 4, 3);
+            eNormalizeBy.Name = "eNormalizeBy";
+            eNormalizeBy.Size = new Size(90, 23);
+            eNormalizeBy.TabIndex = 5;
+            eNormalizeBy.Leave += eNormalizeBy_Leave;
             // 
             // lNormalizeBy
             // 
-            this.lNormalizeBy.AutoSize = true;
-            this.lNormalizeBy.Location = new System.Drawing.Point(6, 47);
-            this.lNormalizeBy.Name = "lNormalizeBy";
-            this.lNormalizeBy.Size = new System.Drawing.Size(68, 13);
-            this.lNormalizeBy.TabIndex = 4;
-            this.lNormalizeBy.Text = "Normalize By";
+            lNormalizeBy.AutoSize = true;
+            lNormalizeBy.Location = new Point(7, 54);
+            lNormalizeBy.Margin = new Padding(4, 0, 4, 0);
+            lNormalizeBy.Name = "lNormalizeBy";
+            lNormalizeBy.Size = new Size(77, 15);
+            lNormalizeBy.TabIndex = 4;
+            lNormalizeBy.Text = "Normalize By";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 6);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 17);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Normalized";
-            // 
-            // dlgOpenProject
-            // 
-            this.dlgOpenProject.FileName = "Open Project";
-            this.dlgOpenProject.Filter = "PeSA Peptide Array Project File|*.ppep";
-            // 
-            // dlgSaveProject
-            // 
-            this.dlgSaveProject.Filter = "PeSA Peptide Array Project File|*.ppep";
-            this.dlgSaveProject.OverwritePrompt = false;
-            // 
-            // dlgExcelExport
-            // 
-            this.dlgExcelExport.Filter = "Excel Files|*.xlsx;*.xlsm";
-            // 
-            // errorProvider1
-            // 
-            this.errorProvider1.ContainerControl = this;
-            // 
-            // dlgOpenPeptideMatrix
-            // 
-            this.dlgOpenPeptideMatrix.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm|Comma Delimited|*.csv";
-            // 
-            // dlgSaveMotif
-            // 
-            this.dlgSaveMotif.Filter = "PeSA Motif File|*.pmtf";
-            this.dlgSaveMotif.Title = "Save Motif File";
-            // 
-            // splitMain
-            // 
-            this.splitMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitMain.Location = new System.Drawing.Point(0, 0);
-            this.splitMain.Name = "splitMain";
-            // 
-            // splitMain.Panel1
-            // 
-            this.splitMain.Panel1.Controls.Add(this.splitLeft);
-            this.splitMain.Panel1MinSize = 580;
-            // 
-            // splitMain.Panel2
-            // 
-            this.splitMain.Panel2.Controls.Add(this.tabImages);
-            this.splitMain.Panel2MinSize = 315;
-            this.splitMain.Size = new System.Drawing.Size(1197, 794);
-            this.splitMain.SplitterDistance = 580;
-            this.splitMain.TabIndex = 6;
-            // 
-            // tabImages
-            // 
-            this.tabImages.Controls.Add(this.tMotif);
-            this.tabImages.Controls.Add(this.tInfo);
-            this.tabImages.Controls.Add(this.tDecisionList);
-            this.tabImages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabImages.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabImages.Location = new System.Drawing.Point(0, 0);
-            this.tabImages.Name = "tabImages";
-            this.tabImages.SelectedIndex = 0;
-            this.tabImages.Size = new System.Drawing.Size(613, 794);
-            this.tabImages.TabIndex = 6;
-            // 
-            // tMotif
-            // 
-            this.tMotif.Controls.Add(this.pMotif);
-            this.tMotif.Location = new System.Drawing.Point(4, 25);
-            this.tMotif.Name = "tMotif";
-            this.tMotif.Padding = new System.Windows.Forms.Padding(3);
-            this.tMotif.Size = new System.Drawing.Size(605, 765);
-            this.tMotif.TabIndex = 0;
-            this.tMotif.Text = "Motif";
-            this.tMotif.UseVisualStyleBackColor = true;
-            // 
-            // pMotif
-            // 
-            this.pMotif.AutoScroll = true;
-            this.pMotif.Controls.Add(this.mdShifted);
-            this.pMotif.Controls.Add(this.mdMain);
-            this.pMotif.Controls.Add(this.panel3);
-            this.pMotif.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pMotif.Location = new System.Drawing.Point(3, 3);
-            this.pMotif.Name = "pMotif";
-            this.pMotif.Size = new System.Drawing.Size(599, 759);
-            this.pMotif.TabIndex = 0;
-            // 
-            // mdShifted
-            // 
-            this.mdShifted.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mdShifted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mdShifted.Image = null;
-            this.mdShifted.LabelText = "Shifted Motif";
-            this.mdShifted.Location = new System.Drawing.Point(0, 304);
-            this.mdShifted.Margin = new System.Windows.Forms.Padding(4);
-            this.mdShifted.Name = "mdShifted";
-            this.mdShifted.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.mdShifted.Size = new System.Drawing.Size(599, 189);
-            this.mdShifted.TabIndex = 1;
-            this.mdShifted.Visible = false;
-            // 
-            // mdMain
-            // 
-            this.mdMain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mdMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mdMain.Image = null;
-            this.mdMain.LabelText = "Motif";
-            this.mdMain.Location = new System.Drawing.Point(0, 115);
-            this.mdMain.Margin = new System.Windows.Forms.Padding(4);
-            this.mdMain.Name = "mdMain";
-            this.mdMain.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.mdMain.Size = new System.Drawing.Size(599, 189);
-            this.mdMain.TabIndex = 0;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.lQuestion);
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.ePeptideLength);
-            this.panel3.Controls.Add(this.eKeyPosition);
-            this.panel3.Controls.Add(this.lPeptideLength);
-            this.panel3.Controls.Add(this.lAminoAcid);
-            this.panel3.Controls.Add(this.eAminoAcid);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.eFreqThreshold);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(599, 115);
-            this.panel3.TabIndex = 2;
-            // 
-            // lQuestion
-            // 
-            this.lQuestion.AutoSize = true;
-            this.lQuestion.Location = new System.Drawing.Point(183, 60);
-            this.lQuestion.Name = "lQuestion";
-            this.lQuestion.Size = new System.Drawing.Size(13, 13);
-            this.lQuestion.TabIndex = 43;
-            this.lQuestion.Text = "?";
-            this.lQuestion.Click += new System.EventHandler(this.lQuestion_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 42;
-            this.label3.Text = "Key position";
-            // 
-            // eKeyPosition
-            // 
-            this.eKeyPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.eKeyPosition.Location = new System.Drawing.Point(122, 34);
-            this.eKeyPosition.Name = "eKeyPosition";
-            this.eKeyPosition.Size = new System.Drawing.Size(55, 20);
-            this.eKeyPosition.TabIndex = 37;
-            this.eKeyPosition.Leave += new System.EventHandler(this.eKeyPosition_Leave);
-            // 
-            // lAminoAcid
-            // 
-            this.lAminoAcid.AutoSize = true;
-            this.lAminoAcid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lAminoAcid.Location = new System.Drawing.Point(12, 62);
-            this.lAminoAcid.Name = "lAminoAcid";
-            this.lAminoAcid.Size = new System.Drawing.Size(94, 13);
-            this.lAminoAcid.TabIndex = 41;
-            this.lAminoAcid.Text = "Target Amino Acid";
-            // 
-            // eAminoAcid
-            // 
-            this.eAminoAcid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.eAminoAcid.Location = new System.Drawing.Point(122, 58);
-            this.eAminoAcid.Name = "eAminoAcid";
-            this.eAminoAcid.Size = new System.Drawing.Size(55, 20);
-            this.eAminoAcid.TabIndex = 38;
-            this.eAminoAcid.Leave += new System.EventHandler(this.eAminoAcid_Leave);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 86);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 13);
-            this.label6.TabIndex = 40;
-            this.label6.Text = "Frequency Threshold";
-            // 
-            // eFreqThreshold
-            // 
-            this.eFreqThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.eFreqThreshold.Location = new System.Drawing.Point(122, 82);
-            this.eFreqThreshold.Name = "eFreqThreshold";
-            this.eFreqThreshold.Size = new System.Drawing.Size(55, 20);
-            this.eFreqThreshold.TabIndex = 39;
-            this.eFreqThreshold.Text = "0.1";
-            this.eFreqThreshold.Leave += new System.EventHandler(this.eFreqThreshold_Leave);
-            // 
-            // tInfo
-            // 
-            this.tInfo.Controls.Add(this.flowpanelReference);
-            this.tInfo.Location = new System.Drawing.Point(4, 25);
-            this.tInfo.Name = "tInfo";
-            this.tInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.tInfo.Size = new System.Drawing.Size(605, 801);
-            this.tInfo.TabIndex = 1;
-            this.tInfo.Text = "Info";
-            this.tInfo.UseVisualStyleBackColor = true;
-            // 
-            // flowpanelReference
-            // 
-            this.flowpanelReference.AutoScroll = true;
-            this.flowpanelReference.BackColor = System.Drawing.SystemColors.Control;
-            this.flowpanelReference.Controls.Add(this.imageReference);
-            this.flowpanelReference.Controls.Add(this.lNotes);
-            this.flowpanelReference.Controls.Add(this.eNotes);
-            this.flowpanelReference.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowpanelReference.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowpanelReference.Location = new System.Drawing.Point(3, 3);
-            this.flowpanelReference.Name = "flowpanelReference";
-            this.flowpanelReference.Size = new System.Drawing.Size(599, 795);
-            this.flowpanelReference.TabIndex = 1;
-            this.flowpanelReference.WrapContents = false;
-            this.flowpanelReference.ClientSizeChanged += new System.EventHandler(this.flowpanelReference_ClientSizeChanged);
-            // 
-            // imageReference
-            // 
-            this.imageReference.Image = ((System.Drawing.Image)(resources.GetObject("imageReference.Image")));
-            this.imageReference.Location = new System.Drawing.Point(4, 4);
-            this.imageReference.Margin = new System.Windows.Forms.Padding(4);
-            this.imageReference.Name = "imageReference";
-            this.imageReference.Size = new System.Drawing.Size(400, 200);
-            this.imageReference.TabIndex = 5;
-            // 
-            // lNotes
-            // 
-            this.lNotes.AutoSize = true;
-            this.lNotes.Location = new System.Drawing.Point(3, 208);
-            this.lNotes.Name = "lNotes";
-            this.lNotes.Padding = new System.Windows.Forms.Padding(3);
-            this.lNotes.Size = new System.Drawing.Size(51, 23);
-            this.lNotes.TabIndex = 1;
-            this.lNotes.Text = "Notes";
-            // 
-            // eNotes
-            // 
-            this.eNotes.BackColor = System.Drawing.Color.White;
-            this.eNotes.Location = new System.Drawing.Point(3, 234);
-            this.eNotes.Multiline = true;
-            this.eNotes.Name = "eNotes";
-            this.eNotes.Size = new System.Drawing.Size(478, 578);
-            this.eNotes.TabIndex = 2;
-            // 
-            // tDecisionList
-            // 
-            this.tDecisionList.Controls.Add(this.dgDecision);
-            this.tDecisionList.Location = new System.Drawing.Point(4, 25);
-            this.tDecisionList.Name = "tDecisionList";
-            this.tDecisionList.Padding = new System.Windows.Forms.Padding(3);
-            this.tDecisionList.Size = new System.Drawing.Size(605, 801);
-            this.tDecisionList.TabIndex = 2;
-            this.tDecisionList.Text = "Decision List";
-            this.tDecisionList.UseVisualStyleBackColor = true;
-            // 
-            // dgDecision
-            // 
-            this.dgDecision.AllowUserToAddRows = false;
-            this.dgDecision.AllowUserToDeleteRows = false;
-            this.dgDecision.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgDecision.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colPeptide,
-            this.colWeight,
-            this.colDecision});
-            this.dgDecision.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgDecision.Location = new System.Drawing.Point(3, 3);
-            this.dgDecision.Name = "dgDecision";
-            this.dgDecision.RowHeadersVisible = false;
-            this.dgDecision.Size = new System.Drawing.Size(599, 795);
-            this.dgDecision.TabIndex = 1;
-            // 
-            // colPeptide
-            // 
-            this.colPeptide.HeaderText = "Peptide";
-            this.colPeptide.Name = "colPeptide";
-            this.colPeptide.ReadOnly = true;
-            // 
-            // colWeight
-            // 
-            this.colWeight.HeaderText = "Weight";
-            this.colWeight.Name = "colWeight";
-            this.colWeight.ReadOnly = true;
-            // 
-            // colDecision
-            // 
-            this.colDecision.HeaderText = "Decision";
-            this.colDecision.Name = "colDecision";
-            this.colDecision.ReadOnly = true;
-            // 
-            // dlgOpenImage
-            // 
-            this.dlgOpenImage.FileName = "Open Image";
-            this.dlgOpenImage.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif;" +
-    " *.png\"";
-            // 
-            // btnSaveMotif
-            // 
-            this.btnSaveMotif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveMotif.Location = new System.Drawing.Point(1080, 6);
-            this.btnSaveMotif.Name = "btnSaveMotif";
-            this.btnSaveMotif.Size = new System.Drawing.Size(105, 23);
-            this.btnSaveMotif.TabIndex = 4;
-            this.btnSaveMotif.Text = "Save Motif";
-            this.btnSaveMotif.UseVisualStyleBackColor = true;
-            this.btnSaveMotif.Click += new System.EventHandler(this.btnSaveMotif_Click);
+            label2.AutoSize = true;
+            label2.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(7, 7);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(79, 17);
+            label2.TabIndex = 2;
+            label2.Text = "Normalized";
+            // 
+            // pBottom
+            // 
+            pBottom.Controls.Add(btnRunScorer);
+            pBottom.Controls.Add(btnSaveMotif);
+            pBottom.Controls.Add(btnExport);
+            pBottom.Controls.Add(btnLoad);
+            pBottom.Controls.Add(btnSave);
+            pBottom.Dock = DockStyle.Bottom;
+            pBottom.Location = new Point(0, 916);
+            pBottom.Margin = new Padding(4, 3, 4, 3);
+            pBottom.Name = "pBottom";
+            pBottom.Size = new Size(1396, 42);
+            pBottom.TabIndex = 4;
             // 
             // btnRunScorer
             // 
-            this.btnRunScorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRunScorer.Location = new System.Drawing.Point(969, 6);
-            this.btnRunScorer.Name = "btnRunScorer";
-            this.btnRunScorer.Size = new System.Drawing.Size(105, 23);
-            this.btnRunScorer.TabIndex = 5;
-            this.btnRunScorer.Text = "Run Scorer";
-            this.btnRunScorer.UseVisualStyleBackColor = true;
-            this.btnRunScorer.Click += new System.EventHandler(this.btnRunScorer_Click);
+            btnRunScorer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRunScorer.Location = new Point(1130, 7);
+            btnRunScorer.Margin = new Padding(4, 3, 4, 3);
+            btnRunScorer.Name = "btnRunScorer";
+            btnRunScorer.Size = new Size(122, 27);
+            btnRunScorer.TabIndex = 5;
+            btnRunScorer.Text = "Run Scorer";
+            btnRunScorer.UseVisualStyleBackColor = true;
+            btnRunScorer.Click += btnRunScorer_Click;
+            // 
+            // btnSaveMotif
+            // 
+            btnSaveMotif.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSaveMotif.Location = new Point(1260, 7);
+            btnSaveMotif.Margin = new Padding(4, 3, 4, 3);
+            btnSaveMotif.Name = "btnSaveMotif";
+            btnSaveMotif.Size = new Size(122, 27);
+            btnSaveMotif.TabIndex = 4;
+            btnSaveMotif.Text = "Save Motif";
+            btnSaveMotif.UseVisualStyleBackColor = true;
+            btnSaveMotif.Click += btnSaveMotif_Click;
+            // 
+            // btnExport
+            // 
+            btnExport.Location = new Point(270, 7);
+            btnExport.Margin = new Padding(4, 3, 4, 3);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(122, 27);
+            btnExport.TabIndex = 2;
+            btnExport.Text = "Export to Excel";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
+            // 
+            // btnLoad
+            // 
+            btnLoad.Location = new Point(140, 7);
+            btnLoad.Margin = new Padding(4, 3, 4, 3);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(122, 27);
+            btnLoad.TabIndex = 1;
+            btnLoad.Text = "Load Project";
+            btnLoad.UseVisualStyleBackColor = true;
+            btnLoad.Click += btnLoad_Click;
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(10, 7);
+            btnSave.Margin = new Padding(4, 3, 4, 3);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(122, 27);
+            btnSave.TabIndex = 0;
+            btnSave.Text = "Save Project";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
+            // dlgOpenProject
+            // 
+            dlgOpenProject.FileName = "Open Project";
+            dlgOpenProject.Filter = "PeSA Peptide Array Project File|*.ppep";
+            // 
+            // dlgSaveProject
+            // 
+            dlgSaveProject.Filter = "PeSA Peptide Array Project File|*.ppep";
+            dlgSaveProject.OverwritePrompt = false;
+            // 
+            // dlgExcelExport
+            // 
+            dlgExcelExport.Filter = "Excel Files|*.xlsx;*.xlsm";
+            // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
+            // 
+            // dlgOpenPeptideMatrix
+            // 
+            dlgOpenPeptideMatrix.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm|Comma Delimited|*.csv";
+            // 
+            // dlgSaveMotif
+            // 
+            dlgSaveMotif.Filter = "PeSA Motif File|*.pmtf";
+            dlgSaveMotif.Title = "Save Motif File";
+            // 
+            // splitMain
+            // 
+            splitMain.Dock = DockStyle.Fill;
+            splitMain.Location = new Point(0, 0);
+            splitMain.Margin = new Padding(4, 3, 4, 3);
+            splitMain.Name = "splitMain";
+            // 
+            // splitMain.Panel1
+            // 
+            splitMain.Panel1.Controls.Add(splitLeft);
+            splitMain.Panel1MinSize = 580;
+            // 
+            // splitMain.Panel2
+            // 
+            splitMain.Panel2.Controls.Add(tabImages);
+            splitMain.Panel2MinSize = 315;
+            splitMain.Size = new Size(1396, 916);
+            splitMain.SplitterDistance = 676;
+            splitMain.SplitterWidth = 5;
+            splitMain.TabIndex = 6;
+            // 
+            // tabImages
+            // 
+            tabImages.Controls.Add(tMotif);
+            tabImages.Controls.Add(tInfo);
+            tabImages.Controls.Add(tDecisionList);
+            tabImages.Dock = DockStyle.Fill;
+            tabImages.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            tabImages.Location = new Point(0, 0);
+            tabImages.Margin = new Padding(4, 3, 4, 3);
+            tabImages.Name = "tabImages";
+            tabImages.SelectedIndex = 0;
+            tabImages.Size = new Size(715, 916);
+            tabImages.TabIndex = 6;
+            // 
+            // tMotif
+            // 
+            tMotif.Controls.Add(pMotif);
+            tMotif.Location = new Point(4, 25);
+            tMotif.Margin = new Padding(4, 3, 4, 3);
+            tMotif.Name = "tMotif";
+            tMotif.Padding = new Padding(4, 3, 4, 3);
+            tMotif.Size = new Size(707, 887);
+            tMotif.TabIndex = 0;
+            tMotif.Text = "Motif";
+            tMotif.UseVisualStyleBackColor = true;
+            // 
+            // pMotif
+            // 
+            pMotif.AutoScroll = true;
+            pMotif.Controls.Add(mdShifted);
+            pMotif.Controls.Add(mdNegative);
+            pMotif.Controls.Add(mdMain);
+            pMotif.Controls.Add(panel3);
+            pMotif.Dock = DockStyle.Fill;
+            pMotif.Location = new Point(4, 3);
+            pMotif.Margin = new Padding(4, 3, 4, 3);
+            pMotif.Name = "pMotif";
+            pMotif.Size = new Size(699, 881);
+            pMotif.TabIndex = 0;
+            // 
+            // mdNegative
+            // 
+            mdNegative.Dock = DockStyle.Top;
+            mdNegative.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            mdNegative.Image = null;
+            mdNegative.LabelText = "Negative Motif";
+            mdNegative.Location = new Point(0, 354);
+            mdNegative.Margin = new Padding(5);
+            mdNegative.Name = "mdNegative";
+            mdNegative.Padding = new Padding(0, 5, 0, 0);
+            mdNegative.Size = new Size(699, 221);
+            mdNegative.TabIndex = 3;
+            // 
+            // mdMain
+            // 
+            mdMain.Dock = DockStyle.Top;
+            mdMain.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            mdMain.Image = null;
+            mdMain.LabelText = "Motif";
+            mdMain.Location = new Point(0, 133);
+            mdMain.Margin = new Padding(5);
+            mdMain.Name = "mdMain";
+            mdMain.Padding = new Padding(0, 5, 0, 0);
+            mdMain.Size = new Size(699, 221);
+            mdMain.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(lQuestion);
+            panel3.Controls.Add(label3);
+            panel3.Controls.Add(ePeptideLength);
+            panel3.Controls.Add(eKeyPosition);
+            panel3.Controls.Add(lPeptideLength);
+            panel3.Controls.Add(lAminoAcid);
+            panel3.Controls.Add(eAminoAcid);
+            panel3.Controls.Add(label6);
+            panel3.Controls.Add(eFreqThreshold);
+            panel3.Dock = DockStyle.Top;
+            panel3.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            panel3.Location = new Point(0, 0);
+            panel3.Margin = new Padding(4, 3, 4, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(699, 133);
+            panel3.TabIndex = 2;
+            // 
+            // lQuestion
+            // 
+            lQuestion.AutoSize = true;
+            lQuestion.Location = new Point(214, 69);
+            lQuestion.Margin = new Padding(4, 0, 4, 0);
+            lQuestion.Name = "lQuestion";
+            lQuestion.Size = new Size(13, 13);
+            lQuestion.TabIndex = 43;
+            lQuestion.Text = "?";
+            lQuestion.Click += lQuestion_Click;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(14, 44);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(64, 13);
+            label3.TabIndex = 42;
+            label3.Text = "Key position";
+            // 
+            // eKeyPosition
+            // 
+            eKeyPosition.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            eKeyPosition.Location = new Point(142, 39);
+            eKeyPosition.Margin = new Padding(4, 3, 4, 3);
+            eKeyPosition.Name = "eKeyPosition";
+            eKeyPosition.Size = new Size(63, 20);
+            eKeyPosition.TabIndex = 37;
+            eKeyPosition.Leave += eKeyPosition_Leave;
+            // 
+            // lAminoAcid
+            // 
+            lAminoAcid.AutoSize = true;
+            lAminoAcid.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lAminoAcid.Location = new Point(14, 72);
+            lAminoAcid.Margin = new Padding(4, 0, 4, 0);
+            lAminoAcid.Name = "lAminoAcid";
+            lAminoAcid.Size = new Size(94, 13);
+            lAminoAcid.TabIndex = 41;
+            lAminoAcid.Text = "Target Amino Acid";
+            // 
+            // eAminoAcid
+            // 
+            eAminoAcid.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            eAminoAcid.Location = new Point(142, 67);
+            eAminoAcid.Margin = new Padding(4, 3, 4, 3);
+            eAminoAcid.Name = "eAminoAcid";
+            eAminoAcid.Size = new Size(63, 20);
+            eAminoAcid.TabIndex = 38;
+            eAminoAcid.Leave += eAminoAcid_Leave;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Location = new Point(14, 99);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(107, 13);
+            label6.TabIndex = 40;
+            label6.Text = "Frequency Threshold";
+            // 
+            // eFreqThreshold
+            // 
+            eFreqThreshold.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            eFreqThreshold.Location = new Point(142, 95);
+            eFreqThreshold.Margin = new Padding(4, 3, 4, 3);
+            eFreqThreshold.Name = "eFreqThreshold";
+            eFreqThreshold.Size = new Size(63, 20);
+            eFreqThreshold.TabIndex = 39;
+            eFreqThreshold.Text = "0.1";
+            eFreqThreshold.Leave += eFreqThreshold_Leave;
+            // 
+            // tInfo
+            // 
+            tInfo.Controls.Add(flowpanelReference);
+            tInfo.Location = new Point(4, 25);
+            tInfo.Margin = new Padding(4, 3, 4, 3);
+            tInfo.Name = "tInfo";
+            tInfo.Padding = new Padding(4, 3, 4, 3);
+            tInfo.Size = new Size(192, 71);
+            tInfo.TabIndex = 1;
+            tInfo.Text = "Info";
+            tInfo.UseVisualStyleBackColor = true;
+            // 
+            // flowpanelReference
+            // 
+            flowpanelReference.AutoScroll = true;
+            flowpanelReference.BackColor = SystemColors.Control;
+            flowpanelReference.Controls.Add(imageReference);
+            flowpanelReference.Controls.Add(lNotes);
+            flowpanelReference.Controls.Add(eNotes);
+            flowpanelReference.Dock = DockStyle.Fill;
+            flowpanelReference.FlowDirection = FlowDirection.TopDown;
+            flowpanelReference.Location = new Point(4, 3);
+            flowpanelReference.Margin = new Padding(4, 3, 4, 3);
+            flowpanelReference.Name = "flowpanelReference";
+            flowpanelReference.Size = new Size(184, 65);
+            flowpanelReference.TabIndex = 1;
+            flowpanelReference.WrapContents = false;
+            flowpanelReference.ClientSizeChanged += flowpanelReference_ClientSizeChanged;
+            // 
+            // imageReference
+            // 
+            imageReference.Image = (Image)resources.GetObject("imageReference.Image");
+            imageReference.Location = new Point(5, 5);
+            imageReference.Margin = new Padding(5);
+            imageReference.Name = "imageReference";
+            imageReference.Size = new Size(467, 231);
+            imageReference.TabIndex = 5;
+            // 
+            // lNotes
+            // 
+            lNotes.AutoSize = true;
+            lNotes.Location = new Point(4, 241);
+            lNotes.Margin = new Padding(4, 0, 4, 0);
+            lNotes.Name = "lNotes";
+            lNotes.Padding = new Padding(4, 3, 4, 3);
+            lNotes.Size = new Size(53, 23);
+            lNotes.TabIndex = 1;
+            lNotes.Text = "Notes";
+            // 
+            // eNotes
+            // 
+            eNotes.BackColor = Color.White;
+            eNotes.Location = new Point(4, 267);
+            eNotes.Margin = new Padding(4, 3, 4, 3);
+            eNotes.Multiline = true;
+            eNotes.Name = "eNotes";
+            eNotes.Size = new Size(557, 666);
+            eNotes.TabIndex = 2;
+            // 
+            // tDecisionList
+            // 
+            tDecisionList.Controls.Add(dgDecision);
+            tDecisionList.Location = new Point(4, 25);
+            tDecisionList.Margin = new Padding(4, 3, 4, 3);
+            tDecisionList.Name = "tDecisionList";
+            tDecisionList.Padding = new Padding(4, 3, 4, 3);
+            tDecisionList.Size = new Size(192, 71);
+            tDecisionList.TabIndex = 2;
+            tDecisionList.Text = "Decision List";
+            tDecisionList.UseVisualStyleBackColor = true;
+            // 
+            // dgDecision
+            // 
+            dgDecision.AllowUserToAddRows = false;
+            dgDecision.AllowUserToDeleteRows = false;
+            dgDecision.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgDecision.Columns.AddRange(new DataGridViewColumn[] { colPeptide, colWeight, colDecision });
+            dgDecision.Dock = DockStyle.Fill;
+            dgDecision.Location = new Point(4, 3);
+            dgDecision.Margin = new Padding(4, 3, 4, 3);
+            dgDecision.Name = "dgDecision";
+            dgDecision.RowHeadersVisible = false;
+            dgDecision.Size = new Size(184, 65);
+            dgDecision.TabIndex = 1;
+            // 
+            // colPeptide
+            // 
+            colPeptide.HeaderText = "Peptide";
+            colPeptide.Name = "colPeptide";
+            colPeptide.ReadOnly = true;
+            // 
+            // colWeight
+            // 
+            colWeight.HeaderText = "Weight";
+            colWeight.Name = "colWeight";
+            colWeight.ReadOnly = true;
+            // 
+            // colDecision
+            // 
+            colDecision.HeaderText = "Decision";
+            colDecision.Name = "colDecision";
+            colDecision.ReadOnly = true;
+            // 
+            // dlgOpenImage
+            // 
+            dlgOpenImage.FileName = "Open Image";
+            dlgOpenImage.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png\"";
             // 
             // cmsRunScorer
             // 
-            this.cmsRunScorer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmiPeptideScorer,
-            this.cmiProteinScorer});
-            this.cmsRunScorer.Name = "cmsRunScorer";
-            this.cmsRunScorer.Size = new System.Drawing.Size(181, 70);
+            cmsRunScorer.Items.AddRange(new ToolStripItem[] { cmiPeptideScorer, cmiProteinScorer });
+            cmsRunScorer.Name = "cmsRunScorer";
+            cmsRunScorer.Size = new Size(151, 48);
             // 
             // cmiPeptideScorer
             // 
-            this.cmiPeptideScorer.Name = "cmiPeptideScorer";
-            this.cmiPeptideScorer.Size = new System.Drawing.Size(180, 22);
-            this.cmiPeptideScorer.Text = "Peptide Scorer";
-            this.cmiPeptideScorer.Click += new System.EventHandler(this.cmiPeptideScorer_Click);
+            cmiPeptideScorer.Name = "cmiPeptideScorer";
+            cmiPeptideScorer.Size = new Size(150, 22);
+            cmiPeptideScorer.Text = "Peptide Scorer";
+            cmiPeptideScorer.Click += cmiPeptideScorer_Click;
             // 
             // cmiProteinScorer
             // 
-            this.cmiProteinScorer.Name = "cmiProteinScorer";
-            this.cmiProteinScorer.Size = new System.Drawing.Size(180, 22);
-            this.cmiProteinScorer.Text = "Protein Scorer";
-            this.cmiProteinScorer.Click += new System.EventHandler(this.cmiProteinScorer_Click);
+            cmiProteinScorer.Name = "cmiProteinScorer";
+            cmiProteinScorer.Size = new Size(150, 22);
+            cmiProteinScorer.Text = "Protein Scorer";
+            cmiProteinScorer.Click += cmiProteinScorer_Click;
+            // 
+            // mdShifted
+            // 
+            mdShifted.Dock = DockStyle.Top;
+            mdShifted.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            mdShifted.Image = null;
+            mdShifted.LabelText = "Shifted Motif";
+            mdShifted.Location = new Point(0, 575);
+            mdShifted.Margin = new Padding(5);
+            mdShifted.Name = "mdShifted";
+            mdShifted.Padding = new Padding(0, 5, 0, 0);
+            mdShifted.Size = new Size(699, 221);
+            mdShifted.TabIndex = 4;
+            mdShifted.Visible = false;
             // 
             // frmAnalyzePeptideArray
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1197, 830);
-            this.Controls.Add(this.splitMain);
-            this.Controls.Add(this.pBottom);
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(506, 291);
-            this.Name = "frmAnalyzePeptideArray";
-            this.Text = "Peptide Array Analysis";
-            this.Load += new System.EventHandler(this.frmPeptideArray_Load);
-            this.cmsLoadPeptide.ResumeLayout(false);
-            this.splitLeftTop.Panel1.ResumeLayout(false);
-            this.splitLeftTop.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitLeftTop)).EndInit();
-            this.splitLeftTop.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgPeptides)).EndInit();
-            this.cmsPeptide.ResumeLayout(false);
-            this.pPeptidesTop.ResumeLayout(false);
-            this.pPeptidesTop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgQuantification)).EndInit();
-            this.cmsQuantification.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.splitLeft.Panel1.ResumeLayout(false);
-            this.splitLeft.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitLeft)).EndInit();
-            this.splitLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgNormalized)).EndInit();
-            this.pBottom.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            this.splitMain.Panel1.ResumeLayout(false);
-            this.splitMain.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).EndInit();
-            this.splitMain.ResumeLayout(false);
-            this.tabImages.ResumeLayout(false);
-            this.tMotif.ResumeLayout(false);
-            this.pMotif.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.tInfo.ResumeLayout(false);
-            this.flowpanelReference.ResumeLayout(false);
-            this.flowpanelReference.PerformLayout();
-            this.tDecisionList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgDecision)).EndInit();
-            this.cmsRunScorer.ResumeLayout(false);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1396, 958);
+            Controls.Add(splitMain);
+            Controls.Add(pBottom);
+            Margin = new Padding(2);
+            MinimumSize = new Size(588, 330);
+            Name = "frmAnalyzePeptideArray";
+            Text = "Peptide Array Analysis";
+            Load += frmPeptideArray_Load;
+            cmsLoadPeptide.ResumeLayout(false);
+            splitLeftTop.Panel1.ResumeLayout(false);
+            splitLeftTop.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitLeftTop).EndInit();
+            splitLeftTop.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgPeptides).EndInit();
+            cmsPeptide.ResumeLayout(false);
+            pPeptidesTop.ResumeLayout(false);
+            pPeptidesTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgQuantification).EndInit();
+            cmsQuantification.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            splitLeft.Panel1.ResumeLayout(false);
+            splitLeft.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitLeft).EndInit();
+            splitLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgNormalized).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            pBottom.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
+            splitMain.Panel1.ResumeLayout(false);
+            splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
+            splitMain.ResumeLayout(false);
+            tabImages.ResumeLayout(false);
+            tMotif.ResumeLayout(false);
+            pMotif.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            tInfo.ResumeLayout(false);
+            flowpanelReference.ResumeLayout(false);
+            flowpanelReference.PerformLayout();
+            tDecisionList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgDecision).EndInit();
+            cmsRunScorer.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
@@ -965,7 +1006,6 @@
         private System.Windows.Forms.Label lNotes;
         private System.Windows.Forms.TextBox eNotes;
         private System.Windows.Forms.Panel pMotif;
-        private MotifDisplay mdShifted;
         private MotifDisplay mdMain;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label lQuestion;
@@ -990,5 +1030,7 @@
         private System.Windows.Forms.ContextMenuStrip cmsRunScorer;
         private System.Windows.Forms.ToolStripMenuItem cmiPeptideScorer;
         private System.Windows.Forms.ToolStripMenuItem cmiProteinScorer;
+        private MotifDisplay mdNegative;
+        private MotifDisplay mdShifted;
     }
 }

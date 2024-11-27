@@ -34,21 +34,31 @@ namespace PeSA.Engine
         public int? KeyPosition { get; set; }
         public char KeyAA { get; set; }
 
-        public List<string> ModifiedPeptides { get; set; }
+        public List<string> PositivePeptides { get; set; }
+        public List<string> NegativePeptides { get; set; }
+        
         #region Private methods
         private void GenerateModifiedPeptideList()
         {
-            ModifiedPeptides.Clear();
+            PositivePeptides.Clear();
+            NegativePeptides.Clear();
             foreach (string s in NormalizedPeptideWeights.Keys)
             {
                 if (NormalizedPeptideWeights[s] >= PositiveThreshold)
-                    AddModifiedPeptide(s);
+                    AddPositivePeptide(s);
+                if (NormalizedPeptideWeights[s] <= NegativeThreshold)
+                    AddNegativePeptide(s);
             }
         }
-        private void AddModifiedPeptide(string s)
+        private void AddPositivePeptide(string s)
         {
-            if (!ModifiedPeptides.Contains(s))
-                ModifiedPeptides.Add(s);
+            if (!PositivePeptides.Contains(s))
+                PositivePeptides.Add(s);
+        }
+        private void AddNegativePeptide(string s)
+        {
+            if (!NegativePeptides.Contains(s))
+                NegativePeptides.Add(s);
         }
 
         private void AddNormalizedPeptideWeight(string peptide, double weight)
@@ -88,7 +98,8 @@ namespace PeSA.Engine
             PeptideMatrix = new string[nRow, nCol];
             QuantificationMatrix = new double[nRow, nCol];
             NormalizedMatrix = new double[nRow, nCol];
-            ModifiedPeptides = new List<string>();
+            PositivePeptides = new List<string>();
+            NegativePeptides = new List<string>();
             NormalizedPeptideWeights = new Dictionary<string, double>();
         }
 

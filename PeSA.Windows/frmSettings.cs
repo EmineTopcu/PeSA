@@ -112,14 +112,14 @@ namespace PeSA.Windows
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!Int32.TryParse(eMotifHeight.Text, out int h))
+            if (!int.TryParse(eMotifHeight.Text, out int h))
                 h = 200;
-            if (!Int32.TryParse(eMotifWidth.Text, out int w))
+            if (!int.TryParse(eMotifWidth.Text, out int w))
                 w = 800;
-            if (!Int32.TryParse(eMaxAAPerColumn.Text, out int m))
+            if (!int.TryParse(eMaxAAPerColumn.Text, out int m))
                 m = 10;
 
-            if (!Double.TryParse(eThreshold.Text, out double t))
+            if (!double.TryParse(eThreshold.Text, out double t))
                 t = 0.1;
             settings.MotifHeight = h;
             settings.MotifWidth = w;
@@ -127,9 +127,9 @@ namespace PeSA.Windows
             settings.MotifThreshold = t;
             settings.WildTypeYAxisTopToBottom = rbTopToBottom.Checked;
 
-            if (!Int32.TryParse(eRowNumber.Text, out int r))
+            if (!int.TryParse(eRowNumber.Text, out int r))
                 r = 20;
-            if (!Int32.TryParse(eColumnNumber.Text, out int c))
+            if (!int.TryParse(eColumnNumber.Text, out int c))
                 c = 30;
             settings.PeptideArrayRows = r;
             settings.PeptideArrayColumns = c;

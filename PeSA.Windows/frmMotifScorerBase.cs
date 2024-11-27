@@ -128,7 +128,7 @@ namespace PeSA.Windows
             }
             keyPosition = 0;
             keyAA = ' ';
-            if (Int32.TryParse(eTargetPosition.Text, out keyPosition))
+            if (int.TryParse(eTargetPosition.Text, out keyPosition))
             {
                 if (keyPosition <= 0 || keyPosition > Motif.PeptideLength)
                 {

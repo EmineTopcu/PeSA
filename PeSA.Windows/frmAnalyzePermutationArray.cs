@@ -128,7 +128,7 @@ namespace PeSA.Windows
                     if (warnings?.Count > 0)
                     {
                         warnings.Insert(0, "Warning:");
-                        MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+                        MessageBox.Show(string.Join("\r\n", warnings), Analyzer.ProgramName);
                     }
                 }
             }
@@ -345,7 +345,7 @@ namespace PeSA.Windows
             if (warnings.Count > 0)
             {
                 warnings.Insert(0, "Warning:");
-                MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+                MessageBox.Show(string.Join("\r\n", warnings), Analyzer.ProgramName);
             }
             PA.SetPositiveThreshold(thresholdEntry.PositiveThreshold, out bool negChanged);
             PA.SetNegativeThreshold(thresholdEntry.NegativeThreshold, out bool posChanged2);

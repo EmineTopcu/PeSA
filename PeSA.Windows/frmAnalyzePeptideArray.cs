@@ -19,7 +19,7 @@ namespace PeSA.Windows
         int peptidelength = 0;
         
         GridUtil dgPeptideHelper;
-        Motif MotifMain, MotifShifted;
+        Motif MotifMain, MotifShifted, MotifNegative;
 
         public frmAnalyzePeptideArray()
         {
@@ -129,9 +129,10 @@ namespace PeSA.Windows
 
         private void ClearMotifs()
         {
-            MotifMain = MotifShifted = null;
+            MotifMain = MotifShifted = MotifNegative = null;
             mdMain.Image = null;
             mdShifted.Image = null;
+            mdNegative.Image = null;
         }
 
         private void LoadNormalizedMatrixFromPeptideArrayToGrid()
@@ -281,7 +282,7 @@ namespace PeSA.Windows
                 }
 
                 int midpoint = peptidelength / 2;
-                if (Int32.TryParse(eKeyPosition.Text, out int keyPos) && keyPos <= peptidelength && keyPos > 0)
+                if (int.TryParse(eKeyPosition.Text, out int keyPos) && keyPos <= peptidelength && keyPos > 0)
                     midpoint = keyPos - 1;
                 else
                 {
@@ -290,20 +291,20 @@ namespace PeSA.Windows
                 }
                 PA.KeyPosition = keyPos;
 
-                if (!Char.TryParse(eAminoAcid.Text.Trim(), out char keyAA))
+                if (!char.TryParse(eAminoAcid.Text.Trim(), out char keyAA))
                 {
                     keyAA = ' ';
                     eAminoAcid.Text = keyAA.ToString();
                 }
-                else if (Char.IsLower(keyAA))
-                    keyAA = Char.ToUpper(keyAA);
+                else if (char.IsLower(keyAA))
+                    keyAA = char.ToUpper(keyAA);
 
                 PA.KeyAA = keyAA;
                 if (keyAA != ' ')
                 {
-                    List<string> mainList = PA.ModifiedPeptides.Where(s => s[keyPos - 1] == keyAA).ToList();
+                    List<string> mainList = PA.PositivePeptides.Where(s => s[keyPos - 1] == keyAA).ToList();
 
-                    List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
+                    List<string> shiftedList = Analyzer.ShiftPeptides(PA.PositivePeptides.Where(s => s[keyPos - 1] != keyAA).ToList(), keyAA, peptidelength, keyPos - 1, out List<string> replacements);
                     MotifMain = new Motif(mainList, peptidelength)
                     {
                         FreqThreshold = PA.FrequencyThreshold
@@ -318,15 +319,30 @@ namespace PeSA.Windows
                     bm = MotifShifted.GetFrequencyMotif(widthImage, heightImage);
                     mdShifted.Image = bm;
                     mdShifted.Visible = true;
+
+                    MotifNegative = new Motif(PA.NegativePeptides, peptidelength)
+                    {
+                        FreqThreshold = PA.FrequencyThreshold
+                    };
+                    bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
+                    mdNegative.Image = bm;
                 }
                 else
                 {
-                    MotifMain = new Motif(PA.ModifiedPeptides, peptidelength)
+                    MotifMain = new Motif(PA.PositivePeptides, peptidelength)
                     {
                         FreqThreshold = PA.FrequencyThreshold
                     };
                     Bitmap bm = MotifMain.GetFrequencyMotif(widthImage, heightImage);
                     mdMain.Image = bm;
+
+                    MotifNegative = new Motif(PA.NegativePeptides, peptidelength)
+                    {
+                        FreqThreshold = PA.FrequencyThreshold
+                    };
+                    bm = MotifNegative.GetFrequencyMotif(widthImage, heightImage);
+                    mdNegative.Image = bm;
+                    mdNegative.Visible = true;
                     mdShifted.Visible = false;
                 }
                 return true;

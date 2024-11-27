@@ -73,7 +73,7 @@ namespace PeSA.Windows
 
             string filename = dlgOpenPeptides.FileName;
             Peptides = FileUtil.ReadPeptideList(filename);
-            ePeptides.Text = String.Join("\r\n", Peptides);
+            ePeptides.Text = string.Join("\r\n", Peptides);
         }
 
         private void AddScoreToGrid(int rowind, Score score)
@@ -134,7 +134,7 @@ namespace PeSA.Windows
             if (int.TryParse(eNegCutoff.Text, out int negcutoff))
                 Scorer.NegMatchCutoff = negcutoff;
 
-            if (!Int32.TryParse(eTarget.Text, out int keyPosition))
+            if (!int.TryParse(eTarget.Text, out int keyPosition))
                 keyPosition = 0;
             Scorer.KeyPosition = keyPosition - 1;
             if (Scorer.KeyPosition < 0)

@@ -372,7 +372,7 @@ namespace PeSA.Windows
                     if (warnings?.Count > 0)
                     {
                         warnings.Insert(0, "Warning:");
-                        MessageBox.Show(String.Join("\r\n", warnings), Analyzer.ProgramName);
+                        MessageBox.Show(string.Join("\r\n", warnings), Analyzer.ProgramName);
                     }
                 }
             }

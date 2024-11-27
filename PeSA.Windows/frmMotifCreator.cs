@@ -8,6 +8,7 @@ namespace PeSA.Windows
     public partial class frmMotifCreator : Form
     {
         List<string> Peptides;
+        List<double> Weights;
         int peptidelength = 0;
         char keyAA = ' ';
         int keyPos;
@@ -22,14 +23,14 @@ namespace PeSA.Windows
 
         private void LoadSettings()
         {
-            if (!Int32.TryParse(ePeptideLength.Text, out peptidelength) || peptidelength <= 0)
+            if (!int.TryParse(ePeptideLength.Text, out peptidelength) || peptidelength <= 0)
             {
                 peptidelength = Peptides[0].Length;
                 ePeptideLength.Text = peptidelength.ToString();
             }
 
             int midpoint = peptidelength / 2;
-            if (Int32.TryParse(eKeyPosition.Text, out keyPos) && keyPos <= peptidelength && keyPos > 0)
+            if (int.TryParse(eKeyPosition.Text, out keyPos) && keyPos <= peptidelength && keyPos > 0)
                 midpoint = keyPos - 1;
             else
             {
@@ -37,18 +38,18 @@ namespace PeSA.Windows
                 eKeyPosition.Text = keyPos.ToString();
             }
 
-            if (!Double.TryParse(eFreqThreshold.Text, out threshold))
+            if (!double.TryParse(eFreqThreshold.Text, out threshold))
             {
                 threshold = 0.05;
                 eFreqThreshold.Text = threshold.ToString();
             }
-            if (!Char.TryParse(eAminoAcid.Text.Trim(), out keyAA))
+            if (!char.TryParse(eAminoAcid.Text.Trim(), out keyAA))
             {
                 keyAA = ' ';
                 eAminoAcid.Text = keyAA.ToString();
             }
-            else if (Char.IsLower(keyAA))
-                keyAA = Char.ToUpper(keyAA);
+            else if (char.IsLower(keyAA))
+                keyAA = char.ToUpper(keyAA);
         }
 
         private bool LoadAndCheckPeptides()
@@ -59,7 +60,7 @@ namespace PeSA.Windows
             Peptides = Peptides.Select(s => s.Replace("\t", "").Replace("\r", "").Replace("\n", "")).ToList();
             Peptides = Peptides.Where(s => s.Length > 0).ToList();
 
-            if (!Int32.TryParse(ePeptideLength.Text, out peptidelength) || peptidelength <= 0)
+            if (!int.TryParse(ePeptideLength.Text, out peptidelength) || peptidelength <= 0)
             {
                 peptidelength = Peptides[0].Length;
                 ePeptideLength.Text = peptidelength.ToString();
@@ -67,9 +68,9 @@ namespace PeSA.Windows
             Analyzer.CheckPeptideList(Peptides, peptidelength, out List<string> warnings, out List<string> errors);
             Peptides = Peptides.Select(s => s[..Math.Min(s.Length, peptidelength)]).ToList();
             if (errors.Count > 0)
-                eOutput.Text += String.Join("\r\nError: ", errors) + "\r\n";
+                eOutput.Text += string.Join("\r\nError: ", errors) + "\r\n";
             if (warnings.Count > 0)
-                eOutput.Text += String.Join("\r\nWarning: ", warnings) + "\r\n";
+                eOutput.Text += string.Join("\r\nWarning: ", warnings) + "\r\n";
             if (errors.Count > 0)
             {
                 MessageBox.Show("Please check the peptide list for accuracy before proceeding. Details are listed in the output window.", Analyzer.ProgramName);
@@ -151,7 +152,7 @@ namespace PeSA.Windows
             }
 
             int midpoint = peptidelength / 2;
-            if (Int32.TryParse(eKeyPosition.Text, out keyPos) && keyPos <= peptidelength && keyPos > 0)
+            if (int.TryParse(eKeyPosition.Text, out keyPos) && keyPos <= peptidelength && keyPos > 0)
                 midpoint = keyPos - 1;
             else
             {
@@ -159,13 +160,13 @@ namespace PeSA.Windows
                 eKeyPosition.Text = keyPos.ToString();
             }
 
-            if (!Char.TryParse(eAminoAcid.Text.Trim(), out keyAA))
+            if (!char.TryParse(eAminoAcid.Text.Trim(), out keyAA))
             {
                 keyAA = ' ';
                 eAminoAcid.Text = keyAA.ToString();
             }
-            else if (Char.IsLower(keyAA))
-                keyAA = Char.ToUpper(keyAA);
+            else if (char.IsLower(keyAA))
+                keyAA = char.ToUpper(keyAA);
 
             if (keyAA != ' ')
             {
@@ -186,7 +187,7 @@ namespace PeSA.Windows
                 bm = ShiftedMotif.GetFrequencyMotif(widthImage, heightImage);
                 mdShifted.Image = bm;
                 mdShifted.Visible = true;
-                eOutput.Text += String.Join("\r\nInfo: ", replacements) + "\r\n";
+                eOutput.Text += string.Join("\r\nInfo: ", replacements) + "\r\n";
                 eOutput.Text += "Motifs are created succesfully.\r\n";
             }
             else
@@ -210,7 +211,7 @@ namespace PeSA.Windows
             SetText(dlgOpenPeptides);
             string filename = dlgOpenPeptides.FileName;
             Peptides = FileUtil.ReadPeptideList(filename);
-            ePeptides.Text = String.Join("\r\n", Peptides);
+            ePeptides.Text = string.Join("\r\n", Peptides);
         }
 
         private void SetText(FileDialog dlg)

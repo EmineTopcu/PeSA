@@ -676,8 +676,8 @@ namespace PeSA.Engine.Helpers
                 if (PA.KeyPosition != null && PA.KeyAA != ' ')
                 {
                     int rowind = 1;
-                    List<string> mainList = PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] == PA.KeyAA).ToList();
-                    List<string> shiftedList = Analyzer.ShiftPeptides(PA.ModifiedPeptides.Where(s => s[(int)PA.KeyPosition - 1] != PA.KeyAA).ToList(), PA.KeyAA, PA.PeptideLength, (int)PA.KeyPosition - 1,
+                    List<string> mainList = PA.PositivePeptides.Where(s => s[(int)PA.KeyPosition - 1] == PA.KeyAA).ToList();
+                    List<string> shiftedList = Analyzer.ShiftPeptides(PA.PositivePeptides.Where(s => s[(int)PA.KeyPosition - 1] != PA.KeyAA).ToList(), PA.KeyAA, PA.PeptideLength, (int)PA.KeyPosition - 1,
                         out List<string> replacements);
                     Motif motif = new(mainList, PA.PeptideLength)
                     {
@@ -695,7 +695,7 @@ namespace PeSA.Engine.Helpers
                 }
                 else
                 {
-                    Motif motif = new(PA.ModifiedPeptides, PA.PeptideLength)
+                    Motif motif = new(PA.PositivePeptides, PA.PeptideLength)
                     {
                         FreqThreshold = PA.FrequencyThreshold
                     };
